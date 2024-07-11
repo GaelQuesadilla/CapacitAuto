@@ -1,0 +1,12 @@
+# VS CODE
+.vscode/
+
+# Project
+data/*
+output/*
+config.ini
+
+# Python
+__pycache__/
+
+.

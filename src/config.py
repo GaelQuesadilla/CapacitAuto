@@ -12,7 +12,11 @@ default_config = {
     "School": {
         "school_key": "03ECB0004K",
         "school_shift": "M",
-    }
+    },
+    "Files": {
+        "data_dir": os.path.join(os.getcwd(), "data\\"),
+        "output_dir": os.path.join(os.getcwd(), "output\\")
+    },
 }
 
 
@@ -25,6 +29,7 @@ class Config():
             config["General"] = default_config.get("General")
             config["Web"] = default_config.get("Web")
             config["School"] = default_config.get("School")
+            config["Files"] = default_config.get("Files")
             with open("config.ini", "w") as config_file:
                 config.write(config_file)
             print("Config file has been written successfully")

@@ -3,7 +3,6 @@ from .GetIndexes import getIndexes
 
 def sliceList(element, *args):
     indexes = getIndexes(element, args)
-    print(indexes)
     newElement = []
 
     previousIndex = 0

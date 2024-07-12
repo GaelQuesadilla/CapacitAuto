@@ -6,7 +6,7 @@ from .errors import InvalidInput
 init(autoreset=True)
 
 
-def askPath(baseDir: str):
+def askPath(baseDir=Config.read("Files", "data_dir")):
     baseDir = os.path.join(baseDir)
     print(f"Files in: {Fore.YELLOW}{baseDir}")
     listdir = os.listdir(baseDir)

@@ -11,9 +11,9 @@ import math
 class ReadKardex():
     def __init__(self, curp):
         self.curp = curp
-        self.kardex = None
-        self.soup = None
-        self.info = {
+        self._kardex = None
+        self._soup = None
+        self._info = {
             "Name": None,
             "CURP": None,
             "Semester": None,
@@ -23,11 +23,9 @@ class ReadKardex():
             "Final_Grade": None,
         }
 
-        self.kardex = GetStudentKardex(curp)
-
-    def cleanSoup(self):
+    def _cleanSoup(self):
         cleanSoup = []
-        for line in self.soup.get_text().splitlines():
+        for line in self._soup.get_text().splitlines():
             cleanLine = line
 
             cleanLine = cleanLine.replace("\xa0", " ")
@@ -46,40 +44,40 @@ class ReadKardex():
                 continue
 
             cleanSoup.append(cleanLine)
-        self.soup = cleanSoup
+        self._soup = cleanSoup
 
-    def readKardex(self):
-        self.soup = BeautifulSoup(self.kardex.content, "html.parser")
-        self.cleanSoup()
+    def _readKardex(self):
+        self._soup = BeautifulSoup(self._kardex.content, "html.parser")
+        self._cleanSoup()
 
-        if len(self.soup) == 2:
+        if len(self._soup) == 2:
             raise InvalidCurp(
                 f"The Kardex application has not been able to find the curp:'{self.curp}'")
 
-        return self.soup
+        return self._soup
 
-    def getStudentInfo(self):
+    def _getStudentInfo(self):
 
-        nameIndex = self.soup.index("ALUMNO : ") + 1
-        self.info["Name"] = self.soup[nameIndex]
+        nameIndex = self._soup.index("ALUMNO : ") + 1
+        self._info["Name"] = self._soup[nameIndex]
 
-        self.info["CURP"] = self.curp
+        self._info["CURP"] = self.curp
 
-        semesterIndex = self.soup.index("SEMESTRE : ") + 1
-        self.info["Semester"] = self.soup[semesterIndex]
+        semesterIndex = self._soup.index("SEMESTRE : ") + 1
+        self._info["Semester"] = self._soup[semesterIndex]
 
-        groupIndex = self.soup.index("GRUPO : ") + 1
-        self.info["Group"] = self.soup[groupIndex]
+        groupIndex = self._soup.index("GRUPO : ") + 1
+        self._info["Group"] = self._soup[groupIndex]
 
-        self.info["Shift"] = Config.read("School", "School_shift")
+        self._info["Shift"] = Config.read("School", "School_shift")
 
-        return self.info
+        return self._info
 
-    def getStudentGrades(self):
+    def _getStudentGrades(self):
 
-        firstIndex = getIndexes(self.soup, "FECHA ")[-1]+1
-        last_index = getIndexes(self.soup, "Observaciones : ")[0]
-        soupGrades = self.soup[firstIndex:last_index]
+        firstIndex = getIndexes(self._soup, "FECHA ")[-1]+1
+        last_index = getIndexes(self._soup, "Observaciones : ")[0]
+        soupGrades = self._soup[firstIndex:last_index]
 
         currentYear = datetime.now().year
 
@@ -148,16 +146,23 @@ class ReadKardex():
                 grades["Extra"] = extraordinaryGrades[-1]
                 FinalGrade = extraordinaryGrades[-1]
 
-            if self.info.get("Grades").get(semester) is None:
-                self.info["Grades"][semester] = {}
+            if self._info.get("Grades").get(semester) is None:
+                self._info["Grades"][semester] = {}
 
-            self.info["Grades"][semester][subjectName] = grades
+            self._info["Grades"][semester][subjectName] = grades
 
             gradesSum += FinalGrade
             gradesCount += 1
 
-        self.info["Final_Grade"] = math.ceil(gradesSum*10/gradesCount)/10
+        self._info["Final_Grade"] = math.ceil(gradesSum*10/gradesCount)/10
         return soupGrades
+
+    def getInfo(self):
+        self._kardex = GetStudentKardex(self.curp)
+        self._readKardex()
+        self._getStudentInfo()
+        self._getStudentGrades()
+        return self._info
 
 
 if __name__ == "__main__":

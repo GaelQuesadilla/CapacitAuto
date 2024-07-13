@@ -5,7 +5,8 @@ default_config = {
     "General": {
         "encoding": "utf-8",
         "debug": True,
-        "relevant_subjects_name": "Materias relevantes para {}"
+        "relevant_subjects_name": "Materias relevantes para {}",
+        "relevant_grades_name": "Promedio relevante para {}",
     },
     "Web": {
         "kardex_url": "https://apps.cobachbcs.edu.mx/Sice/ReportesImpresos/wf_Rep_Kardex_ws.aspx",

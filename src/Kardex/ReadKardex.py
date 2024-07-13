@@ -21,7 +21,16 @@ class ReadKardex():
             "Shift": None,
             "Grades": {},
             "Final_Grade": None,
+            "Relevant_Grades": {}
         }
+
+        for package in Config.read("School", "packages").split(","):
+            prefix = Config.read("General", "relevant_grades_name")
+            self._info["Relevant_Grades"][prefix.format(package)] = None
+
+        for package in Config.read("School", "trainings").split(","):
+            prefix = Config.read("General", "relevant_grades_name")
+            self._info["Relevant_Grades"][prefix.format(package)] = None
 
     def _cleanSoup(self):
         cleanSoup = []

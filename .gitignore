@@ -4,6 +4,8 @@
 # Project
 data/*
 output/*
+!output/reports/
+output/reports/*
 config.ini
 
 # Python

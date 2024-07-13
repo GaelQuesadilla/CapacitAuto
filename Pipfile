@@ -8,6 +8,7 @@ configparser = "*"
 colorama = "*"
 requests = "*"
 bs4 = "*"
+alive-progress = "*"
 
 [dev-packages]
 

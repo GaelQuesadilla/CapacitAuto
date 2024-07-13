@@ -5,6 +5,7 @@ default_config = {
     "General": {
         "encoding": "utf-8",
         "debug": True,
+        "relevant_subjects_name": "Materias relevantes para {}"
     },
     "Web": {
         "kardex_url": "https://apps.cobachbcs.edu.mx/Sice/ReportesImpresos/wf_Rep_Kardex_ws.aspx",
@@ -12,6 +13,10 @@ default_config = {
     "School": {
         "school_key": "03ECB0004K",
         "school_shift": "M",
+        "packages":
+            "Informatica,Servicios turísticos,Dibujo arquitectónico,Contabilidad",
+        "trainings":
+            "Ciencias economico administrativas,Ciencias naturales,Ciencias exactas,Ciencias sociales y humanidades",
     },
     "Files": {
         "data_dir": os.path.join(os.getcwd(), "data\\"),

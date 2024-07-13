@@ -9,6 +9,8 @@ colorama = "*"
 requests = "*"
 bs4 = "*"
 alive-progress = "*"
+pandas = "*"
+openpyxl = "*"
 
 [dev-packages]
 

@@ -6,6 +6,7 @@ from src.Tools.GetIndexes import getIndexes
 from datetime import datetime
 from src.Tools.SliceList import sliceList
 import math
+from src.Tools.Normalize import normalizeText
 
 
 class ReadKardex():
@@ -109,7 +110,7 @@ class ReadKardex():
                 subject[3] += subject[4][:-1]
                 subject.remove(subject[4])
 
-            subjectName = subject[3]
+            subjectName = normalizeText(subject[3])
 
             # Select data
             AllGrades = subject[4:]

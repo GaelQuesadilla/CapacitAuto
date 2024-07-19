@@ -6,6 +6,7 @@ import pprint
 import math
 import os
 import json
+from src.FileManager.AskFile import askPath
 
 
 def calcRelevantGrades():
@@ -48,9 +49,8 @@ def calcRelevantGrades():
                 student["Relevant_Grades"][relevantGradeKey] = relevantGrade
 
             bar()
-    allKardexFileDir = os.path.join(
-        Config.read("Files", "output_dir"),
-        "AllKardex.json"
+    allKardexFileDir = askPath(
+        Config.read("Files", "output_dir")
     )
     encoding = Config.read("General", "encoding")
     with open(allKardexFileDir, "w", encoding=encoding) as allKardexFile:

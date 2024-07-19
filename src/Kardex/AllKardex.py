@@ -8,6 +8,8 @@ import json
 from src.Config import Config
 import os
 import pprint
+from src.FileManager.SafeFileName import safeFileName
+
 
 init(autoreset=True)
 
@@ -39,22 +41,31 @@ def saveAllKardex():
                 curpReport.append(curp)
 
             bar()
-
+    print(f"{Fore.BLUE}Saving kardex...")
     allKardexFileDir = os.path.join(
         Config.read("Files", "output_dir"),
         "AllKardex.json"
     )
 
+    allKardexFileDir = safeFileName(allKardexFileDir)
+
     with open(allKardexFileDir, "w", encoding=encoding) as allKardexFile:
         json.dump(allKardex, allKardexFile)
+
+    print(f"{Fore.GREEN}Kardex saved on {allKardexFileDir}")
+
+    print(f"{Fore.BLUE}Saving Curp report...")
 
     curpReportFileDir = os.path.join(
         Config.read("Files", "reports_dir"),
         "invalidCurps.json"
     )
+    curpReportFileDir = safeFileName(curpReportFileDir)
 
     with open(curpReportFileDir, "w", encoding=encoding) as curpReportFile:
         json.dump(curpReport, curpReportFile)
+
+    print(f"{Fore.GREEN}Curp report saved on {allKardexFileDir}")
 
 
 def getAllKardex():
@@ -65,12 +76,11 @@ def getAllKardex():
     list
         A list of dictionaries containing kardex information.
     """
-    allKardexFileDir = os.path.join(
-        Config.read("Files", "output_dir"),
-        "AllKardex.json"
-    )
+    allKardexFileDir = askPath(Config.read("Files", "output_dir"))
     with open(allKardexFileDir, "r", encoding=encoding) as allKardexFile:
         return json.load(allKardexFile)
+
+    print(f"{Fore.GREEN}Kardex loaded from {allKardexFileDir}")
 
 
 if __name__ == "__main__":

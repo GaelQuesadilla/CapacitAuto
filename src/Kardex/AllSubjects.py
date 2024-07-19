@@ -6,6 +6,8 @@ import os
 from src.Config import Config
 from colorama import Fore, init
 import numpy
+from src.FileManager.SafeFileName import safeFileName
+from src.FileManager.AskFile import askPath
 
 init(autoreset=True)
 
@@ -44,10 +46,7 @@ class AllSubjects():
             "5": [],
             "6": [],
         }
-        self.allSubjectsFileDir = os.path.join(
-            Config.read("Files", "output_dir"),
-            "AllSubjects.xlsx"
-        )
+        self.allSubjectsFileDir = None
 
         for package in Config.read("School", "packages").split(","):
             prefix = Config.read("General", "relevant_subjects_name")
@@ -83,6 +82,11 @@ class AllSubjects():
 
         This method get all subjects and converts _allSubjects dictionary to a pandas DataFrame and saves it to an Excel file 
         """
+        self.allSubjectsFileDir = safeFileName(
+            os.path.join(
+                Config.read("Files", "output_dir"),
+                "AllSubjects.xlsx")
+        )
 
         df = pd.DataFrame(
             dict([(k, pd.Series(v)) for k, v in self.getAll().items()])
@@ -101,6 +105,8 @@ class AllSubjects():
         dict
             A dictionary that contains all subjects for each semester.
         """
+
+        self.allSubjectsFileDir = askPath(Config.read("Files", "output_dir"))
 
         df = pd.read_excel(self.allSubjectsFileDir)
 

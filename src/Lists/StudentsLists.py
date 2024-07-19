@@ -5,6 +5,7 @@ import os
 from alive_progress import alive_bar
 from colorama import init, Fore
 import pprint
+from src.FileManager.SafeFileName import safeFileName
 init(autoreset=True)
 
 
@@ -65,6 +66,8 @@ def createStudentsList():
             shift = Config.read("School", "school_shift")
             fileName = f"Lista Alumnos {semesterKey}-{groupKey}-{shift}.xlsx"
             path = os.path.join(Config.read("Files", "lists_dir"), fileName)
+
+            path = safeFileName(path)
 
             df = pd.DataFrame(group)
             df = df.sort_values(by=["Nombre", "CURP"], ascending=True)

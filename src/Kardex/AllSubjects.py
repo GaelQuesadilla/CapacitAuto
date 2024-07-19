@@ -11,7 +11,31 @@ init(autoreset=True)
 
 
 class AllSubjects():
+    """A class to manage and save all subjects from students kardex data
+
+    This class provides methods to collect, process, and save information about all subjects 
+    taken by students across various semesters. The subjects data can be saved to or loaded from 
+    an Excel file.
+
+    Attributes
+    ----------
+    _allSubjects : dict
+        A dictionary to store subjects for each semester.
+    allSubjectsFileDir : str
+        The file path for saving and loading the subjects data in Excel format.
+
+    Methods
+    -------
+    getAll():
+        Collects all subjects from student kardex data.
+    saveToExcel():
+        Saves the collected subjects data to an Excel file.
+    getAllFromExcel():
+        Loads the subjects data from an Excel file.
+    """
+
     def __init__(self):
+        """Initializes AllSubjects class with default values and file_paths."""
         self._allSubjects = {
             "1": [],
             "2": [],
@@ -34,6 +58,13 @@ class AllSubjects():
             self._allSubjects[prefix.format(package)] = []
 
     def getAll(self):
+        """Collects all subjects from students kardex data. 
+
+        Returns
+        -------
+        dict
+            A dict containing all subjects for each semester
+        """
         allStudents = getAllKardex()
 
         with alive_bar(len(allStudents)) as bar:
@@ -48,6 +79,10 @@ class AllSubjects():
         return self._allSubjects
 
     def saveToExcel(self):
+        """Collect and save all subjects data into an Excel file.
+
+        This method get all subjects and converts _allSubjects dictionary to a pandas DataFrame and saves it to an Excel file 
+        """
 
         df = pd.DataFrame(
             dict([(k, pd.Series(v)) for k, v in self.getAll().items()])
@@ -58,9 +93,14 @@ class AllSubjects():
             f"{Fore.GREEN}[✓] All Subjects saved in: {self.allSubjectsFileDir}"
         )
 
-        return None
-
     def getAllFromExcel(self):
+        """Loads the subjects data from an Excel file.
+
+        Returns
+        -------
+        dict
+            A dictionary that contains all subjects for each semester.
+        """
 
         df = pd.read_excel(self.allSubjectsFileDir)
 

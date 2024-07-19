@@ -1,5 +1,16 @@
 def normalizeText(text: str):
-    """Returns a value with no special characters"""
+    """Returns a value with no special characters, replacing them with an analogous character
+
+    Parameters
+    ----------
+    text : str
+        The string to normalize
+
+    Returns
+    -------
+    str
+        The normalized string
+    """
 
     special_characters = {
         "Á": "A",
@@ -23,4 +34,4 @@ def normalizeText(text: str):
 
 
 if __name__ == "__main__":
-    print(normalizeText("Hólá muúündóoooó"))
+    pass

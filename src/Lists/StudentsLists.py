@@ -9,6 +9,7 @@ init(autoreset=True)
 
 
 def createStudentsList():
+    """Sorts students according to their semester and group, and then saves them in an Excel file"""
 
     students = getAllKardex()
     print(f"{Fore.BLUE}Creating Students Lists...")
@@ -68,8 +69,6 @@ def createStudentsList():
             df = pd.DataFrame(group)
             df = df.sort_values(by=["Nombre", "CURP"], ascending=True)
             df.to_excel(path)
-
-    return None
 
 
 if __name__ == "__main__":

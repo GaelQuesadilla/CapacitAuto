@@ -9,6 +9,7 @@ import json
 
 
 def calcRelevantGrades():
+    """Calculates relevant grades for each student based on specified subjects and saves them in a json file"""
     allKardex = getAllKardex()
     subjects = AllSubjects()
     allSubjects = subjects.getAllFromExcel()
@@ -54,8 +55,6 @@ def calcRelevantGrades():
     encoding = Config.read("General", "encoding")
     with open(allKardexFileDir, "w", encoding=encoding) as allKardexFile:
         json.dump(allKardex, allKardexFile)
-
-    return None
 
 
 if __name__ == "__main__":

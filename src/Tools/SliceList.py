@@ -2,6 +2,22 @@ from .GetIndexes import getIndexes
 
 
 def sliceList(element, *args):
+    """Slice a list at the indexes where a specified element is located
+
+    Parameters
+    ----------
+    element : list
+        The element that will be sliced
+
+    Args
+    ----------
+    params: str
+
+    Returns
+    -------
+    list
+        A list that contains the main element, sliced where args params were found
+    """
     indexes = getIndexes(element, args)
     newElement = []
 

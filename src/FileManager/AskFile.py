@@ -6,7 +6,24 @@ from .errors import InvalidInput
 init(autoreset=True)
 
 
-def askPath(baseDir=Config.read("Files", "data_dir")):
+def askPath(baseDir: str = Config.read("Files", "data_dir")):
+    """Prompts the user to select a file from a directory.
+
+    Parameters
+    ----------
+    baseDir : str, optional
+        The base directory to list files from, by default Config.read("Files", "data_dir")
+
+    Returns
+    -------
+    str
+        The selected file path.
+
+    Raises
+    ------
+    InvalidInput
+        If the selected index is out of range
+    """
     baseDir = os.path.join(baseDir)
     print(f"Files in: {Fore.YELLOW}{baseDir}")
     listdir = os.listdir(baseDir)

@@ -10,7 +10,41 @@ from src.Tools.Normalize import normalizeText
 
 
 class ReadKardex():
-    def __init__(self, curp):
+    """Class to read and process a student's kardex information
+
+    Attributes
+    ----------
+    curp : str
+        The CURP (Clave Única de Registro de Población) of the student.
+    _kardex : requests.Response
+        The HTTP response object containing the student's kardex data.
+    _soup : BeautifulSoup or list
+        The parsed HTML content of the kardex data.
+    _info : dict
+        A dictionary to store the extracted student information.
+
+    Methods
+    -------
+    _cleanSoup():
+        Cleans the parsed HTML content by removing unwanted characters and empty lines.
+    _readKardex():
+        Parses the kardex HTML content and cleans it.
+    _getStudentInfo():
+        Extracts and returns the student's basic information (name, CURP, semester, group, shift).
+    _getStudentGrades():
+        Extracts and returns the student's grades for each subject in each semester.
+    getInfo():
+        Fetches and processes the student's kardex data, returning the extracted information.
+    """
+
+    def __init__(self, curp: str):
+        """Initializes the class with default values
+
+        Parameters
+        ----------
+        curp : str
+            The student's CURP
+        """
         self.curp = curp
         self._kardex = None
         self._soup = None
@@ -34,6 +68,7 @@ class ReadKardex():
             self._info["Relevant_Grades"][prefix.format(package)] = None
 
     def _cleanSoup(self):
+        """Cleans the parsed HTML content by removing unwanted characters and empty lines."""
         cleanSoup = []
         for line in self._soup.get_text().splitlines():
             cleanLine = line
@@ -57,6 +92,18 @@ class ReadKardex():
         self._soup = cleanSoup
 
     def _readKardex(self):
+        """Parses the kardex HTML and cleans it.
+
+        Returns
+        -------
+        list
+            A list of cleaned strings extracted from the kardex HTML content.
+
+        Raises
+        ------
+        InvalidCurp
+            If the kardex cannot be found for the given CURP
+        """
         self._soup = BeautifulSoup(self._kardex.content, "html.parser")
         self._cleanSoup()
 
@@ -168,6 +215,13 @@ class ReadKardex():
         return soupGrades
 
     def getInfo(self):
+        """Fetches and process the students kardex returning the extracted information.
+
+        Returns
+        -------
+        dict
+            A dictionary containing all the student's information and grades.
+        """
         self._kardex = GetStudentKardex(self.curp)
         self._readKardex()
         self._getStudentInfo()

@@ -15,6 +15,7 @@ encoding = Config.read("General", "encoding")
 
 
 def saveAllKardex():
+    """Read CURPs from a file, get the kardex information and save the results as a json file."""
     curpsDir = askPath()
     curps = open(curpsDir, "rt").readlines()
     allKardex = []
@@ -55,10 +56,15 @@ def saveAllKardex():
     with open(curpReportFileDir, "w", encoding=encoding) as curpReportFile:
         json.dump(curpReport, curpReportFile)
 
-    return None
-
 
 def getAllKardex():
+    """Retrieves and returns all kardex information from 'AllKardex.json'.
+
+    Returns
+    -------
+    list
+        A list of dictionaries containing kardex information.
+    """
     allKardexFileDir = os.path.join(
         Config.read("Files", "output_dir"),
         "AllKardex.json"

@@ -23,6 +23,7 @@ The default configuration is a dictionary with sections and key-value pairs:
     * output_dir (str): Base directory for output files (default: "output/")
     * reports_dir (str): Directory for storing reports within output (default: "output/reports/")
     * lists_dir (str): Directory for storing lists within output (default: "output/lists/")
+    * logs_dir (str): Directory for storing logs (default: "logs/")
 """
 
 
@@ -49,6 +50,7 @@ default_config = {
         "output_dir": os.path.join(os.getcwd(), "output\\"),
         "reports_dir": os.path.join(os.getcwd(), "output\\reports\\"),
         "lists_dir": os.path.join(os.getcwd(), "output\\lists\\"),
+        "logs_dir": os.path.join(os.getcwd(), "logs\\"),
     },
 }
 

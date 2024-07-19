@@ -4,8 +4,8 @@ from src.Kardex.AllKardex import getAllKardex
 import os
 from alive_progress import alive_bar
 from colorama import init, Fore
-import pprint
 from src.FileManager.SafeFileName import safeFileName
+from src.Log import Log
 init(autoreset=True)
 
 
@@ -13,7 +13,7 @@ def createStudentsList():
     """Sorts students according to their semester and group, and then saves them in an Excel file"""
 
     students = getAllKardex()
-    print(f"{Fore.BLUE}Creating Students Lists...")
+    Log.log(f"Creating Students Lists...", Log.info)
 
     packages = Config.read("School", "packages").split(",")
     trainings = Config.read("School", "trainings").split(",")
@@ -67,7 +67,11 @@ def createStudentsList():
             fileName = f"Lista Alumnos {semesterKey}-{groupKey}-{shift}.xlsx"
             path = os.path.join(Config.read("Files", "lists_dir"), fileName)
 
-            path = safeFileName(path)
+            path = safeFileName(
+                f"Saving list for {
+                    semesterKey}-{groupKey}-{shift}",
+                path
+            )
 
             df = pd.DataFrame(group)
             df = df.sort_values(by=["Nombre", "CURP"], ascending=True)

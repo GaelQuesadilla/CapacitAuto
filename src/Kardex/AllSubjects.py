@@ -1,6 +1,5 @@
 from .AllKardex import getAllKardex
 from alive_progress import alive_bar
-import pprint
 import pandas as pd
 import os
 from src.Config import Config
@@ -8,6 +7,7 @@ from colorama import Fore, init
 import numpy
 from src.FileManager.SafeFileName import safeFileName
 from src.FileManager.AskFile import askPath
+from src.Log import Log
 
 init(autoreset=True)
 
@@ -83,6 +83,7 @@ class AllSubjects():
         This method get all subjects and converts _allSubjects dictionary to a pandas DataFrame and saves it to an Excel file 
         """
         self.allSubjectsFileDir = safeFileName(
+            "Saving Excel with all subjects",
             os.path.join(
                 Config.read("Files", "output_dir"),
                 "AllSubjects.xlsx")
@@ -93,8 +94,9 @@ class AllSubjects():
         )
 
         df.to_excel(self.allSubjectsFileDir, index=False)
-        print(
-            f"{Fore.GREEN}[✓] All Subjects saved in: {self.allSubjectsFileDir}"
+        Log.log(
+            f"All Subjects saved in: {self.allSubjectsFileDir}",
+            Log.success
         )
 
     def getAllFromExcel(self):
@@ -106,13 +108,15 @@ class AllSubjects():
             A dictionary that contains all subjects for each semester.
         """
 
-        self.allSubjectsFileDir = askPath(Config.read("Files", "output_dir"))
+        self.allSubjectsFileDir = askPath(
+            "Getting Excel table with all subjects ", Config.read("Files", "output_dir"))
 
         df = pd.read_excel(self.allSubjectsFileDir)
 
-        print(
-            f"{Fore.GREEN}[✓] All Subjects recovered from: {
-                self.allSubjectsFileDir}"
+        Log.log(
+            f"All Subjects recovered from: {
+                self.allSubjectsFileDir}",
+            Log.success
         )
 
         allSubjectsFromExcel = df.to_dict()

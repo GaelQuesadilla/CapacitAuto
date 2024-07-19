@@ -2,7 +2,6 @@ from src.Config import Config
 from .AllKardex import getAllKardex
 from alive_progress import alive_bar
 from .AllSubjects import AllSubjects
-import pprint
 import math
 import os
 import json
@@ -50,6 +49,7 @@ def calcRelevantGrades():
 
             bar()
     allKardexFileDir = askPath(
+        "Getting kardex json file",
         Config.read("Files", "output_dir")
     )
     encoding = Config.read("General", "encoding")

@@ -2,15 +2,18 @@ from src.Config import Config
 from colorama import init, Fore, Back
 import os
 from .errors import InvalidInput
+from src.Log import Log
 
 init(autoreset=True)
 
 
-def askPath(baseDir: str = Config.read("Files", "data_dir")):
+def askPath(info: str, baseDir: str = Config.read("Files", "data_dir")):
     """Prompts the user to select a file from a directory.
 
     Parameters
     ----------
+    info: str
+        The info that will be logged 
     baseDir : str, optional
         The base directory to list files from, by default Config.read("Files", "data_dir")
 
@@ -24,6 +27,10 @@ def askPath(baseDir: str = Config.read("Files", "data_dir")):
     InvalidInput
         If the selected index is out of range
     """
+    # TODO: Add extension & prefix filters
+    if not info is None:
+        Log.log(info, Log.info)
+
     baseDir = os.path.join(baseDir)
     print(f"Files in: {Fore.YELLOW}{baseDir}")
     listdir = os.listdir(baseDir)
@@ -54,8 +61,9 @@ def askPath(baseDir: str = Config.read("Files", "data_dir")):
         else:
             selection = os.path.join(baseDir, listdir[selectedIndex])
         if not os.path.isfile(selection):
-            selection = askPath(selection)
+            selection = askPath(info, selection)
 
+        Log.log(f"Selected path: {selection}", Log.info)
         return selection
     except IndexError:
         raise InvalidInput(
@@ -64,15 +72,17 @@ def askPath(baseDir: str = Config.read("Files", "data_dir")):
         )
         return None
     except ValueError:
-        print(
-            f"{Fore.RED}Error, please select a valid integer number, please try again")
-        return askPath(baseDir)
+
+        Log.log(
+            "Error, please select a valid integer number, please try again",
+            Log.error
+        )
+        return askPath(info, baseDir)
 
     except Exception as e:
-        print(f"{Fore.RED}Error: {e}")
+        Log.log(f"Error: {e}", Log.error)
         return None
 
 
 if __name__ == "__main__":
-    baseDir = Config.read("Files", "data_dir")
-    print(askPath(baseDir))
+    pass

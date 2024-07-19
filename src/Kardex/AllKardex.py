@@ -1,14 +1,13 @@
 from src.FileManager.AskFile import askPath
 from .ReadKardex import ReadKardex
-import pprint
 from alive_progress import alive_bar
 from colorama import Fore, init
 from .errors import InvalidCurp
 import json
 from src.Config import Config
 import os
-import pprint
 from src.FileManager.SafeFileName import safeFileName
+from src.Log import Log
 
 
 init(autoreset=True)
@@ -18,7 +17,7 @@ encoding = Config.read("General", "encoding")
 
 def saveAllKardex():
     """Read CURPs from a file, get the kardex information and save the results as a json file."""
-    curpsDir = askPath()
+    curpsDir = askPath("Getting CURPS txt file")
     curps = open(curpsDir, "rt").readlines()
     allKardex = []
     curpReport = []
@@ -29,46 +28,48 @@ def saveAllKardex():
             current = ReadKardex(curp)
             try:
                 info = current.getInfo()
-                print(
-                    f"{Fore.GREEN}[✓]{curp}{Fore.RESET}: {info.get('Name')}, {info.get('Semester')}, {
-                        info.get('Group')}, {info.get("Final_Grade")}"
+                Log.log(
+                    f"{curp}{Fore.RESET}: {info.get('Name')}, {info.get('Semester')}, {
+                        info.get('Group')}, {info.get("Final_Grade")}",
+                    Log.success
                 )
                 allKardex.append(info)
             except InvalidCurp:
-                print(
-                    f"{Fore.RED}[✘]{curp}{Fore.RESET}: Invalid CURP"
+                Log.log(
+                    f"{curp}{Fore.RESET}: Invalid CURP", Log.error
                 )
                 curpReport.append(curp)
 
             bar()
-    print(f"{Fore.BLUE}Saving kardex...")
     allKardexFileDir = os.path.join(
         Config.read("Files", "output_dir"),
         "AllKardex.json"
     )
-
-    allKardexFileDir = safeFileName(allKardexFileDir)
+    allKardexFileDir = safeFileName(
+        "Saving kardex in json file...",
+        allKardexFileDir
+    )
 
     with open(allKardexFileDir, "w", encoding=encoding) as allKardexFile:
         json.dump(allKardex, allKardexFile)
 
-    print(f"{Fore.GREEN}Kardex saved on {allKardexFileDir}")
-
-    print(f"{Fore.BLUE}Saving Curp report...")
+    Log.log(f"Kardex saved on {allKardexFileDir}", Log.success)
 
     curpReportFileDir = os.path.join(
         Config.read("Files", "reports_dir"),
         "invalidCurps.json"
     )
-    curpReportFileDir = safeFileName(curpReportFileDir)
+    curpReportFileDir = safeFileName(
+        "Saving CURP report...", curpReportFileDir
+    )
 
     with open(curpReportFileDir, "w", encoding=encoding) as curpReportFile:
         json.dump(curpReport, curpReportFile)
 
-    print(f"{Fore.GREEN}Curp report saved on {allKardexFileDir}")
+    Log.log(f"Curp report saved on {allKardexFileDir}", Log.success)
 
 
-def getAllKardex():
+def getAllKardex(allKardexFileDir: str = None):
     """Retrieves and returns all kardex information from 'AllKardex.json'.
 
     Returns
@@ -76,11 +77,15 @@ def getAllKardex():
     list
         A list of dictionaries containing kardex information.
     """
-    allKardexFileDir = askPath(Config.read("Files", "output_dir"))
-    with open(allKardexFileDir, "r", encoding=encoding) as allKardexFile:
-        return json.load(allKardexFile)
 
-    print(f"{Fore.GREEN}Kardex loaded from {allKardexFileDir}")
+    if allKardexFileDir is None:
+        allKardexFileDir = askPath(
+            "Getting Kardex json file", Config.read("Files", "output_dir"))
+    if not allKardexFileDir is None:
+        pass
+    with open(allKardexFileDir, "r", encoding=encoding) as allKardexFile:
+        Log.log(f"Kardex loaded from {allKardexFileDir}", Log.success)
+        return json.load(allKardexFile)
 
 
 if __name__ == "__main__":

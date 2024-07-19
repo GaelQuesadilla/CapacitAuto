@@ -3,10 +3,11 @@ import os
 from colorama import Fore, init
 from src.Tools.Normalize import normalizeText
 from .AskFile import askPath
+from src.Log import Log
 init(autoreset=True)
 
 
-def safeFileName(path: str):
+def safeFileName(info: str, path: str):
     """Prompts the user to ask if they want to overwrite a file
 
     Asks the user if they want to overwrite a file, if not, returns a unique path using datetime
@@ -21,22 +22,25 @@ def safeFileName(path: str):
     str
         The new file name
     """
+
+    Log.log(info, Log.info)
     path = os.path.join(path)
 
     if not os.path.exists(path):
         return path
 
     if os.path.exists(path):
-        print(
-            f"{Fore.YELLOW}[⚠] The file '{
-                path}' already exists, do you want to overwrite it?"
+        Log.log(
+            f"The file '{
+                path}' already exists, do you want to overwrite it?",
+            Log.warning
         )
         option = input(f"[Y/N]\n")
         option = option.lower()
         option = normalizeText(option)
 
         if option in ["y", "yes", "si", "s"]:
-            return path
+            newPath = path
         if option in ["n", "no"]:
             baseDir = os.path.dirname(path)
             fileName = os.path.basename(path)
@@ -49,11 +53,9 @@ def safeFileName(path: str):
 
             newPath = os.path.join(baseDir, newFileName)
 
-            print(f"{Fore.BLUE}File name: {newPath}")
-            return newPath
+    Log.log(f"The selected path is: {newPath}", Log.info)
+    return newPath
 
 
 if __name__ == "__main__":
-    for _ in range(0, 10):
-        path = askPath()
-        print(safeFileName(path))
+    pass

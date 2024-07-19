@@ -5,7 +5,7 @@ from alive_progress import alive_bar
 from colorama import Fore, init
 from .errors import InvalidCurp
 import json
-from src.config import Config
+from src.Config import Config
 import os
 import pprint
 

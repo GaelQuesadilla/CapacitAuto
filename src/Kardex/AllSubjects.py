@@ -3,7 +3,7 @@ from alive_progress import alive_bar
 import pprint
 import pandas as pd
 import os
-from src.config import Config
+from src.Config import Config
 from colorama import Fore, init
 import numpy
 

@@ -1,4 +1,4 @@
-from src.config import Config
+from src.Config import Config
 from .AllKardex import getAllKardex
 from alive_progress import alive_bar
 from .AllSubjects import AllSubjects

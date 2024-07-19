@@ -1,4 +1,4 @@
-from src.config import Config
+from src.Config import Config
 import requests
 
 

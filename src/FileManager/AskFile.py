@@ -1,4 +1,4 @@
-from src.config import Config
+from src.Config import Config
 from colorama import init, Fore, Back
 import os
 from .errors import InvalidInput

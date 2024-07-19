@@ -1,5 +1,5 @@
 import pandas as pd
-from src.config import Config
+from src.Config import Config
 from src.Kardex.AllKardex import getAllKardex
 import os
 from alive_progress import alive_bar

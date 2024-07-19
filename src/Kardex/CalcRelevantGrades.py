@@ -10,6 +10,7 @@ from src.FileManager.AskFile import askPath
 
 def calcRelevantGrades():
     """Calculates relevant grades for each student based on specified subjects and saves them in a json file"""
+    # TODO Añadir path estático para evitar repetir prompts
     allKardex = getAllKardex()
     subjects = AllSubjects()
     allSubjects = subjects.getAllFromExcel()
@@ -49,8 +50,8 @@ def calcRelevantGrades():
 
             bar()
     allKardexFileDir = askPath(
-        "Getting kardex json file",
-        Config.read("Files", "output_dir")
+        "Consiguiendo archivo kardex",
+        Config.read("Files", "output_dir"), prefix="AllKardex", suffix=".json"
     )
     encoding = Config.read("General", "encoding")
     with open(allKardexFileDir, "w", encoding=encoding) as allKardexFile:

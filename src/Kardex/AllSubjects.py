@@ -38,6 +38,8 @@ class AllSubjects():
 
     def __init__(self):
         """Initializes AllSubjects class with default values and file_paths."""
+        # TODO Añadir un directorio estático en AllSubject para evitar prompts repetidos
+        # Todo añadir un directorio estático en AllKardex para evitar prompts repetidos
         self._allSubjects = {
             "1": [],
             "2": [],
@@ -83,7 +85,7 @@ class AllSubjects():
         This method get all subjects and converts _allSubjects dictionary to a pandas DataFrame and saves it to an Excel file 
         """
         self.allSubjectsFileDir = safeFileName(
-            "Saving Excel with all subjects",
+            "Guardando Excel con todas las materias...",
             os.path.join(
                 Config.read("Files", "output_dir"),
                 "AllSubjects.xlsx")
@@ -95,7 +97,8 @@ class AllSubjects():
 
         df.to_excel(self.allSubjectsFileDir, index=False)
         Log.log(
-            f"All Subjects saved in: {self.allSubjectsFileDir}",
+            f"Todas las materias han sido guardadas en: {
+                self.allSubjectsFileDir}",
             Log.success
         )
 
@@ -109,12 +112,12 @@ class AllSubjects():
         """
 
         self.allSubjectsFileDir = askPath(
-            "Getting Excel table with all subjects ", Config.read("Files", "output_dir"))
+            "Consiguiendo tabla de excel con todas las materias ", Config.read("Files", "output_dir"), prefix="AllSubjects", suffix="xlsx")
 
         df = pd.read_excel(self.allSubjectsFileDir)
 
         Log.log(
-            f"All Subjects recovered from: {
+            f"Materias recuperadas desde: {
                 self.allSubjectsFileDir}",
             Log.success
         )

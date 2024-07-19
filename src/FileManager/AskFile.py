@@ -39,7 +39,7 @@ def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: 
     baseDir = os.path.join(baseDir)
     if baseDir.endswith("\\"):
         baseDir = baseDir[:-1]
-    print(f"Files in: {Fore.YELLOW}{baseDir}")
+    print(f"Archivos en: {Fore.YELLOW}{baseDir}")
     listdir = getListDirs(baseDir, prefix, suffix)
 
     def centerChar(string, n=5):
@@ -68,7 +68,7 @@ def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: 
 
     try:
         selectedIndex = int(
-            input(f"{Fore.GREEN}Select the index of the file:{Fore.RESET}\n"))
+            input(f"{Fore.GREEN}Escribe el indice del archivo:{Fore.RESET}\n"))
 
         if selectedIndex == -1:
             selection = parent
@@ -79,13 +79,13 @@ def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: 
                                 prefix=prefix, suffix=suffix, isParent=False)
 
         if isParent:
-            Log.log(f"Selected path: {selection}", Log.info)
+            Log.log(f"Archivo seleccionado: {selection}", Log.info)
 
         return selection
 
     except IndexError:
         raise InvalidInput(
-            f"Can't select the file {
+            f"No es posible seleccionar el archivo {
                 selectedIndex + 1}/{len(listdir)}"
         )
         return None
@@ -93,7 +93,7 @@ def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: 
     except ValueError:
 
         Log.log(
-            "Error, please select a valid integer number, please try again",
+            "Error, por favor selecciona un valor entero valido, intente nuevamente",
             Log.error
         )
         return askPath(info, baseDir, prefix, suffix)

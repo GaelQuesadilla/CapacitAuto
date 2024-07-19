@@ -13,7 +13,7 @@ def createStudentsList():
     """Sorts students according to their semester and group, and then saves them in an Excel file"""
 
     students = getAllKardex()
-    Log.log(f"Creating Students Lists...", Log.info)
+    Log.log(f"Creando listas de estudiantes...", Log.info)
 
     packages = Config.read("School", "packages").split(",")
     trainings = Config.read("School", "trainings").split(",")
@@ -68,7 +68,7 @@ def createStudentsList():
             path = os.path.join(Config.read("Files", "lists_dir"), fileName)
 
             path = safeFileName(
-                f"Saving list for {
+                f"Guardando lista para el grupo {
                     semesterKey}-{groupKey}-{shift}",
                 path
             )

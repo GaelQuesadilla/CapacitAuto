@@ -17,7 +17,7 @@ encoding = Config.read("General", "encoding")
 
 def saveAllKardex():
     """Read CURPs from a file, get the kardex information and save the results as a json file."""
-    curpsDir = askPath("Getting CURPS txt file")
+    curpsDir = askPath("Consiguiendo CURPs", suffix=".txt")
     curps = open(curpsDir, "rt").readlines()
     allKardex = []
     curpReport = []
@@ -36,7 +36,7 @@ def saveAllKardex():
                 allKardex.append(info)
             except InvalidCurp:
                 Log.log(
-                    f"{curp}{Fore.RESET}: Invalid CURP", Log.error
+                    f"{curp}{Fore.RESET}: CURP NO VALIDA", Log.warning
                 )
                 curpReport.append(curp)
 
@@ -46,27 +46,27 @@ def saveAllKardex():
         "AllKardex.json"
     )
     allKardexFileDir = safeFileName(
-        "Saving kardex in json file...",
+        "Guardando los kardex en un archivo .json...",
         allKardexFileDir
     )
 
     with open(allKardexFileDir, "w", encoding=encoding) as allKardexFile:
         json.dump(allKardex, allKardexFile)
 
-    Log.log(f"Kardex saved on {allKardexFileDir}", Log.success)
+    Log.log(f"Kardex guardado en {allKardexFileDir}", Log.success)
 
     curpReportFileDir = os.path.join(
         Config.read("Files", "reports_dir"),
         "invalidCurps.json"
     )
     curpReportFileDir = safeFileName(
-        "Saving CURP report...", curpReportFileDir
+        "Guardando reporte de CURPs...", curpReportFileDir
     )
 
     with open(curpReportFileDir, "w", encoding=encoding) as curpReportFile:
         json.dump(curpReport, curpReportFile)
 
-    Log.log(f"Curp report saved on {allKardexFileDir}", Log.success)
+    Log.log(f"Reporte de CURPs guardado en {allKardexFileDir}", Log.success)
 
 
 def getAllKardex(allKardexFileDir: str = None):
@@ -80,11 +80,11 @@ def getAllKardex(allKardexFileDir: str = None):
 
     if allKardexFileDir is None:
         allKardexFileDir = askPath(
-            "Getting Kardex json file", Config.read("Files", "output_dir"))
+            "Cargando archivo de kardex...", Config.read("Files", "output_dir"), prefix="AllKardex", suffix=".json")
     if not allKardexFileDir is None:
         pass
     with open(allKardexFileDir, "r", encoding=encoding) as allKardexFile:
-        Log.log(f"Kardex loaded from {allKardexFileDir}", Log.success)
+        Log.log(f"Kardex cargado desde {allKardexFileDir}", Log.success)
         return json.load(allKardexFile)
 
 

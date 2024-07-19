@@ -31,11 +31,11 @@ def safeFileName(info: str, path: str):
 
     if os.path.exists(path):
         Log.log(
-            f"The file '{
-                path}' already exists, do you want to overwrite it?",
+            f"El archivo '{
+                path}' ya existe ¿Desea remplazarlo?",
             Log.warning
         )
-        option = input(f"[Y/N]\n")
+        option = input(f"[Si/No]\n")
         option = option.lower()
         option = normalizeText(option)
 
@@ -53,7 +53,7 @@ def safeFileName(info: str, path: str):
 
             newPath = os.path.join(baseDir, newFileName)
 
-    Log.log(f"The selected path is: {newPath}", Log.info)
+    Log.log(f"Ruta seleccionada: {newPath}", Log.info)
     return newPath
 
 

@@ -11,9 +11,9 @@ bs4 = "*"
 alive-progress = "*"
 pandas = "*"
 openpyxl = "*"
+ipython = "*"
 
 [dev-packages]
-ipython = "*"
 
 [requires]
 python_version = "3.12"

@@ -69,7 +69,7 @@ def createStudentsList():
             df = df.sort_values(by=["Nombre", "CURP"], ascending=True)
             df.to_excel(path)
 
-    return groups
+    return None
 
 
 if __name__ == "__main__":

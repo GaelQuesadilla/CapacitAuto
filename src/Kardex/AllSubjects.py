@@ -58,6 +58,8 @@ class AllSubjects():
             f"{Fore.GREEN}[✓] All Subjects saved in: {self.allSubjectsFileDir}"
         )
 
+        return None
+
     def getAllFromExcel(self):
 
         df = pd.read_excel(self.allSubjectsFileDir)

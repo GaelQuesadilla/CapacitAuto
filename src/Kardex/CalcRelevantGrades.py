@@ -55,7 +55,7 @@ def calcRelevantGrades():
     with open(allKardexFileDir, "w", encoding=encoding) as allKardexFile:
         json.dump(allKardex, allKardexFile)
 
-    return getAllKardex()
+    return None
 
 
 if __name__ == "__main__":

@@ -55,7 +55,7 @@ def saveAllKardex():
     with open(curpReportFileDir, "w", encoding=encoding) as curpReportFile:
         json.dump(curpReport, curpReportFile)
 
-    return {"curpReport": curpReport}
+    return None
 
 
 def getAllKardex():

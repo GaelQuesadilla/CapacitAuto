@@ -2,12 +2,13 @@ from src.Config import Config
 from colorama import init, Fore, Back
 import os
 from .errors import InvalidInput
-from src.Log import Log
+from src.Log import Log, log_function
 from .GetListDirs import getListDirs
 
 init(autoreset=True)
 
 
+@log_function
 def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: str = "*", suffix: str = "*", isParent: bool = True):
     """Prompts the user to select a file from a directory.
 
@@ -34,7 +35,7 @@ def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: 
     InvalidInput
         If the selected index is out of range
     """
-    Log.log(f"{info}\n{prefix=}, {suffix=}", Log.info, save=isParent)
+    Log.log(f"{info}\n{prefix=}, {suffix=}", Log.action, save=isParent)
 
     baseDir = os.path.join(baseDir)
     if baseDir.endswith("\\"):
@@ -104,4 +105,4 @@ def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: 
 
 
 if __name__ == "__main__":
-    askPath("This is a test", prefix="AllSubjects", suffix=".xlsx")
+    askPath("This is a test", prefix="*", suffix="*")

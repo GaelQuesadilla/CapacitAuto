@@ -7,7 +7,7 @@ from colorama import Fore, init
 import numpy
 from src.FileManager.SafeFileName import safeFileName
 from src.FileManager.AskFile import askPath
-from src.Log import Log
+from src.Log import Log, log_function
 
 init(autoreset=True)
 
@@ -58,6 +58,7 @@ class AllSubjects():
             prefix = Config.read("General", "relevant_subjects_name")
             self._allSubjects[prefix.format(package)] = []
 
+    @log_function
     def getAll(self):
         """Collects all subjects from students kardex data. 
 
@@ -79,6 +80,7 @@ class AllSubjects():
 
         return self._allSubjects
 
+    @log_function
     def saveToExcel(self):
         """Collect and save all subjects data into an Excel file.
 
@@ -102,6 +104,7 @@ class AllSubjects():
             Log.success
         )
 
+    @log_function
     def getAllFromExcel(self):
         """Loads the subjects data from an Excel file.
 

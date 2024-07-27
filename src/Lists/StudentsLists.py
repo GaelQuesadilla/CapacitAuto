@@ -5,10 +5,11 @@ import os
 from alive_progress import alive_bar
 from colorama import init, Fore
 from src.FileManager.SafeFileName import safeFileName
-from src.Log import Log
+from src.Log import Log, log_function
 init(autoreset=True)
 
 
+@log_function
 def createStudentsList():
     """Sorts students according to their semester and group, and then saves them in an Excel file"""
 

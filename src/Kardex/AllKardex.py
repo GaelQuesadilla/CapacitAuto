@@ -7,7 +7,7 @@ import json
 from src.Config import Config
 import os
 from src.FileManager.SafeFileName import safeFileName
-from src.Log import Log
+from src.Log import Log, log_function
 
 
 init(autoreset=True)
@@ -15,6 +15,7 @@ init(autoreset=True)
 encoding = Config.read("General", "encoding")
 
 
+@log_function
 def saveAllKardex():
     """Read CURPs from a file, get the kardex information and save the results as a json file."""
     curpsDir = askPath("Consiguiendo CURPs", suffix=".txt")
@@ -69,6 +70,7 @@ def saveAllKardex():
     Log.log(f"Reporte de CURPs guardado en {allKardexFileDir}", Log.success)
 
 
+@log_function
 def getAllKardex(allKardexFileDir: str = None):
     """Retrieves and returns all kardex information from 'AllKardex.json'.
 

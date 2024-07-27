@@ -3,10 +3,11 @@ import os
 from colorama import Fore, init
 from src.Tools.Normalize import normalizeText
 from .AskFile import askPath
-from src.Log import Log
+from src.Log import Log, log_function
 init(autoreset=True)
 
 
+@log_function
 def safeFileName(info: str, path: str):
     """Prompts the user to ask if they want to overwrite a file
 

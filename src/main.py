@@ -7,10 +7,10 @@ from src.Log import Log
 if __name__ == "__main__":
     Log.log("Start", Log.info)
 
-    saveAllKardex()
-    subjects = AllSubjects()
+    allKardexFileDir = saveAllKardex()
+    subjects = AllSubjects(allKardexFileDir)
     subjects.saveToExcel()
-    calcRelevantGrades()
-    createStudentsList()
+    calcRelevantGrades(allKardexFileDir)
+    createStudentsList(allKardexFileDir)
 
     Log.log("End", Log.info)

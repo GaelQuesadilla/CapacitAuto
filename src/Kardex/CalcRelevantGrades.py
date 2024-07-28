@@ -10,11 +10,16 @@ from src.Log import log_function
 
 
 @log_function
-def calcRelevantGrades():
-    """Calculates relevant grades for each student based on specified subjects and saves them in a json file"""
-    # TODO Añadir path estático para evitar repetir prompts
-    allKardex = getAllKardex()
-    subjects = AllSubjects()
+def calcRelevantGrades(allKardexFileDir: str = None):
+    """Calculates relevant grades for each student based on specified subjects and saves them in a json file
+
+    Parameters
+    ----------
+    allKardexFileDir : str, optional
+        The path of the Kardex file to get, by default None
+    """
+    allKardex = getAllKardex(allKardexFileDir)
+    subjects = AllSubjects(allKardexFileDir)
     allSubjects = subjects.getAllFromExcel()
 
     options = Config.read(
@@ -51,10 +56,7 @@ def calcRelevantGrades():
                 student["Relevant_Grades"][relevantGradeKey] = relevantGrade
 
             bar()
-    allKardexFileDir = askPath(
-        "Consiguiendo archivo kardex",
-        Config.read("Files", "data_dir"), prefix="AllKardex", suffix=".json"
-    )
+
     encoding = Config.read("General", "encoding")
     with open(allKardexFileDir, "w", encoding=encoding) as allKardexFile:
         json.dump(allKardex, allKardexFile)

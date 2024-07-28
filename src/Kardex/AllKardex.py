@@ -17,7 +17,13 @@ encoding = Config.read("General", "encoding")
 
 @log_function
 def saveAllKardex():
-    """Read CURPs from a file, get the kardex information and save the results as a json file."""
+    """Read CURPs from a file, get the kardex information and save the results as a json file.
+
+    Returns
+    -------
+    str
+        The kardex file path
+    """
     # TODO añadir condicional para evitar repetir alumnos
     curpsDir = askPath("Consiguiendo CURPs", suffix=".txt")
     curps = open(curpsDir, "rt").readlines()
@@ -69,10 +75,17 @@ def saveAllKardex():
 
     Log.log(f"Reporte de CURPs guardado en {curpReportFileDir}", Log.success)
 
+    return allKardexFileDir
+
 
 @log_function
 def getAllKardex(allKardexFileDir: str = None):
     """Retrieves and returns all kardex information from 'AllKardex.json'.
+
+    Parameters
+    ----------
+    allKardexFileDir : str, optional
+        The path of the Kardex file to get, by default None
 
     Returns
     -------
@@ -81,13 +94,26 @@ def getAllKardex(allKardexFileDir: str = None):
     """
 
     if allKardexFileDir is None:
-        allKardexFileDir = askPath(
-            "Cargando archivo de kardex...", Config.read("Files", "data_dir"), prefix="AllKardex", suffix=".json")
+        allKardexFileDir = askKardexPath()
+
     if not allKardexFileDir is None:
         pass
     with open(allKardexFileDir, "r", encoding=encoding) as allKardexFile:
         Log.log(f"Kardex cargado desde {allKardexFileDir}", Log.success)
         return json.load(allKardexFile)
+
+
+def askKardexPath():
+    """Ask the path of the kardex file
+
+    Returns
+    -------
+    str
+        The path of the kardex file
+    """
+    allKardexFileDir: str = askPath(
+        "Cargando archivo de kardex...", Config.read("Files", "data_dir"), prefix="AllKardex", suffix=".json")
+    return allKardexFileDir
 
 
 if __name__ == "__main__":

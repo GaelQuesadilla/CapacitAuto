@@ -25,6 +25,8 @@ class AllSubjects():
         A dictionary to store subjects for each semester.
     allSubjectsFileDir : str
         The file path for saving and loading the subjects data in Excel format.
+    _allKardexFileDir : str
+        The file path for load the kardex data.
 
     Methods
     -------
@@ -36,10 +38,15 @@ class AllSubjects():
         Loads the subjects data from an Excel file.
     """
 
-    def __init__(self):
-        """Initializes AllSubjects class with default values and file_paths."""
+    def __init__(self, allKardexFileDir: str = None):
+        """Initializes AllSubjects class with default values and file_paths.
+
+        Parameters
+        ----------
+        allKardexFileDir : str, optional
+            The path of the Kardex file to get, by default None
+        """
         # TODO Añadir un directorio estático en AllSubject para evitar prompts repetidos
-        # Todo añadir un directorio estático en AllKardex para evitar prompts repetidos
         self._allSubjects = {
             "1": [],
             "2": [],
@@ -49,6 +56,7 @@ class AllSubjects():
             "6": [],
         }
         self.allSubjectsFileDir = None
+        self._allKardexFileDir = allKardexFileDir
 
         for package in Config.read("School", "packages").split(","):
             prefix = Config.read("General", "relevant_subjects_name")
@@ -67,7 +75,7 @@ class AllSubjects():
         dict
             A dict containing all subjects for each semester
         """
-        allStudents = getAllKardex()
+        allStudents = getAllKardex(self._allKardexFileDir)
 
         with alive_bar(len(allStudents)) as bar:
             for student in allStudents:

@@ -10,10 +10,16 @@ init(autoreset=True)
 
 
 @log_function
-def createStudentsList():
-    """Sorts students according to their semester and group, and then saves them in an Excel file"""
+def createStudentsList(allKardexFileDir: str = None):
+    """Sorts students according to their semester and group, and then saves them in an Excel file
 
-    students = getAllKardex()
+    Parameters
+    ----------
+    allKardexFileDir : str, optional
+        The path of the Kardex file to get, by default None
+    """
+
+    students = getAllKardex(allKardexFileDir)
     Log.log(f"Creando listas de estudiantes...", Log.info)
 
     packages = Config.read("School", "packages").split(",")

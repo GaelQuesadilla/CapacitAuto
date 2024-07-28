@@ -12,6 +12,7 @@ alive-progress = "*"
 pandas = "*"
 openpyxl = "*"
 ipython = "*"
+requests-cache = "*"
 
 [dev-packages]
 

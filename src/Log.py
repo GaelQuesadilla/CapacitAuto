@@ -140,6 +140,15 @@ def log_function(func):
                 save=True,
                 show=True
             )
+        except KeyboardInterrupt:
+            Log.log(
+                text=f"Error en la función: {
+                    func.__name__}\nError -> El sistema ha sido interrumpido",
+                logType=Log.function_error,
+                save=True,
+                show=True
+            )
+            exit()
 
         t2 = time.time()
 

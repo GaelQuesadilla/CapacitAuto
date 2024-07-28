@@ -13,6 +13,8 @@ The default configuration is a dictionary with sections and key-value pairs:
     * relevant_grades_name (str): Format string for relevant grades name (default: "Promedio relevante para {}")
 * Web:
     * kardex_url (str): URL for accessing student records (default: "https://apps.cobachbcs.edu.mx/Sice/ReportesImpresos/wf_Rep_Kardex_ws.aspx")
+    * cache_expire_after (str): Time in seconds to use cache (default: 7200)
+    * kardex_cache_session_name (str): Cache session name for save kardex requests (default:"cache/kardex")
 * School:
     * school_key (str): School identification key
     * school_shift (str): School shift (e.g., "M" for morning)
@@ -36,6 +38,8 @@ default_config = {
     },
     "Web": {
         "kardex_url": "https://apps.cobachbcs.edu.mx/Sice/ReportesImpresos/wf_Rep_Kardex_ws.aspx",
+        "cache_expire_after": 2*60*60,  # 2h
+        "kardex_cache_session_name": "cache/kardex"
     },
     "School": {
         "school_key": "03ECB0004K",

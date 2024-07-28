@@ -1,5 +1,10 @@
 from src.Config import Config
-import requests
+from requests_cache import CachedSession
+
+session = CachedSession(
+    cache_name=Config.read("Web", "kardex_cache_session_name"),
+    expire_after=int(Config.read("Web", "cache_expire_after"))
+)
 
 
 def GetStudentKardex(curp: str):
@@ -22,7 +27,7 @@ def GetStudentKardex(curp: str):
         "turno": Config.read("School", "school_shift"),
     }
 
-    response = requests.get(base_url, params=base_params)
+    response = session.get(base_url, params=base_params)
 
     return response
 

@@ -18,6 +18,7 @@ encoding = Config.read("General", "encoding")
 @log_function
 def saveAllKardex():
     """Read CURPs from a file, get the kardex information and save the results as a json file."""
+    # TODO añadir condicional para evitar repetir alumnos
     curpsDir = askPath("Consiguiendo CURPs", suffix=".txt")
     curps = open(curpsDir, "rt").readlines()
     allKardex = []

@@ -1,5 +1,8 @@
 import configparser
 import os
+from colorama import Fore, init
+
+init(autoreset=True)
 
 """
 This module defines a `Config` class for managing configuration settings in an INI file.
@@ -80,10 +83,9 @@ class Config():
             config["Files"] = default_config.get("Files")
             with open("config.ini", "w") as config_file:
                 config.write(config_file)
-            print("Config file has been written successfully")
+            print(f"{Fore.GREEN}[✓] Config file has been written successfully")
         except Exception as e:
-            print("Error")
-            print(e)
+            print(f"{Fore.RED}[✘] Error -> {e}")
 
     def read(section: str, option: str):
         """Reads a specific configuration value from the file ("config.ini").
@@ -97,15 +99,33 @@ class Config():
 
         Returns
         -------
-        str
+        any
             The value of the selected option
         """
         if not os.path.isfile("config.ini"):
-            print("config.ini not found")
+            print(f"{Fore.YELLOW}[⚠] Config.ini not found")
             create()
+
         config = configparser.ConfigParser()
         config.read("config.ini")
-        return config.get(section, option)
+
+        value: any = config.get(section, option)
+
+        try:
+            defaultValue: any = default_config.get(section).get(option)
+
+            if type(defaultValue) == str:
+                pass
+            elif type(defaultValue) == int:
+                value = int(value)
+            elif type(defaultValue) == float:
+                value = float(value)
+            elif type(defaultValue) == bool:
+                value = True if value == "True" else False
+
+        except:
+            pass
+        return value
 
 
 if __name__ == "__main__":

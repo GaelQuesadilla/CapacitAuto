@@ -3,7 +3,7 @@ from requests_cache import CachedSession
 
 session = CachedSession(
     cache_name=Config.read("Web", "kardex_cache_session_name"),
-    expire_after=int(Config.read("Web", "cache_expire_after"))
+    expire_after=Config.read("Web", "cache_expire_after")
 )
 
 

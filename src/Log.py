@@ -95,7 +95,7 @@ class Log():
                 text = f"\n{text}"
             print(text)
 
-        if save:
+        if save and Config.read("General", "debug"):
 
             encoding = Config.read("General", "encoding")
 

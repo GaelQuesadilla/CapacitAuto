@@ -89,7 +89,7 @@ class AllSubjects():
         self.allSubjectsFileDir = safeFileName(
             "Guardando Excel con todas las materias...",
             os.path.join(
-                Config.read("Files", "output_dir"),
+                Config.read("Files", "data_dir"),
                 "AllSubjects.xlsx")
         )
 
@@ -115,7 +115,7 @@ class AllSubjects():
         """
 
         self.allSubjectsFileDir = askPath(
-            "Consiguiendo tabla de excel con todas las materias ", Config.read("Files", "output_dir"), prefix="AllSubjects", suffix="xlsx")
+            "Consiguiendo tabla de excel con todas las materias ", Config.read("Files", "data_dir"), prefix="AllSubjects", suffix="xlsx")
 
         df = pd.read_excel(self.allSubjectsFileDir)
 

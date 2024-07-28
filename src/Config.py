@@ -52,8 +52,8 @@ default_config = {
     "Files": {
         "data_dir": os.path.join(os.getcwd(), "data\\"),
         "output_dir": os.path.join(os.getcwd(), "output\\"),
-        "reports_dir": os.path.join(os.getcwd(), "output\\reports\\"),
-        "lists_dir": os.path.join(os.getcwd(), "output\\lists\\"),
+        "reports_dir": os.path.join(os.getcwd(), "data\\reports\\"),
+        "lists_dir": os.path.join(os.getcwd(), "data\\lists\\"),
         "logs_dir": os.path.join(os.getcwd(), "logs\\"),
     },
 }

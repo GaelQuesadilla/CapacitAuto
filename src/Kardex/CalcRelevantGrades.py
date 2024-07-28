@@ -53,7 +53,7 @@ def calcRelevantGrades():
             bar()
     allKardexFileDir = askPath(
         "Consiguiendo archivo kardex",
-        Config.read("Files", "output_dir"), prefix="AllKardex", suffix=".json"
+        Config.read("Files", "data_dir"), prefix="AllKardex", suffix=".json"
     )
     encoding = Config.read("General", "encoding")
     with open(allKardexFileDir, "w", encoding=encoding) as allKardexFile:

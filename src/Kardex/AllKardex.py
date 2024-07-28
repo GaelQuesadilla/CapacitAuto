@@ -44,7 +44,7 @@ def saveAllKardex():
 
             bar()
     allKardexFileDir = os.path.join(
-        Config.read("Files", "output_dir"),
+        Config.read("Files", "data_dir"),
         "AllKardex.json"
     )
     allKardexFileDir = safeFileName(
@@ -59,16 +59,15 @@ def saveAllKardex():
 
     curpReportFileDir = os.path.join(
         Config.read("Files", "reports_dir"),
-        "invalidCurps.json"
+        "CURPS INVALIDAS.txt"
     )
-    curpReportFileDir = safeFileName(
-        "Guardando reporte de CURPs...", curpReportFileDir
-    )
+
+    Log.log("Guardando reporte de CURPS...", Log.info)
 
     with open(curpReportFileDir, "w", encoding=encoding) as curpReportFile:
-        json.dump(curpReport, curpReportFile)
+        curpReportFile.write("\n".join(curpReport))
 
-    Log.log(f"Reporte de CURPs guardado en {allKardexFileDir}", Log.success)
+    Log.log(f"Reporte de CURPs guardado en {curpReportFileDir}", Log.success)
 
 
 @log_function
@@ -83,7 +82,7 @@ def getAllKardex(allKardexFileDir: str = None):
 
     if allKardexFileDir is None:
         allKardexFileDir = askPath(
-            "Cargando archivo de kardex...", Config.read("Files", "output_dir"), prefix="AllKardex", suffix=".json")
+            "Cargando archivo de kardex...", Config.read("Files", "data_dir"), prefix="AllKardex", suffix=".json")
     if not allKardexFileDir is None:
         pass
     with open(allKardexFileDir, "r", encoding=encoding) as allKardexFile:

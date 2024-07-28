@@ -85,7 +85,7 @@ class Log():
             currentLog = f"[λ] {text}"
             text = f"{Fore.LIGHTGREEN_EX}{currentLog}"
 
-        elif logType == Log.action:
+        elif logType in [Log.action, Log.warning]:
             currentLog = f"[>] {text}"
             text = f"{Fore.MAGENTA}{currentLog}"
 

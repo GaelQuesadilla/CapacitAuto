@@ -46,7 +46,7 @@ default_config = {
         "school_key": "03ECB0004K",
         "school_shift": "M",
         "packages":
-            "Informatica,Servicios turísticos,Dibujo arquitectónico,Contabilidad",
+            "Informatica,Servicios turisticos,Dibujo arquitectonico,Contabilidad",
         "trainings":
             "Ciencias economico administrativas,Ciencias naturales,Ciencias exactas,Ciencias sociales y humanidades",
     },

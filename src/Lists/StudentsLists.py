@@ -6,7 +6,20 @@ from alive_progress import alive_bar
 from colorama import init, Fore
 from src.FileManager.SafeFileName import safeFileName
 from src.Log import Log, log_function
+from .Student import Student
+
 init(autoreset=True)
+
+
+def setRelevantGrades(student: Student, relevantGrades: dict, courses: list):
+    prefix = Config.read("General", "relevant_grades_name")
+
+    for course in courses:
+        relevantAverageKey = prefix.format(course)
+        student.set(
+            relevantAverageKey,
+            relevantGrades.get(relevantAverageKey)
+        )
 
 
 @log_function
@@ -37,33 +50,29 @@ def createStudentsList(allKardexFileDir: str = None):
             if groups.get(semester).get(group) is None:
                 groups[semester][group] = []
 
-            studentDataToSave = {
-                "CURP": student.get("CURP"),
-                "Semestre": student.get("Semester"),
-                "Grupo": student.get("Group"),
-                "Turno": student.get("Shift"),
-                "Nombre": student.get("Name"),
-                "Promedio": student.get("Final_Grade"),
-            }
+            studentInfo: Student = Student(
+                CURP=student.get("CURP"),
+                Nombre=student.get("Name"),
+                Semestre=student.get("Semester"),
+                Grupo=student.get("Group"),
+                Promedio=student.get("Final_Grade"),
+                Turno=student.get("Shift")
+            )
 
             prefix = Config.read("General", "relevant_grades_name")
 
+            relevantGrades = student.get("Relevant_Grades")
+
             if student.get("Semester") in ["1", "2"]:
-                for package in packages:
-                    relevantAverageKey = prefix.format(package)
-                    studentDataToSave[relevantAverageKey] = student.get(
-                        "Relevant_Grades").get(relevantAverageKey)
+                setRelevantGrades(studentInfo, relevantGrades, packages)
 
             if student.get("Semester") in ["3", "4"]:
-                for training in trainings:
-                    relevantAverageKey = prefix.format(training)
-                    studentDataToSave[relevantAverageKey] = student.get(
-                        "Relevant_Grades").get(relevantAverageKey)
+                setRelevantGrades(studentInfo, relevantGrades, trainings)
 
             if student.get("Semester") in ["5", "6"]:
                 pass
 
-            groups[semester][group].append(studentDataToSave)
+            groups[semester][group].append(studentInfo.to_dict())
 
             bar()
 

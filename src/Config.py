@@ -35,6 +35,7 @@ default_config = {
         "debug": True,
         "relevant_subjects_name": "Materias relevantes para {}",
         "relevant_grades_name": "Promedio relevante para {}",
+        "choice_name": "Opción {}",
     },
     "Web": {
         "kardex_url": "https://apps.cobachbcs.edu.mx/Sice/ReportesImpresos/wf_Rep_Kardex_ws.aspx",
@@ -105,7 +106,21 @@ class Config():
             create()
         config = configparser.ConfigParser()
         config.read("config.ini")
-        return config.get(section, option)
+
+        value = config.get(section, option)
+        defaultValue = default_config.get(section).get(option)
+
+        try:
+            if type(defaultValue) == str:
+                pass
+            elif type(defaultValue) == int:
+                value = int(value)
+            elif type(defaultValue) == float:
+                value = float(value)
+
+        except Exception:
+            pass
+        return value
 
 
 if __name__ == "__main__":

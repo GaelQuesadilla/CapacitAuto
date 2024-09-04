@@ -4,6 +4,7 @@ from src.Tools.Normalize import normalizeText
 import pprint
 from typing import Any
 from src.Log import Log
+import pprint
 
 
 packages = Config.read("School", "packages").split(",")
@@ -33,12 +34,12 @@ class Student:
         The student's shift
     """
 
-    CURP: str
-    Semestre: int
-    Grupo: str
-    Turno: str
-    Nombre: str
-    Promedio: float
+    CURP: str = None
+    Semestre: str = None
+    Grupo: str = None
+    Turno: str = None
+    Nombre: str = None
+    Promedio: float = None
 
     def __post_init__(self):
         if self.Semestre in ["1", "2"]:
@@ -70,6 +71,20 @@ class Student:
 
     def to_dict(self):
         return self.__dict__
+
+
+def getEmptyStudent(Semestre: int):
+
+    emptyStudent: Student = Student(
+        CURP=None,
+        Semestre=Semestre,
+        Grupo=None,
+        Turno=None,
+        Nombre=None,
+        Promedio=None
+    )
+
+    return emptyStudent
 
 
 if __name__ == "__main__":

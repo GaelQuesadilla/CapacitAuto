@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field, asdict
 from src.Config import Config
 from src.Tools.Normalize import normalizeText
 import pprint
@@ -22,13 +22,13 @@ class Student:
     ----------
     Curp: str
         The student's CURP
-    Nombre: str 
+    Nombre: str
         The student's Name
     Promedio: float
         The student's average
     Semester: int
         The student's semester
-    Grupo: str
+    Grupo: str  
         The student's group
     Turno: str
         The student's shift
@@ -40,8 +40,9 @@ class Student:
     Turno: str = None
     Nombre: str = None
     Promedio: float = None
+    extra_fields: dict = field(default_factory=dict, init=False)
 
-    def __post_init__(self):
+    def __post_init__(self, **kwargs):
         if self.Semestre in ["1", "2"]:
             self._set_attributes(packages, choicesPrefix)
             self._set_attributes(packages, relevantGradesPrefix)
@@ -50,9 +51,13 @@ class Student:
             self._set_attributes(trainings, choicesPrefix)
             self._set_attributes(trainings, relevantGradesPrefix)
 
+        for kwarg, value in kwargs:
+            self.set(kwarg, value)
+
     def _set_attributes(self, items: list, prefix: str):
         for item in items:
-            setattr(self, prefix.format(item), None)
+            if not prefix.format(item) in list(self.extra_fields.keys()):
+                self.extra_fields[prefix.format(item)] = None
 
     def get(self, name: str) -> Any:
         if hasattr(self, name):
@@ -69,23 +74,19 @@ class Student:
     def set(self, name: str, value: Any):
         setattr(self, name, value)
 
+    def setExtras(self, **kwargs):
+        for key, value in kwargs:
+            self.default_factory[key] = value
+
     def to_dict(self):
-        return self.__dict__
+        default_dict: dict = asdict(self)
+        default_dict = default_dict | default_dict["extra_fields"]
+        default_dict.pop("extra_fields")
 
-
-def getEmptyStudent(Semestre: int):
-
-    emptyStudent: Student = Student(
-        CURP=None,
-        Semestre=Semestre,
-        Grupo=None,
-        Turno=None,
-        Nombre=None,
-        Promedio=None
-    )
-
-    return emptyStudent
+        return default_dict
 
 
 if __name__ == "__main__":
-    pass
+    test = Student(Semestre="1")
+    pprint.pp(test.to_dict())
+    pprint.pp(asdict(test))

@@ -16,7 +16,7 @@ def setRelevantGrades(student: Student, relevantGrades: dict, courses: list):
 
     for course in courses:
         relevantAverageKey = prefix.format(course)
-        student.set(
+        student.setExtras(
             relevantAverageKey,
             relevantGrades.get(relevantAverageKey)
         )

@@ -4,12 +4,12 @@ import pandas as pd
 import pprint
 from .StudentList import StudentList
 import pprint
-from .Student import Student, getEmptyStudent
+from .Student import Student
 
 
 def getPerfectList(allLists: list, Semestre: str):
 
-    emptyStudent = getEmptyStudent(Semestre)
+    emptyStudent = Student(Semestre=Semestre)
 
     pprint.pp(emptyStudent)
     headersDf: pd.DataFrame = pd.DataFrame.from_dict(emptyStudent.to_dict())

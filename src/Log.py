@@ -1,3 +1,4 @@
+from datetime import datetime
 from colorama import init, Fore
 import os
 import datetime
@@ -62,7 +63,7 @@ class Log():
         """
 
         if logType == Log.info:
-            currentLog = f"[?] {text}"
+            currentLog = f"[INFO] {text}"
             text = f"{Fore.BLUE}{currentLog}"
 
         elif logType == Log.success:
@@ -70,15 +71,15 @@ class Log():
             text = f"{Fore.GREEN}{currentLog}"
 
         elif logType == Log.error:
-            currentLog = f"[✘] {text}"
+            currentLog = f"[ERROR] {text}"
             text = f"{Fore.RED}{currentLog}"
 
         elif logType == Log.function_error:
-            currentLog = f"[λ✘] {text}"
+            currentLog = f"[λ ERROR] {text}"
             text = f"{Fore.RED}{currentLog}"
 
         elif logType == Log.warning:
-            currentLog = f"[⚠] {text}"
+            currentLog = f"[WARNING] {text}"
             text = f"{Fore.YELLOW}{currentLog}"
 
         elif logType == Log.function:
@@ -99,11 +100,12 @@ class Log():
 
             encoding = Config.read("General", "encoding")
 
-            logDir = Config.read("Files", "logs_dir")
-            logPath = os.path.join(logDir, "logs.txt")
-
             now = datetime.datetime.now()
             date = now.strftime("%Y/%m/%d %H:%M:%S")
+
+            logDir = Config.read("Files", "logs_dir")
+            logPath = os.path.join(
+                logDir, f"log_{now.strftime('%Y-%m-%d')}.log")
 
             currentLog = currentLog.replace("\n", "\n\t\t\t\t\t|->")
 
@@ -162,3 +164,27 @@ def log_function(func):
         return result
 
     return wrapper
+
+
+class PrintLog:
+
+    def success(text: str, save: bool = True, show: bool = True):
+        Log.log(text, Log.success, save, show)
+
+    def info(text: str, save: bool = True, show: bool = True):
+        Log.log(text, Log.info, save, show)
+
+    def error(text: str, save: bool = True, show: bool = True):
+        Log.log(text, Log.error, save, show)
+
+    def warning(text: str, save: bool = True, show: bool = True):
+        Log.log(text, Log.warning, save, show)
+
+    def function(text: str, save: bool = True, show: bool = True):
+        Log.log(text, Log.function, save, show)
+
+    def function_error(text: str, save: bool = True, show: bool = True):
+        Log.log(text, Log.function_error, save, show)
+
+    def action(text: str, save: bool = True, show: bool = True):
+        Log.log(text, Log.action, save, show)

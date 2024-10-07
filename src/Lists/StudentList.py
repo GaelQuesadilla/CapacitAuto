@@ -2,39 +2,35 @@ from __future__ import annotations
 from src.FileManager.AskFile import askPath
 from src.Config import Config
 import pandas as pd
-import pprint
 from src.Log import Log
 from src.Lists.Student import Student
+from src.Lists.List import List
+
+maxStudents = Config.read("School", "max_students_in_group")
 
 
-class StudentList:
-    def __init__(self, fileName: str = None):
-        self._fileName: str = fileName
-        self._df: pd.DataFrame = pd.DataFrame()
+class StudentList(List):
+    def __init__(
+        self,
+        fileName: str,
+        semester: str,
+        group: str = None,
+        package: str = None,
+        training=None,
+        maxStudents: int = maxStudents
+    ):
+        self._semester = semester
+        self._group = group
+        self._package = package
+        self.training = training
+        self.maxStudents = maxStudents
 
-    @property
-    def fileName(self):
-        return self._fileName
+        voidStudent: Student = Student(Semestre=semester)
+        headers = voidStudent.to_dict().keys()
 
-    @property
-    def df(self):
-        return self._df
+        df: pd.DataFrame = pd.DataFrame(columns=headers)
 
-    def load(self):
-        self._df = pd.read_excel(self.fileName)
-        print(self._df)
-
-    def save(self):
-        self._df.to_excel(self._fileName, index=False)
+        super().__init__(fileName, df)
 
     def moveStudent(self, CURP: str, to: StudentList):
-
         Log.log(Log.info, f"Moving student {CURP} from to {to}")
-
-
-if __name__ == "__main__":
-    from src.FileManager.AskFile import askPath
-    path: str = askPath("Getting student list for test", suffix="xlsx")
-
-    testList: StudentList = StudentList(path)
-    testList.load()

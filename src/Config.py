@@ -39,7 +39,7 @@ default_config = {
     },
     "Web": {
         "kardex_url": "https://apps.cobachbcs.edu.mx/Sice/ReportesImpresos/wf_Rep_Kardex_ws.aspx",
-        "cache_expire_after": 2*60*60,  # 2h
+        "cache_expire_after": 72*60*60,  # 72h
         "kardex_cache_session_name": "cache/kardex"
     },
     "School": {
@@ -49,6 +49,7 @@ default_config = {
             "Informatica,Servicios turisticos,Dibujo arquitectonico,Contabilidad",
         "trainings":
             "Ciencias economico administrativas,Ciencias naturales,Ciencias exactas,Ciencias sociales y humanidades",
+        "max_students_in_group": 45,
     },
     "Files": {
         "data_dir": os.path.join(os.getcwd(), "data\\"),

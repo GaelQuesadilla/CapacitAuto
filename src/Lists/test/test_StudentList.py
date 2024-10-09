@@ -4,23 +4,10 @@ from src.Lists.StudentList import StudentList
 from src.Lists.Student import Student
 from unittest.mock import patch
 from src.Config import Config
-import random
+from src.Lists.test.GenStudent import genStudent
+
 
 maxStudents = Config.read("School", "max_students_in_group")
-
-
-def genStudent(index: int):
-
-    student = Student(**{
-        "CURP": f"id{index}-GOMG060722HBSNNLA5",
-        "Semestre": "1",
-        "Grupo": "B",
-        "Turno": "M",
-        "Nombre": f"{index}GONZALEZ MENDEZ, GAEL",
-        "Promedio": random.randrange(5, 10),
-    })
-
-    return student
 
 
 class TestStudentList(unittest.TestCase):

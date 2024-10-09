@@ -5,11 +5,13 @@ import pandas as pd
 from src.Log import Log
 from src.Lists.Student import Student
 from src.Lists.List import List
+from src.Lists.errors import InvalidOperationInLists, TryingToDeleteAnInexistentStudent
 
 maxStudents = Config.read("School", "max_students_in_group")
 
 
 class StudentList(List):
+    # TODO Añadir un método para actualizar la información del estudiante
     def __init__(
         self,
         fileName: str,
@@ -32,5 +34,80 @@ class StudentList(List):
 
         super().__init__(fileName, df)
 
-    def moveStudent(self, CURP: str, to: StudentList):
-        Log.log(Log.info, f"Moving student {CURP} from to {to}")
+    def getStudent(self, CURP: str):
+        student = Student(Semestre=self._semester)
+
+        studentData = self.df[self.df["CURP"] == CURP]
+
+        if studentData.shape[0] == 0:
+            Log.log(
+                f"La búsqueda de la CURP {CURP} en la lista {
+                    self.fileName} no consigue ningún elemento",
+                Log.warning
+            )
+            return None
+
+        if studentData.shape[0] > 1:
+            Log.log(
+                f"La búsqueda de la CURP {CURP} en la lista {
+                    self.fileName} consigue elementos duplicados",
+                Log.warning,
+            )
+
+        studentDataDict: dict = studentData.loc[0].to_dict()
+        for key, value in studentDataDict.items():
+            student.set(key, value)
+
+        return student
+
+    def addStudent(self, student: Student):
+        if student.Semestre != self._semester:
+            Log.log(
+                Log.warning,
+                f"El estudiante cpn CURP {student.CURP} tiene grado {
+                    student.Semestre} y será agregado a la lista con grado {self._semester}"
+            )
+        self.df.loc[len(self.df)] = student.to_dict()
+
+    def deleteStudent(self, student: Student = None):
+        studentToDelete = self.getStudent(student.CURP)
+
+        if studentToDelete == None:
+            raise TryingToDeleteAnInexistentStudent
+
+        self._df = self.df[self.df["CURP"] != student.CURP]
+
+    def moveStudent(self, student: Student, toList: StudentList):
+
+        toList.addStudent(student)
+        self.deleteStudent(student)
+        Log.log(
+            f"Moving student {
+                student.CURP} from to {toList.fileName}",
+            Log.info
+        )
+
+
+if __name__ == "__main__":
+    import pprint
+    student = Student(**{
+        "CURP": "GOMG060722HBSNNLA5",
+        "Semestre": "1",
+        "Grupo": "B",
+        "Turno": "M",
+        "Nombre": "GONZALEZ MENDEZ, GAEL",
+        "Promedio": 9.6,
+    })
+
+    studentList = StudentList("test1.xlsx", "1")
+    print("Añadiendo estudiante")
+    studentList.addStudent(student=student)
+    print(studentList.df)
+
+    print("Consiguiendo estudiante")
+    pprint.pp(studentList.getStudent("GOMG060722HBSNNLA5"))
+
+    print("Eliminando estudiante")
+    studentList.deleteStudent(student)
+
+    print(studentList.df)

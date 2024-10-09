@@ -72,7 +72,12 @@ class Student:
         return None
 
     def set(self, name: str, value: Any):
-        setattr(self, name, value)
+        extraKeys = self.extra_fields.keys()
+
+        if name in extraKeys:
+            self.extra_fields[name] = value
+        elif not name in extraKeys:
+            setattr(self, name, value)
 
     def setExtras(self, **kwargs):
         for key, value in kwargs:

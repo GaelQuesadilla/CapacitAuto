@@ -19,6 +19,14 @@ class List:
         self._fileName = fileName
 
     @property
+    def rows(self):
+        return self.df.shape[0]
+
+    @property
+    def columns(self):
+        return self.df.shape[1]
+
+    @property
     def df(self):
         return self._df
 

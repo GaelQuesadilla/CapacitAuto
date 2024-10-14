@@ -35,3 +35,6 @@ class List:
 
     def save(self):
         self._df.to_excel(self._fileName, index=False)
+
+    def sort(self, by: list, ascending: bool = False):
+        self._df = self.df.sort_values(ascending=ascending, by=by)

@@ -60,11 +60,11 @@ class StudentList(List):
         return student
 
     def addStudent(self, student: Student):
-        if student.Semestre != self._semester:
+        if not student.Semestre == self._semester:
             Log.log(
-                Log.warning,
-                f"El estudiante cpn CURP {student.CURP} tiene grado {
-                    student.Semestre} y será agregado a la lista con grado {self._semester}"
+                f"El estudiante con CURP {student.CURP} tiene grado '{
+                    student.Semestre}' y será agregado a la lista con grado '{self._semester}'.",
+                Log.warning
             )
         self.df.loc[len(self.df)] = student.to_dict()
 

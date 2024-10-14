@@ -67,8 +67,28 @@ class AdvancedGroup(Group):
     def sortByGrades(self):
         for course in self.courses:
             currentList = self._studentLists[course]
-            currentList.sort(ascending=False, by=[
-                             "Promedio", relevantGradesPrefix.format(course)])
+            currentList.sort(
+                ascending=False, by=[
+                    "Promedio", relevantGradesPrefix.format(course)]
+            )
+
+    def iterate(self):
+        changedLists = 0
+        for course in self.courses:
+            self.sortByGrades()
+            currentList = self._studentLists.get(course)
+            currentList.df.reset_index(drop=True, inplace=True)
+            shape = currentList.df.shape
+
+            for i in range(45, shape[0], 1):
+                curp: str = currentList.df.loc[i]["CURP"]
+                student: Student = currentList.getStudent(curp)
+
+                currentChoice = student.getChoiceIndex(course)
+                nextChoice = student.getChoiceName(currentChoice+1)
+
+                nextList = self._studentLists.get(nextChoice)
+                currentList.moveStudent(student=student, toList=nextList)
 
 
 if __name__ == "__main__":
@@ -108,6 +128,8 @@ if __name__ == "__main__":
 
     PrintLog.info("Set Perfect List")
     advancedGroup.setPerfectLists()
+
+    PrintLog.info("Set Perfect List")
 
     for course, studentList in advancedGroup.studentLists.items():
         PrintLog.info(f"Lista - {course}")

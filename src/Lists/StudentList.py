@@ -53,7 +53,7 @@ class StudentList(List):
                 Log.warning,
             )
 
-        studentDataDict: dict = studentData.loc[0].to_dict()
+        studentDataDict: dict = studentData.iloc[0].to_dict()
         for key, value in studentDataDict.items():
             student.set(key, value)
 
@@ -82,7 +82,7 @@ class StudentList(List):
         self.deleteStudent(student)
         Log.log(
             f"Moving student {
-                student.CURP} from to {toList.fileName}",
+                student.CURP} from {self.fileName} to {toList.fileName}",
             Log.info
         )
 

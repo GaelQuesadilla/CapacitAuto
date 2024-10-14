@@ -75,3 +75,25 @@ class TestStudentList(unittest.TestCase):
         studentList1.deleteStudent(studentToDelete)
 
         self.assertEqual(studentList1.rows, len(students)-1)
+
+    def test_StudentUpdate(self):
+        students: list = [genStudent(index) for index in range(0, 5)]
+
+        studentList = StudentList("test.xlsx", "1")
+
+        for student in students:
+            studentList.addStudent(student)
+
+        studentToUpdate: Student = students[0]
+
+        studentToUpdate.Nombre = "Nombre Actualizado"
+        studentToUpdate.Promedio = 10.0
+
+        studentList.updateStudent(studentToUpdate)
+
+        updatedStudent = studentList.getStudent(studentToUpdate.CURP)
+
+        self.assertEqual(updatedStudent.Nombre, "Nombre Actualizado")
+        self.assertEqual(updatedStudent.Promedio, 10.0)
+
+        self.assertEqual(studentList.df.shape[0], len(students))

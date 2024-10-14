@@ -73,11 +73,20 @@ class Student:
 
     def set(self, name: str, value: Any):
         extraKeys = self.extra_fields.keys()
+        primary_attrs = [
+            "CURP", "Semestre", "Grupo", "Turno", "Nombre", "Promedio"
+        ]
 
         if name in extraKeys:
             self.extra_fields[name] = value
-        elif not name in extraKeys:
+        elif not name in extraKeys and name in primary_attrs:
             setattr(self, name, value)
+        else:
+            Log.log(
+                f"No es posible agregar nuevos atributos desde {
+                    self.set.__name__}",
+                Log.warning
+            )
 
     def setExtras(self, **kwargs):
         for key, value in kwargs:

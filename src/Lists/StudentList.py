@@ -11,7 +11,6 @@ maxStudents = Config.read("School", "max_students_in_group")
 
 
 class StudentList(List):
-    # TODO Añadir un método para actualizar la información del estudiante
     def __init__(
         self,
         fileName: str,
@@ -86,6 +85,23 @@ class StudentList(List):
                 student.CURP} from to {toList.fileName}",
             Log.info
         )
+
+    def updateStudent(self, student: Student):
+        studentToUpdate = self.getStudent(student.CURP)
+
+        if studentToUpdate is None:
+            Log.log(
+                f"El estudiante con CURP {
+                    student.CURP} no fue encontrado en la lista.",
+                Log.warning
+            )
+            return None
+
+        # Actualiza cada campo en el DataFrame
+        for key, value in student.to_dict().items():
+            self.df.loc[self.df["CURP"] == student.CURP, key] = value
+
+        Log.log(f"Estudiante con CURP {student.CURP} actualizado.", Log.info)
 
 
 if __name__ == "__main__":

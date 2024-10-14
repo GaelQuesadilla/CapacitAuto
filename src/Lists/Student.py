@@ -2,7 +2,7 @@ from dataclasses import dataclass, field, asdict
 from src.Config import Config
 from src.Tools.Normalize import normalizeText
 import pprint
-from typing import Any
+from typing import Any, Dict, List
 from src.Log import Log
 import pprint
 
@@ -98,6 +98,43 @@ class Student:
         default_dict.pop("extra_fields")
 
         return default_dict
+
+    def getChoices(self) -> List[str]:
+        courses: List[str] = []
+        if self.Semestre in ["1", "2"]:
+            courses = packages
+        elif self.Semestre in ["3", "4"]:
+            courses = trainings
+        else:
+            return None
+
+        choices: Dict[str: int] = [
+            {
+                course: self.extra_fields.get(choicesPrefix.format(course))
+            }
+            for course in courses
+        ]
+
+        return choices
+
+    def getChoiceName(self, choice: int) -> str:
+        courses: List[str] = []
+        if self.Semestre in ["1", "2"]:
+            courses = packages
+        elif self.Semestre in ["3", "4"]:
+            courses = trainings
+        else:
+            return None
+
+        if choice > 4:
+            choice = 4
+
+        for course in courses:
+            if self.getChoiceIndex(course) == choice:
+                return course
+
+    def getChoiceIndex(self, choice: str) -> int:
+        return self.extra_fields.get(choicesPrefix.format(choice))
 
 
 if __name__ == "__main__":

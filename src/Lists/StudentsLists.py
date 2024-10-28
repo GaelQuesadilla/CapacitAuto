@@ -5,7 +5,7 @@ import os
 from alive_progress import alive_bar
 from colorama import init, Fore
 from src.FileManager.SafeFileName import safeFileName
-from src.Log import Log, log_function
+from src.Log import PrintLog, log_function
 from .Student import Student
 
 init(autoreset=True)
@@ -33,7 +33,7 @@ def createStudentsList(allKardexFileDir: str = None):
     """
 
     students = getAllKardex(allKardexFileDir)
-    Log.log(f"Creando listas de estudiantes...", Log.info)
+    PrintLog.info(f"Creando listas de estudiantes...")
 
     packages = Config.read("School", "packages").split(",")
     trainings = Config.read("School", "trainings").split(",")

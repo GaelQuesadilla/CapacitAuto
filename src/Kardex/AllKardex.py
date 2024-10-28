@@ -7,7 +7,7 @@ import json
 from src.Config import Config
 import os
 from src.FileManager.SafeFileName import safeFileName
-from src.Log import Log, log_function
+from src.Log import PrintLog, log_function
 
 
 init(autoreset=True)
@@ -36,15 +36,14 @@ def saveAllKardex():
             current = ReadKardex(curp)
             try:
                 info = current.getInfo()
-                Log.log(
+                PrintLog.success(
                     f"{curp}{Fore.RESET}: {info.get('Name')}, {info.get('Semester')}, {
-                        info.get('Group')}, {info.get("Final_Grade")}",
-                    Log.success
+                        info.get('Group')}, {info.get("Final_Grade")}"
                 )
                 allKardex.append(info)
             except InvalidCurp:
-                Log.log(
-                    f"{curp}{Fore.RESET}: CURP NO VALIDA", Log.warning
+                PrintLog.warning(
+                    f"{curp}{Fore.RESET}: CURP NO VALIDA"
                 )
                 curpReport.append(curp)
 
@@ -61,19 +60,19 @@ def saveAllKardex():
     with open(allKardexFileDir, "w", encoding=encoding) as allKardexFile:
         json.dump(allKardex, allKardexFile)
 
-    Log.log(f"Kardex guardado en {allKardexFileDir}", Log.success)
+    PrintLog.success(f"Kardex guardado en {allKardexFileDir}")
 
     curpReportFileDir = os.path.join(
         Config.read("Files", "reports_dir"),
         "CURPS INVALIDAS.txt"
     )
 
-    Log.log("Guardando reporte de CURPS...", Log.info)
+    PrintLog.info("Guardando reporte de CURPS...")
 
     with open(curpReportFileDir, "w", encoding=encoding) as curpReportFile:
         curpReportFile.write("\n".join(curpReport))
 
-    Log.log(f"Reporte de CURPs guardado en {curpReportFileDir}", Log.success)
+    PrintLog.success(f"Reporte de CURPs guardado en {curpReportFileDir}")
 
     return allKardexFileDir
 
@@ -99,7 +98,7 @@ def getAllKardex(allKardexFileDir: str = None):
     if not allKardexFileDir is None:
         pass
     with open(allKardexFileDir, "r", encoding=encoding) as allKardexFile:
-        Log.log(f"Kardex cargado desde {allKardexFileDir}", Log.success)
+        PrintLog.success(f"Kardex cargado desde {allKardexFileDir}")
         return json.load(allKardexFile)
 
 

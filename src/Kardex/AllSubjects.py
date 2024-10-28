@@ -7,7 +7,7 @@ from colorama import Fore, init
 import numpy
 from src.FileManager.SafeFileName import safeFileName
 from src.FileManager.AskFile import askPath
-from src.Log import Log, log_function
+from src.Log import PrintLog, log_function
 
 init(autoreset=True)
 
@@ -106,10 +106,9 @@ class AllSubjects():
         )
 
         df.to_excel(self.allSubjectsFileDir, index=False)
-        Log.log(
+        PrintLog.success(
             f"Todas las materias han sido guardadas en: {
-                self.allSubjectsFileDir}",
-            Log.success
+                self.allSubjectsFileDir}"
         )
 
     @log_function
@@ -127,10 +126,9 @@ class AllSubjects():
 
         df = pd.read_excel(self.allSubjectsFileDir)
 
-        Log.log(
+        PrintLog.success(
             f"Materias recuperadas desde: {
-                self.allSubjectsFileDir}",
-            Log.success
+                self.allSubjectsFileDir}"
         )
 
         allSubjectsFromExcel = df.to_dict()

@@ -3,7 +3,7 @@ import os
 from colorama import Fore, init
 from src.Tools.Normalize import normalizeText
 from .AskFile import askPath
-from src.Log import Log, log_function
+from src.Log import PrintLog, log_function
 init(autoreset=True)
 
 
@@ -24,17 +24,16 @@ def safeFileName(info: str, path: str):
         The new file name
     """
 
-    Log.log(info, Log.info)
+    PrintLog.info(info)
     path = os.path.join(path)
 
     if not os.path.exists(path):
         return path
 
     if os.path.exists(path):
-        Log.log(
+        PrintLog.warning(
             f"El archivo '{
-                path}' ya existe ¿Desea remplazarlo?",
-            Log.warning
+                path}' ya existe ¿Desea remplazarlo?"
         )
         option = input(f"[Si/No]\n")
         option = option.lower()
@@ -54,7 +53,7 @@ def safeFileName(info: str, path: str):
 
             newPath = os.path.join(baseDir, newFileName)
 
-    Log.log(f"Ruta seleccionada: {newPath}", Log.info)
+    PrintLog.info(f"Ruta seleccionada: {newPath}")
     return newPath
 
 

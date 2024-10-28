@@ -3,7 +3,7 @@ from src.Config import Config
 from src.Tools.Normalize import normalizeText
 import pprint
 from typing import Any, Dict, List
-from src.Log import Log
+from src.Log import PrintLog
 import pprint
 
 
@@ -63,9 +63,8 @@ class Student:
         if hasattr(self, name):
             return getattr(self, name)
         else:
-            Log.log(
+            PrintLog.warning(
                 f"Student {self.name} do not have attribute {name}",
-                Log.warning,
                 show=False
             )
 
@@ -82,10 +81,9 @@ class Student:
         elif not name in extraKeys and name in primary_attrs:
             setattr(self, name, value)
         else:
-            Log.log(
+            PrintLog.warning(
                 f"No es posible agregar nuevos atributos desde {
                     self.set.__name__}",
-                Log.warning
             )
 
     def setExtras(self, **kwargs):

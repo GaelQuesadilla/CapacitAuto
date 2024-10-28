@@ -2,15 +2,14 @@ from src.Kardex.AllKardex import saveAllKardex
 from src.Kardex.AllSubjects import AllSubjects
 from src.Kardex.CalcRelevantGrades import calcRelevantGrades
 from src.Lists.StudentsLists import createStudentsList
-from src.Log import Log
+from src.Log import PrintLog
 
 if __name__ == "__main__":
-    Log.log("Start", Log.info)
-
+    PrintLog.info("Start")
     allKardexFileDir = saveAllKardex()
     subjects = AllSubjects(allKardexFileDir)
     subjects.saveToExcel()
     calcRelevantGrades(allKardexFileDir)
     createStudentsList(allKardexFileDir)
 
-    Log.log("End", Log.info)
+    PrintLog.info("End")

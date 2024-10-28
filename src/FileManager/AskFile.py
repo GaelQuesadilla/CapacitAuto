@@ -2,7 +2,7 @@ from src.Config import Config
 from colorama import init, Fore, Back
 import os
 from .errors import InvalidInput
-from src.Log import Log, log_function
+from src.Log import log_function, PrintLog
 from .GetListDirs import getListDirs
 
 init(autoreset=True)
@@ -35,7 +35,7 @@ def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: 
     InvalidInput
         If the selected index is out of range
     """
-    Log.log(f"{info}\n{prefix=}, {suffix=}", Log.action, save=isParent)
+    PrintLog.action(f"{info}\n{prefix=}, {suffix=}", save=isParent)
 
     baseDir = os.path.join(baseDir)
     if baseDir.endswith("\\"):
@@ -80,7 +80,7 @@ def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: 
                                 prefix=prefix, suffix=suffix, isParent=False)
 
         if isParent:
-            Log.log(f"Archivo seleccionado: {selection}", Log.info)
+            PrintLog.info(f"Archivo seleccionado: {selection}")
 
         return selection
 
@@ -93,14 +93,13 @@ def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: 
 
     except ValueError:
 
-        Log.log(
-            "Error, por favor selecciona un valor entero valido, intente nuevamente",
-            Log.error
+        PrintLog.error(
+            "Error, por favor selecciona un valor entero valido, intente nuevamente"
         )
         return askPath(info, baseDir, prefix, suffix)
 
     except Exception as e:
-        Log.log(f"Error: {e}", Log.error)
+        PrintLog.error(f"Error: {e}")
         return None
 
 

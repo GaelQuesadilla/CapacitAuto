@@ -6,10 +6,10 @@ import math
 import os
 import json
 from src.FileManager.AskFile import askPath
-from src.Log import log_function
+from src.Log import setup_logger, trackFunction
 
 
-@log_function
+@trackFunction
 def calcRelevantGrades(allKardexFileDir: str = None):
     """Calculates relevant grades for each student based on specified subjects and saves them in a json file
 

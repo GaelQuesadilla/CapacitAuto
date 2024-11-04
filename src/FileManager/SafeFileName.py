@@ -1,13 +1,14 @@
 import datetime
 import os
-from colorama import Fore, init
+
 from src.Tools.Normalize import normalizeText
 from .AskFile import askPath
-from src.Log import PrintLog, log_function
-init(autoreset=True)
+from src.Log import setup_logger, trackFunction
+
+logging = setup_logger()
 
 
-@log_function
+@trackFunction
 def safeFileName(info: str, path: str):
     """Prompts the user to ask if they want to overwrite a file
 
@@ -24,14 +25,14 @@ def safeFileName(info: str, path: str):
         The new file name
     """
 
-    PrintLog.info(info)
+    logging.info(info)
     path = os.path.join(path)
 
     if not os.path.exists(path):
         return path
 
     if os.path.exists(path):
-        PrintLog.warning(
+        logging.warning(
             f"El archivo '{
                 path}' ya existe ¿Desea remplazarlo?"
         )
@@ -53,7 +54,7 @@ def safeFileName(info: str, path: str):
 
             newPath = os.path.join(baseDir, newFileName)
 
-    PrintLog.info(f"Ruta seleccionada: {newPath}")
+    logging.info(f"Ruta seleccionada: {newPath}")
     return newPath
 
 

@@ -4,28 +4,7 @@ import os
 """
 This module defines a `Config` class for managing configuration settings in an INI file.
 
-The default configuration is a dictionary with sections and key-value pairs:
-
-* General:
-    * encoding (str): Character encoding (default: "utf-8")
-    * debug (bool): Enable debugging mode (default: True)
-    * relevant_subjects_name (str): Format string for relevant subjects name (default: "Materias relevantes para {}")
-    * relevant_grades_name (str): Format string for relevant grades name (default: "Promedio relevante para {}")
-* Web:
-    * kardex_url (str): URL for accessing student records (default: "https://apps.cobachbcs.edu.mx/Sice/ReportesImpresos/wf_Rep_Kardex_ws.aspx")
-    * cache_expire_after (str): Time in seconds to use cache (default: 7200)
-    * kardex_cache_session_name (str): Cache session name for save kardex requests (default:"cache/kardex")
-* School:
-    * school_key (str): School identification key
-    * school_shift (str): School shift (e.g., "M" for morning)
-    * packages (str, comma-separated): List of offered packages
-    * trainings (str, comma-separated): List of offered training areas
-* Files:
-    * data_dir (str): Directory for storing data files (default: "data/")
-    * output_dir (str): Base directory for output files (default: "output/")
-    * reports_dir (str): Directory for storing reports within output (default: "output/reports/")
-    * lists_dir (str): Directory for storing lists within output (default: "output/lists/")
-    * logs_dir (str): Directory for storing logs (default: "logs/")
+The default configuration is a dictionary with sections and key-value pairs
 """
 
 
@@ -62,11 +41,33 @@ default_config = {
 
 
 class Config():
-    """Provides methods for creating and reading configuration settings from a file."""
+    """Provides methods for creating and reading configuration settings from a file.
+
+    * General:
+        * encoding (str): Codificación de caracteres (predeterminado: "utf-8")
+        * debug (bool): Habilitar el modo de depuración (predeterminado: True)
+        * relevant_subjects_name (str): Formato para el nombre de materias relevantes (predeterminado: "Materias relevantes para {}")
+        * relevant_grades_name (str): Formato para el nombre del promedio relevante (predeterminado: "Promedio relevante para {}")
+    * Web:
+        * kardex_url (str): URL para acceder a los registros de estudiantes (predeterminado: "https://apps.cobachbcs.edu.mx/Sice/ReportesImpresos/wf_Rep_Kardex_ws.aspx")
+        * cache_expire_after (str): Tiempo en segundos para usar la caché (predeterminado: 72 horas)
+        * kardex_cache_session_name (str): Nombre de la sesión de caché para guardar solicitudes de kardex (predeterminado: "cache/kardex")
+    * School:
+        * school_key (str): Clave de identificación de la escuela
+        * school_shift (str): Turno de la escuela (por ejemplo, "M" para matutino)
+        * packages (str, separados por comas): Lista de paquetes ofrecidos
+        * trainings (str, separados por comas): Lista de áreas de capacitación ofrecidas
+    * Files:
+        * data_dir (str): Directorio para almacenar archivos de datos (predeterminado: "data/")
+        * output_dir (str): Directorio base para archivos de salida (predeterminado: "output/")
+        * reports_dir (str): Directorio para almacenar informes dentro de la salida (predeterminado: "output/reports/")
+        * lists_dir (str): Directorio para almacenar listas dentro de la salida (predeterminado: "output/lists/")
+        * logs_dir (str): Directorio para almacenar registros (predeterminado: "logs/")
+    """
 
     def create():
         """
-        Creates a new configuration file ("config.ini") with default settings.
+        Creates a new configuration file("config.ini") with default settings.
 
         Raises
         ------
@@ -88,13 +89,13 @@ class Config():
             print(e)
 
     def read(section: str, option: str):
-        """Reads a specific configuration value from the file ("config.ini").
+        """Reads a specific configuration value from the file("config.ini").
 
         Parameters
         ----------
-        section : str
+        section: str
             The section name in the configuration file
-        option : str
+        option: str
             The option name
 
         Returns
@@ -104,7 +105,7 @@ class Config():
         """
         if not os.path.isfile("config.ini"):
             print("config.ini not found")
-            create()
+            config.create()
         config = configparser.ConfigParser()
         config.read("config.ini")
 

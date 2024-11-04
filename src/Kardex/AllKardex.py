@@ -7,15 +7,17 @@ import json
 from src.Config import Config
 import os
 from src.FileManager.SafeFileName import safeFileName
-from src.Log import PrintLog, log_function
+from src.Log import setup_logger, trackFunction
 
 
 init(autoreset=True)
+logging = setup_logger()
+
 
 encoding = Config.read("General", "encoding")
 
 
-@log_function
+@trackFunction
 def saveAllKardex():
     """Read CURPs from a file, get the kardex information and save the results as a json file.
 
@@ -25,6 +27,7 @@ def saveAllKardex():
         The kardex file path
     """
     # TODO añadir condicional para evitar repetir alumnos
+
     curpsDir = askPath("Consiguiendo CURPs", suffix=".txt")
     curps = open(curpsDir, "rt").readlines()
     allKardex = []
@@ -36,13 +39,13 @@ def saveAllKardex():
             current = ReadKardex(curp)
             try:
                 info = current.getInfo()
-                PrintLog.success(
+                logging.info(
                     f"{curp}{Fore.RESET}: {info.get('Name')}, {info.get('Semester')}, {
                         info.get('Group')}, {info.get("Final_Grade")}"
                 )
                 allKardex.append(info)
             except InvalidCurp:
-                PrintLog.warning(
+                logging.warning(
                     f"{curp}{Fore.RESET}: CURP NO VALIDA"
                 )
                 curpReport.append(curp)
@@ -60,24 +63,24 @@ def saveAllKardex():
     with open(allKardexFileDir, "w", encoding=encoding) as allKardexFile:
         json.dump(allKardex, allKardexFile)
 
-    PrintLog.success(f"Kardex guardado en {allKardexFileDir}")
+    logging.info(f"Kardex guardado en {allKardexFileDir}")
 
     curpReportFileDir = os.path.join(
         Config.read("Files", "reports_dir"),
         "CURPS INVALIDAS.txt"
     )
 
-    PrintLog.info("Guardando reporte de CURPS...")
+    logging.info("Guardando reporte de CURPS...")
 
     with open(curpReportFileDir, "w", encoding=encoding) as curpReportFile:
         curpReportFile.write("\n".join(curpReport))
 
-    PrintLog.success(f"Reporte de CURPs guardado en {curpReportFileDir}")
+    logging.info(f"Reporte de CURPs guardado en {curpReportFileDir}")
 
     return allKardexFileDir
 
 
-@log_function
+@trackFunction
 def getAllKardex(allKardexFileDir: str = None):
     """Retrieves and returns all kardex information from 'AllKardex.json'.
 
@@ -98,7 +101,7 @@ def getAllKardex(allKardexFileDir: str = None):
     if not allKardexFileDir is None:
         pass
     with open(allKardexFileDir, "r", encoding=encoding) as allKardexFile:
-        PrintLog.success(f"Kardex cargado desde {allKardexFileDir}")
+        logging.info(f"Kardex cargado desde {allKardexFileDir}")
         return json.load(allKardexFile)
 
 

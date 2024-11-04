@@ -3,13 +3,11 @@ from alive_progress import alive_bar
 import pandas as pd
 import os
 from src.Config import Config
-from colorama import Fore, init
-import numpy
 from src.FileManager.SafeFileName import safeFileName
 from src.FileManager.AskFile import askPath
-from src.Log import PrintLog, log_function
+from src.Log import setup_logger, trackFunction
 
-init(autoreset=True)
+logging = setup_logger()
 
 
 class AllSubjects():
@@ -66,7 +64,7 @@ class AllSubjects():
             prefix = Config.read("General", "relevant_subjects_name")
             self._allSubjects[prefix.format(package)] = []
 
-    @log_function
+    @trackFunction
     def getAll(self):
         """Collects all subjects from students kardex data. 
 
@@ -88,12 +86,13 @@ class AllSubjects():
 
         return self._allSubjects
 
-    @log_function
+    @trackFunction
     def saveToExcel(self):
         """Collect and save all subjects data into an Excel file.
 
         This method get all subjects and converts _allSubjects dictionary to a pandas DataFrame and saves it to an Excel file 
         """
+
         self.allSubjectsFileDir = safeFileName(
             "Guardando Excel con todas las materias...",
             os.path.join(
@@ -106,12 +105,12 @@ class AllSubjects():
         )
 
         df.to_excel(self.allSubjectsFileDir, index=False)
-        PrintLog.success(
+        logging.info(
             f"Todas las materias han sido guardadas en: {
                 self.allSubjectsFileDir}"
         )
 
-    @log_function
+    @trackFunction
     def getAllFromExcel(self):
         """Loads the subjects data from an Excel file.
 
@@ -126,7 +125,7 @@ class AllSubjects():
 
         df = pd.read_excel(self.allSubjectsFileDir)
 
-        PrintLog.success(
+        logging.info(
             f"Materias recuperadas desde: {
                 self.allSubjectsFileDir}"
         )

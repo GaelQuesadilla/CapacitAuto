@@ -3,7 +3,7 @@ from src.Config import Config
 from src.Tools.Normalize import normalizeText
 import pprint
 from typing import Any, Dict, List
-from src.Log import PrintLog
+from src.Log import setup_logger, trackFunction
 import pprint
 
 
@@ -12,6 +12,8 @@ trainings = Config.read("School", "trainings").split(",")
 
 relevantGradesPrefix = Config.read("General", "relevant_grades_name")
 choicesPrefix = Config.read("General", "choice_name")
+
+logging = setup_logger()
 
 
 @dataclass
@@ -63,7 +65,7 @@ class Student:
         if hasattr(self, name):
             return getattr(self, name)
         else:
-            PrintLog.warning(
+            logging.warning(
                 f"Student {self.name} do not have attribute {name}",
                 show=False
             )
@@ -81,7 +83,7 @@ class Student:
         elif not name in extraKeys and name in primary_attrs:
             setattr(self, name, value)
         else:
-            PrintLog.warning(
+            logging.warning(
                 f"No es posible agregar nuevos atributos desde {
                     self.set.__name__}",
             )

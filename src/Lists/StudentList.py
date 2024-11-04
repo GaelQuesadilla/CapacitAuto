@@ -2,12 +2,14 @@ from __future__ import annotations
 from src.FileManager.AskFile import askPath
 from src.Config import Config
 import pandas as pd
-from src.Log import PrintLog
+from src.Log import setup_logger, trackFunction
 from src.Lists.Student import Student
 from src.Lists.List import List
 from src.Lists.errors import InvalidOperationInLists, TryingToDeleteAnInexistentStudent
 
 maxStudents = Config.read("School", "max_students_in_group")
+
+logging = setup_logger()
 
 
 class StudentList(List):
@@ -39,14 +41,14 @@ class StudentList(List):
         studentData = self.df[self.df["CURP"] == CURP]
 
         if studentData.shape[0] == 0:
-            PrintLog.warning(
+            logging.warning(
                 f"La búsqueda de la CURP {CURP} en la lista {
                     self.fileName} no consigue ningún elemento"
             )
             return None
 
         if studentData.shape[0] > 1:
-            PrintLog.warning(
+            logging.warning(
                 f"La búsqueda de la CURP {CURP} en la lista {
                     self.fileName} consigue elementos duplicados"
             )
@@ -59,7 +61,7 @@ class StudentList(List):
 
     def addStudent(self, student: Student):
         if not student.Semestre == self._semester:
-            PrintLog.warning(
+            logging.warning(
                 f"El estudiante con CURP {student.CURP} tiene grado '{
                     student.Semestre}' y será agregado a la lista con grado '{self._semester}'."
             )
@@ -77,7 +79,7 @@ class StudentList(List):
 
         toList.addStudent(student)
         self.deleteStudent(student)
-        PrintLog.info(
+        logging.info(
             f"Moving student {
                 student.CURP} from {self.fileName} to {toList.fileName}"
         )
@@ -86,7 +88,7 @@ class StudentList(List):
         studentToUpdate = self.getStudent(student.CURP)
 
         if studentToUpdate is None:
-            PrintLog.warning(
+            logging.warning(
                 f"El estudiante con CURP {
                     student.CURP} no fue encontrado en la lista."
             )
@@ -96,7 +98,7 @@ class StudentList(List):
         for key, value in student.to_dict().items():
             self.df.loc[self.df["CURP"] == student.CURP, key] = value
 
-        PrintLog.info(f"Estudiante con CURP {student.CURP} actualizado.")
+        logging.info(f"Estudiante con CURP {student.CURP} actualizado.")
 
 
 if __name__ == "__main__":

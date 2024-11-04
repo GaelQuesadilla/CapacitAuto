@@ -5,11 +5,13 @@ from typing import List, Dict, Any
 from dataclasses import dataclass
 import pandas as pd
 from src.Config import Config
-from src.Log import Log, PrintLog
+from src.Log import setup_logger, trackFunction
 
 maxStudents: int = Config.read("School", "max_students_in_group")
 optionPrefix: str = Config.read("General", "choice_name")
 relevantGradesPrefix: str = Config.read("General", "relevant_grades_name")
+
+logging = setup_logger()
 
 
 class AdvancedGroup(Group):
@@ -27,7 +29,7 @@ class AdvancedGroup(Group):
             self.courses = Config.read("School", "trainings").split(",")
             self.group = "Paquetes"
         else:
-            PrintLog.warning(
+            logging.warning(
                 "Advanced groups should be used only in 1,2,3,4 semesters"
             )
 
@@ -123,14 +125,14 @@ if __name__ == "__main__":
     advancedGroup = AdvancedGroup(
         "2", studentListA, studentListB, studentListC, studentListD)
 
-    PrintLog.info("All students")
+    logging.info("All students")
     print(f"{advancedGroup.allStudents}")
 
-    PrintLog.info("Set Perfect List")
+    logging.info("Set Perfect List")
     advancedGroup.setPerfectLists()
 
-    PrintLog.info("Set Perfect List")
+    logging.info("Set Perfect List")
 
     for course, studentList in advancedGroup.studentLists.items():
-        PrintLog.info(f"Lista - {course}")
+        logging.info(f"Lista - {course}")
         print(studentList.df)

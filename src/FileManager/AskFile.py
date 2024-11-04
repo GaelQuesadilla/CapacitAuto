@@ -2,13 +2,15 @@ from src.Config import Config
 from colorama import init, Fore, Back
 import os
 from .errors import InvalidInput
-from src.Log import log_function, PrintLog
+from src.Log import setup_logger, trackFunction
 from .GetListDirs import getListDirs
 
 init(autoreset=True)
 
+logging = setup_logger()
 
-@log_function
+
+@trackFunction
 def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: str = "*", suffix: str = "*", isParent: bool = True):
     """Prompts the user to select a file from a directory.
 
@@ -35,7 +37,7 @@ def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: 
     InvalidInput
         If the selected index is out of range
     """
-    PrintLog.action(f"{info}\n{prefix=}, {suffix=}", save=isParent)
+    logging.info(f"{info}\n{prefix=}, {suffix=}")
 
     baseDir = os.path.join(baseDir)
     if baseDir.endswith("\\"):
@@ -80,7 +82,7 @@ def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: 
                                 prefix=prefix, suffix=suffix, isParent=False)
 
         if isParent:
-            PrintLog.info(f"Archivo seleccionado: {selection}")
+            logging.info(f"Archivo seleccionado: {selection}")
 
         return selection
 
@@ -93,13 +95,13 @@ def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: 
 
     except ValueError:
 
-        PrintLog.error(
+        logging.error(
             "Error, por favor selecciona un valor entero valido, intente nuevamente"
         )
         return askPath(info, baseDir, prefix, suffix)
 
     except Exception as e:
-        PrintLog.error(f"Error: {e}")
+        logging.error(f"Error: {e}")
         return None
 
 

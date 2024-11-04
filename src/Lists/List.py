@@ -1,6 +1,6 @@
 from src.FileManager.AskFile import askPath
 import pandas as pd
-from src.Log import Log
+from src.Log import setup_logger, trackFunction
 
 
 class List:

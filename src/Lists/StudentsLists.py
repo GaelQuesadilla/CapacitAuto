@@ -3,12 +3,11 @@ from src.Config import Config
 from src.Kardex.AllKardex import getAllKardex
 import os
 from alive_progress import alive_bar
-from colorama import init, Fore
 from src.FileManager.SafeFileName import safeFileName
-from src.Log import PrintLog, log_function
+from src.Log import setup_logger, trackFunction
 from .Student import Student
 
-init(autoreset=True)
+logging = setup_logger()
 
 
 def setRelevantGrades(student: Student, relevantGrades: dict, courses: list):
@@ -22,7 +21,7 @@ def setRelevantGrades(student: Student, relevantGrades: dict, courses: list):
         )
 
 
-@log_function
+@trackFunction
 def createStudentsList(allKardexFileDir: str = None):
     """Sorts students according to their semester and group, and then saves them in an Excel file
 
@@ -33,7 +32,7 @@ def createStudentsList(allKardexFileDir: str = None):
     """
 
     students = getAllKardex(allKardexFileDir)
-    PrintLog.info(f"Creando listas de estudiantes...")
+    logging.info(f"Creando listas de estudiantes...")
 
     packages = Config.read("School", "packages").split(",")
     trainings = Config.read("School", "trainings").split(",")

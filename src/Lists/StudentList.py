@@ -1,10 +1,9 @@
 from __future__ import annotations
-from src.FileManager.AskFile import askPath
 from src.Config import Config
 import pandas as pd
-from src.Log import setup_logger, trackFunction
+from src.Log import setup_logger
 from src.Lists.Student import Student
-from src.Lists.List import List
+from src.Lists.DataList import DataList
 from src.Lists.errors import InvalidOperationInLists, TryingToDeleteAnInexistentStudent
 
 maxStudents = Config.read("School", "max_students_in_group")
@@ -12,7 +11,7 @@ maxStudents = Config.read("School", "max_students_in_group")
 logging = setup_logger()
 
 
-class StudentList(List):
+class StudentList(DataList):
     def __init__(
         self,
         fileName: str,

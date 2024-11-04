@@ -1,5 +1,5 @@
 from unittest import TestCase
-from src.Lists.List import List
+from src.Lists.DataList import DataList
 
 
 class test_List(TestCase):
@@ -14,7 +14,7 @@ class test_List(TestCase):
     # |    5    |   10    |   15    |
     # +---------+---------+---------+
     def test_open(self):
-        list = List("src\\Lists\\test\\List.xlsx")
+        list = DataList("src\\Lists\\test\\List.xlsx")
         list.load()
 
         self.assertEqual(list.df.shape, (5, 3))

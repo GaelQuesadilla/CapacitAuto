@@ -1,4 +1,7 @@
-def getIndexes(element: list or str, *args):
+from typing import List
+
+
+def getIndexes(element: list | str, *args) -> List[int]:
     """Get the indexes of the specified element in a list or string
 
     Parameters

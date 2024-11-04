@@ -7,7 +7,7 @@ import time
 logFile = os.path.join(Config.read("Files", "logs_dir"), "logs.log")
 
 
-def setup_logger(logFile: str = logFile, loggerName: str = "Capacitauto"):
+def setup_logger(logFile: str = logFile, loggerName: str = "Capacitauto") -> logging.Logger:
     os.makedirs(os.path.dirname(logFile), exist_ok=True)
 
     logging.basicConfig(
@@ -20,7 +20,7 @@ def setup_logger(logFile: str = logFile, loggerName: str = "Capacitauto"):
     )
 
     # Crear un logger específico para tu aplicación
-    logger = logging.getLogger(loggerName)
+    logger: logging.Logger = logging.getLogger(loggerName)
     return logger
 
 

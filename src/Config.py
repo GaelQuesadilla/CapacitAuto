@@ -88,7 +88,7 @@ class Config():
             print("Error")
             print(e)
 
-    def read(section: str, option: str):
+    def read(section: str, option: str) -> any:
         """Reads a specific configuration value from the file("config.ini").
 
         Parameters

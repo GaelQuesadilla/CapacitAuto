@@ -1,4 +1,4 @@
-def normalizeText(text: str):
+def normalizeText(text: str) -> str:
     """Returns a value with no special characters, replacing them with an analogous character
 
     Parameters

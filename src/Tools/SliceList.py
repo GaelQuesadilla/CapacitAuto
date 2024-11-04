@@ -1,7 +1,7 @@
 from .GetIndexes import getIndexes
 
 
-def sliceList(element, *args):
+def sliceList(element: list, *args) -> list:
     """Slice a list at the indexes where a specified element is located
 
     Parameters

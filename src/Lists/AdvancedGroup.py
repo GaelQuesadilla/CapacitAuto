@@ -2,10 +2,9 @@ from src.Lists.Group import Group
 from src.Lists.Student import Student
 from src.Lists.StudentList import StudentList
 from typing import List, Dict, Any
-from dataclasses import dataclass
 import pandas as pd
 from src.Config import Config
-from src.Log import setup_logger, trackFunction
+from src.Log import setup_logger
 
 maxStudents: int = Config.read("School", "max_students_in_group")
 optionPrefix: str = Config.read("General", "choice_name")

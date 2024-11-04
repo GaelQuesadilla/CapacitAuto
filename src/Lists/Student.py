@@ -1,10 +1,7 @@
 from dataclasses import dataclass, field, asdict
 from src.Config import Config
-from src.Tools.Normalize import normalizeText
-import pprint
 from typing import Any, Dict, List
-from src.Log import setup_logger, trackFunction
-import pprint
+from src.Log import setup_logger
 
 
 packages = Config.read("School", "packages").split(",")
@@ -34,6 +31,8 @@ class Student:
         The student's group
     Turno: str
         The student's shift
+    extra_fields: dict
+        Extra fields
     """
 
     CURP: str = None
@@ -89,10 +88,10 @@ class Student:
             )
 
     def setExtras(self, **kwargs):
-        for key, value in kwargs:
+        for key, value in kwargs.items():
             self.default_factory[key] = value
 
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, Any]:
         default_dict: dict = asdict(self)
         default_dict = default_dict | default_dict["extra_fields"]
         default_dict.pop("extra_fields")
@@ -138,6 +137,7 @@ class Student:
 
 
 if __name__ == "__main__":
+    import pprint
     test = Student(Semestre="1")
     pprint.pp(test.to_dict())
     pprint.pp(asdict(test))

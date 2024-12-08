@@ -36,6 +36,11 @@ default_config = {
         "reports_dir": os.path.join(os.getcwd(), "data\\reports\\"),
         "lists_dir": os.path.join(os.getcwd(), "data\\lists\\"),
         "logs_dir": os.path.join(os.getcwd(), "logs\\"),
+        "assets_dir": os.path.join(os.getcwd(), "assets\\"),
+        "base_dir": os.path.join(os.getcwd(), ""),
+    },
+    "Assets": {
+        "logo_image_dir": os.path.join(os.getcwd(), "assets\\images\\cobach_logo.png"),
     },
 }
 
@@ -81,6 +86,7 @@ class Config():
             config["Web"] = default_config.get("Web")
             config["School"] = default_config.get("School")
             config["Files"] = default_config.get("Files")
+            config["Assets"] = default_config.get("Assets")
             with open("config.ini", "w") as config_file:
                 config.write(config_file)
             print("Config file has been written successfully")

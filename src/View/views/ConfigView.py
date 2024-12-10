@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from src.Config import default_config, Config
 from configparser import ConfigParser
-from typing import Dict, List, Any, Callable
+from typing import Dict, Any, Callable
 from src.Log import setup_logger
 
 
@@ -17,7 +17,7 @@ class ConfigView:
         self.config = ConfigParser()
         self.config.read(configFile)
 
-        self.entriesBySection: Dict[Dict[str:Any]] = {}
+        self.entriesBySection: Dict[str, Dict[str, tk.Entry]] = {}
 
     def createConfigFields(self):
         row = 1
@@ -44,7 +44,33 @@ class ConfigView:
         return frame
 
     def saveConfig(self):
-        pass
+        logger.debug("Guardando configuración")
+
+        try:
+
+            for section, options in self.entriesBySection.items():
+                for option, entry in options.items():
+                    prev: str = self.config.get(section, option)
+                    if entry.get() != prev:
+                        logger.debug(
+                            f"Actualizando {section}.{option} de '{
+                                prev}' a '{entry.get()}'"
+                        )
+                    # Get entries
+                    self.config.set(
+                        section=section,
+                        option=option,
+                        value=entry.get())
+
+            with open(self.configFile, "w") as file:
+                self.config.write(file)
+
+        except Exception as e:
+            errorWindow = messagebox.showerror(
+                "Error", "No fue posible guardar la configuración")
+
+            logger.error("No fue posible guardar la configuración")
+            logger.error(e)
 
     def show(self):
         self.window = tk.Toplevel(self.parent)
@@ -103,6 +129,7 @@ if __name__ == "__main__":
             configView = ConfigView(
                 self.root, self.configFile, self.on_config_saved
             )
+
             configView.show()
 
         def on_config_saved(self):

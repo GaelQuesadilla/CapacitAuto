@@ -29,15 +29,19 @@ default_config = {
         "trainings":
             "Ciencias economico administrativas,Ciencias naturales,Ciencias exactas,Ciencias sociales y humanidades",
         "max_students_in_group": 45,
+        "groups": 4,
     },
     "Files": {
         "data_dir": os.path.join(os.getcwd(), "data\\"),
-        "output_dir": os.path.join(os.getcwd(), "output\\"),
         "reports_dir": os.path.join(os.getcwd(), "data\\reports\\"),
         "lists_dir": os.path.join(os.getcwd(), "data\\lists\\"),
+        "curps_dir": os.path.join(os.getcwd(), "data\\CURPS.txt"),
+        "all_kardex_dir": os.path.join(os.getcwd(), "data\\allKardex.json"),
+        "curp_report_dir": os.path.join(os.getcwd(), "data\\reports\\curp_report.txt"),
+
+        "output_dir": os.path.join(os.getcwd(), "output\\"),
         "logs_dir": os.path.join(os.getcwd(), "logs\\"),
         "assets_dir": os.path.join(os.getcwd(), "assets\\"),
-        "base_dir": os.path.join(os.getcwd(), ""),
     },
     "Assets": {
         "logo_image_dir": os.path.join(os.getcwd(), "assets\\images\\cobach_logo.png"),
@@ -130,6 +134,20 @@ class Config():
             pass
         return value
 
+    def setup():
+        for option, defaultValue in default_config.get("Files").items():
+            path = os.path.join(Config.read("Files", option))
+
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+
+            if not os.path.isfile(path) and os.path.splitext(path)[1] != "":
+                print(f"Creando el archivo {path}")
+                with open(path, "w") as file:
+                    file.write(" ")
+
+        print("Setup done")
+
 
 if __name__ == "__main__":
     Config.create()
+    Config.setup()

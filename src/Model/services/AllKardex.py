@@ -4,6 +4,7 @@ import json
 from src.Config import Config
 from src.Log import setup_logger, trackFunction
 from typing import List, Dict, Any
+import os
 
 
 logging = setup_logger()
@@ -24,7 +25,8 @@ class AllKardex():
             json.dump(self._allKardex, file)
 
     def saveReport(self):
-        with open(self.fileName.replace(".json", "_report.txt"), "w", encoding=encoding) as file:
+
+        with open(Config.read("Files", "curp_report_dir"), "w", encoding=encoding) as file:
             for curp in self.invalidCurps:
                 file.write(f"{curp}\n")
 

@@ -1,5 +1,5 @@
 import tkinter as tk
-from src.View.views.BaseView import BaseView
+from src.View.components.BaseView import BaseView
 from src.View.views.ConfigView import ConfigView
 from src.Config import Config
 from src.Log import setup_logger, trackFunction

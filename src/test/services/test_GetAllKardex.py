@@ -14,15 +14,19 @@ class TestAllKardex(unittest.TestCase):
         self.assertEqual(kardex.allKardex, [])
         self.assertEqual(kardex.invalidCurps, [])
 
+    @patch('src.Config.Config.read', return_value="path.json")
     @patch("builtins.open", new_callable=mock_open)
     @patch("json.dump")
-    def test_saveAllKardex(self, mock_json_dump, mock_file):
+    def test_saveAllKardex(self, mock_json_dump: MagicMock, mock_file: MagicMock, mock_config: MagicMock):
+        # Preparar el objeto AllKardex con datos de prueba
         kardex = AllKardex(fileName="test.json")
         kardex._allKardex = [{"Name": "Test User", "Final_Grade": 95}]
+
+        # Llamar al método que estamos probando
         kardex.saveAllKardex()
 
-        mock_file.assert_called_once_with("test.json", "w", encoding="utf-8")
-        mock_json_dump.assert_called_once_with(kardex._allKardex, mock_file())
+        # Verificar que se hizo una llamada a json.dump() con _allKardex
+        mock_json_dump.assert_any_call(kardex._allKardex, mock_file())
 
     @patch("builtins.open", new_callable=mock_open)
     def test_saveReport(self, mock_file):

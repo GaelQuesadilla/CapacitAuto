@@ -89,7 +89,7 @@ class Student:
 
     def setExtras(self, **kwargs):
         for key, value in kwargs.items():
-            self.default_factory[key] = value
+            self.extra_fields[key] = value
 
     def to_dict(self) -> Dict[str, Any]:
         default_dict: dict = asdict(self)

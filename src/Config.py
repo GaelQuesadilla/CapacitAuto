@@ -47,6 +47,7 @@ default_config = {
         "base_dir": os.path.join(os.getcwd(), ""),
         "kardex_data_dir": os.path.join(os.getcwd(), "data\\kardexData.json"),
         "all_subjects_dir": os.path.join(os.getcwd(), "data\\AllSubjects.xlsx"),
+        "choices_dir": os.path.join(os.getcwd(), "data\\choices.xlsx"),
     },
     "Assets": {
         "logo_image_dir": os.path.join(os.getcwd(), "assets\\images\\cobach_logo.png"),

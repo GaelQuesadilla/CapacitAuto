@@ -14,9 +14,10 @@ logging = setup_logger()
 
 
 class AdvancedGroup(Group):
-    def __init__(self, semester: str, *args: StudentList):
+    def __init__(self, semester: str, choicesList: pd.DataFrame, *args: StudentList):
         self.courses: List[str] = []
         self.group: str = None
+        self.choicesList = choicesList
         self._allStudents: pd.DataFrame = pd.concat(
             [studentList.df for studentList in args], ignore_index=True, sort=False)
 
@@ -31,6 +32,13 @@ class AdvancedGroup(Group):
             logging.warning(
                 "Advanced groups should be used only in 1,2,3,4 semesters"
             )
+
+        self._allStudents = self._allStudents.merge(self.choicesList, on="CURP",
+                                                    how="left", suffixes=('', '_choices'))
+
+        columnsToDrop = [
+            col for col in self._allStudents.columns if col.endswith('_choices')]
+        self._allStudents.drop(columns=columnsToDrop, inplace=True)
 
         groups: Dict[str, StudentList] = {}
 

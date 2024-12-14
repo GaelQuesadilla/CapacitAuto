@@ -3,14 +3,15 @@ from tkinter import ttk, messagebox
 from src.Config import default_config, Config
 from configparser import ConfigParser
 from typing import Dict, Any, Callable
-from src.Log import setup_logger
+from src.Log import setup_logger, trackFunction
+from src.View.components.TopWindow import TopWindow
 
 
 logger = setup_logger(loggerName="ConfigView")
 
 
-class ConfigView:
-    def __init__(self, parent, configFile, onSaveConfig: Callable):
+class ConfigView(TopWindow):
+    def __init__(self, parent: tk.Tk, configFile: str, onSaveConfig: Callable):
         self.parent = parent
         self.onSaveConfig = onSaveConfig
         self.configFile = configFile
@@ -44,7 +45,7 @@ class ConfigView:
         return frame
 
     def saveConfig(self):
-        logger.debug("Guardando configuración")
+        logger.info("Guardando configuración")
 
         try:
 
@@ -52,7 +53,7 @@ class ConfigView:
                 for option, entry in options.items():
                     prev: str = self.config.get(section, option)
                     if entry.get() != prev:
-                        logger.debug(
+                        logger.info(
                             f"Actualizando {section}.{option} de '{
                                 prev}' a '{entry.get()}'"
                         )
@@ -72,8 +73,10 @@ class ConfigView:
             logger.error("No fue posible guardar la configuración")
             logger.error(e)
 
+    @trackFunction
     def show(self):
-        self.window = tk.Toplevel(self.parent)
+        super().show()
+
         self.window.title("Configuración")
         self.window.geometry("790x400")
 

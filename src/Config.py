@@ -32,6 +32,8 @@ default_config = {
         "groups": 4,
     },
     "Files": {
+        "base_dir": os.getcwd(),
+        "config_dir": os.path.join(os.getcwd(), "config.ini"),
         "data_dir": os.path.join(os.getcwd(), "data\\"),
         "reports_dir": os.path.join(os.getcwd(), "data\\reports\\"),
         "lists_dir": os.path.join(os.getcwd(), "data\\lists\\"),

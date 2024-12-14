@@ -1,26 +1,28 @@
 from src.Config import Config
-from .AllKardex import AllKardex
+from src.Model.services.AllKardex import AllKardex
 from alive_progress import alive_bar
-from .AllSubjects import AllSubjects
+from src.Model.services.AllSubjects import AllSubjects
 import math
 import os
 import json
-from src.FileManager.AskFile import askPath
 from src.Log import setup_logger, trackFunction
 
 
 @trackFunction
-def calcRelevantGrades(allKardexFileDir: str = None):
+def calcRelevantGrades(
+        allKardexFileDir: str = Config.read("Files", "all_kardex_dir"),
+        allSubjectsFileDir: str = Config.read("Files", "all_subjects_dir")
+):
     """Calculates relevant grades for each student based on specified subjects and saves them in a json file
 
     Parameters
     ----------
-    allKardexFileDir : str, optionalq
+    allKardexFileDir : str, optional
         The path of the Kardex file to get, by default None
     """
     allKardex = AllKardex(fileName=allKardexFileDir)
     allKardex.loadAllKardex()
-    subjects = AllSubjects(allKardexFileDir)
+    subjects = AllSubjects(allSubjectsFileName=allSubjectsFileDir)
     allSubjects = subjects.getAllFromExcel()
 
     options = Config.read(
@@ -61,4 +63,7 @@ def calcRelevantGrades(allKardexFileDir: str = None):
 
 
 if __name__ == "__main__":
-    pass
+    calcRelevantGrades(
+        Config.read("Files", "all_kardex_dir"),
+        Config.read("Files", "all_subjects_dir")
+    )

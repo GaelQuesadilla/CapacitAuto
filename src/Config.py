@@ -14,7 +14,7 @@ default_config = {
         "debug": True,
         "relevant_subjects_name": "Materias relevantes para {}",
         "relevant_grades_name": "Promedio relevante para {}",
-        "choice_name": "Opción {}",
+        "choice_name": "Opcion {}",
     },
     "Web": {
         "kardex_url": "https://apps.cobachbcs.edu.mx/Sice/ReportesImpresos/wf_Rep_Kardex_ws.aspx",
@@ -38,6 +38,8 @@ default_config = {
         "logs_dir": os.path.join(os.getcwd(), "logs\\"),
         "assets_dir": os.path.join(os.getcwd(), "assets\\"),
         "base_dir": os.path.join(os.getcwd(), ""),
+        "kardex_data_dir": os.path.join(os.getcwd(), "data\\kardexData.json"),
+        "all_subjects_dir": os.path.join(os.getcwd(), "data\\AllSubjects.xlsx"),
     },
     "Assets": {
         "logo_image_dir": os.path.join(os.getcwd(), "assets\\images\\cobach_logo.png"),

@@ -23,6 +23,15 @@ class AllKardex():
         with open(self.fileName, "w", encoding=encoding) as file:
             json.dump(self._allKardex, file)
 
+        self.kardexData = {
+            "invalidCurps": self.invalidCurps,
+            "availableGroups": list(set([student.get("Group") for student in self.allKardex])),
+            "availableShifts": list(set([student.get("Shift") for student in self.allKardex])),
+            "availableSemesters": list(set([student.get("Semester") for student in self.allKardex])),
+        }
+        with open(Config.read("Files", "kardex_data_dir"), "w", encoding=encoding) as file:
+            json.dump(self.kardexData, file)
+
     def saveReport(self):
         with open(self.fileName.replace(".json", "_report.txt"), "w", encoding=encoding) as file:
             for curp in self.invalidCurps:
@@ -66,7 +75,7 @@ if __name__ == "__main__":
         "Files", "data_dir"), "CURPS.txt")).read()
 
     allKardex = AllKardex(os.path.join(Config.read(
-        "Files", "data_dir"), "testAllKardex.json"), curps.splitlines())
+        "Files", "data_dir"), "AllKardex.json"), curps.splitlines())
 
     allKardex.requestAllKardex()
 

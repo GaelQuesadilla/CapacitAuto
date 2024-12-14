@@ -28,7 +28,10 @@ class StudentList(DataList):
         self.maxStudents = maxStudents
 
         voidStudent: Student = Student(Semestre=semester)
-        headers = voidStudent.to_dict().keys()
+        keys = voidStudent.to_dict().keys()
+        optionPrefix = Config.read("General", "relevant_grades_name")
+
+        headers = [key for key in keys if not optionPrefix in key]
 
         df: pd.DataFrame = pd.DataFrame(columns=headers)
 

@@ -2,9 +2,9 @@ import pandas as pd
 from src.Config import Config
 from src.Model.services.AllKardex import AllKardex
 import os
-from src.FileManager.SafeFileName import safeFileName
 from src.Log import setup_logger, trackFunction
-from ..models.Student import Student
+from src.Model.models.StudentList import StudentList
+from src.Model.models.Student import Student
 
 logging = setup_logger()
 
@@ -15,8 +15,9 @@ def setRelevantGrades(student: Student, relevantGrades: dict, courses: list):
     for course in courses:
         relevantAverageKey = prefix.format(course)
         student.setExtras(
-            relevantAverageKey,
-            relevantGrades.get(relevantAverageKey)
+            **{
+                relevantAverageKey: relevantGrades.get(relevantAverageKey)
+            }
         )
 
 
@@ -70,7 +71,7 @@ def createStudentsList(allKardexFileDir: str = None):
         if student.get("Semester") in ["5", "6"]:
             pass
 
-        groups[semester][group].append(studentInfo.to_dict())
+        groups[semester][group].append(studentInfo)
 
     for semesterKey, semester in groups.items():
         for groupKey, group in semester.items():
@@ -79,16 +80,19 @@ def createStudentsList(allKardexFileDir: str = None):
             fileName = f"Lista Alumnos {semesterKey}-{groupKey}-{shift}.xlsx"
             path = os.path.join(Config.read("Files", "lists_dir"), fileName)
 
-            path = safeFileName(
-                f"Guardando lista para el grupo {
-                    semesterKey}-{groupKey}-{shift}",
-                path
+            studentList = StudentList(
+                fileName=path,
+                semester=semesterKey,
+                group=groupKey
             )
 
-            df = pd.DataFrame(group)
-            df = df.sort_values(by=["Nombre", "CURP"], ascending=True)
-            df.to_excel(path)
+            for student in group:
+                studentList.addStudent(student)
+
+            studentList.sort(by=["Nombre", "CURP"], ascending=True)
+            studentList.save()
 
 
 if __name__ == "__main__":
-    pass
+
+    createStudentsList(Config.read("Files", "all_kardex_dir"))

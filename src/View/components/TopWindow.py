@@ -14,7 +14,7 @@ class TopWindow:
         self.parent = parent
 
     @property
-    def root(self):
+    def window(self):
         return self._window
 
     def show(self):

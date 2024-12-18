@@ -6,6 +6,8 @@ from src.Model.models.AdvancedGroup import AdvancedGroup
 from src.test.models.utils.GenStudent import genStudent
 from typing import List
 from src.Config import Config
+import pandas as pd
+import pprint
 
 
 class TestAdvancedGroup(unittest.TestCase):
@@ -20,6 +22,18 @@ class TestAdvancedGroup(unittest.TestCase):
         self.student_list_2 = StudentList(
             semester="1", fileName="test_2.xlsx", group="B")
 
+        choiceList = pd.merge(
+            self.student_list_1.df,
+            self.student_list_2.df, on=["CURP", "Nombre"])
+
+        columnsToDrop = [
+            col for col in choiceList.columns
+            if col.endswith(
+                "_x") or col.endswith("_y")
+        ]
+
+        choiceList.drop(columns=columnsToDrop, inplace=True)
+
         # Agregar los estudiantes a sus respectivas listas
         for student in self.students_1:
             self.student_list_1.addStudent(student)
@@ -27,7 +41,7 @@ class TestAdvancedGroup(unittest.TestCase):
             self.student_list_2.addStudent(student)
 
         # Inicializar AdvancedGroup con listas de estudiantes y semestre
-        self.advanced_group = AdvancedGroup("1",
+        self.advanced_group = AdvancedGroup("1", choiceList,
                                             *[self.student_list_1, self.student_list_2, ])
 
     def test_initialization(self):
@@ -48,6 +62,14 @@ class TestAdvancedGroup(unittest.TestCase):
 
         for student in all_students_list:
             all_students_df.addStudent(student)
+
+        columnsToDrop = [
+            col for col in all_students_df.df.columns if col.startswith("Opcion")]
+
+        all_students_df.df.drop(
+            columns=columnsToDrop, inplace=True)
+        self.advanced_group.allStudents.drop(
+            columns=columnsToDrop, inplace=True)
 
         self.assertEqual(
             self.advanced_group.allStudents.to_dict(),

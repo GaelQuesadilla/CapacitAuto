@@ -28,8 +28,9 @@ class TestAllKardex(unittest.TestCase):
         # Verificar que se hizo una llamada a json.dump() con _allKardex
         mock_json_dump.assert_any_call(kardex._allKardex, mock_file())
 
+    @patch('src.Config.Config.read', return_value="test_report.txt")
     @patch("builtins.open", new_callable=mock_open)
-    def test_saveReport(self, mock_file):
+    def test_saveReport(self, mock_file, mockConfig: MagicMock):
         kardex = AllKardex(fileName="test.json")
         kardex._invalidCurps = ["INVALID123", "INVALID456"]
         kardex.saveReport()

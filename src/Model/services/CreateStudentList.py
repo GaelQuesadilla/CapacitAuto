@@ -5,6 +5,7 @@ import os
 from src.Log import setup_logger, trackFunction
 from src.Model.models.StudentList import StudentList
 from src.Model.models.Student import Student
+import pathlib
 
 logging = setup_logger()
 
@@ -78,7 +79,7 @@ def createStudentsList(allKardexFileDir: str = None):
 
             shift = Config.read("School", "school_shift")
             fileName = f"Lista Alumnos {semesterKey}-{groupKey}-{shift}.xlsx"
-            path = os.path.join(Config.read("Files", "lists_dir"), fileName)
+            path = Config.getPath("Files", "lists_dir") / fileName
 
             studentList = StudentList(
                 fileName=path,

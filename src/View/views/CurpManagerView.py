@@ -6,6 +6,7 @@ import os
 from src.Log import setup_logger
 from src.Config import Config
 from src.Model.services.AllKardex import AllKardex
+import pathlib
 
 logger = setup_logger(loggerName="src.View.views.CurpManagerView")
 
@@ -30,9 +31,8 @@ class CURPManagerView():
 
     def getCurps(self):
 
-        curps = open(os.path.join(Config.read(
-            "Files", "data_dir"), "CURPS.txt")).read()
-        self.curps: Set[str] = set(curps.splitlines())
+        curps = Config.getPath("Files", "curps_dir").read_text().splitlines()
+        self.curps: Set[str] = set(curps)
 
         invalidCurps = open(
             self.reportDir, "r", encoding=self.encoding
@@ -82,7 +82,9 @@ class CURPManagerView():
             filetypes=(("text files", "*.txt"),)
         )
 
-        if os.path.isfile(newFilePath):
+        newFilePath = pathlib.Path(newFilePath)
+
+        if newFilePath.is_file():
             with open(newFilePath, "r") as file:
                 curpsFromFile = file.read().splitlines()
 
@@ -175,8 +177,7 @@ class CURPManagerView():
 if __name__ == "__main__":
     from src.Config import Config
 
-    logger.debug(os.path.join(
-        Config.read("Files", "data_dir"), "CURPS.txt"))
+    logger.debug(Config.getPath("Files", "curps_dir"))
 
     root = tk.Tk()
 

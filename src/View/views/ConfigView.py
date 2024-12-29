@@ -5,6 +5,7 @@ from configparser import ConfigParser
 from typing import Dict, Any, Callable
 from src.Log import setup_logger, trackFunction
 from src.View.components.TopWindow import TopWindow
+import pathlib
 
 
 logger = setup_logger(loggerName="ConfigView")
@@ -123,11 +124,9 @@ if __name__ == "__main__":
     class View:
         def __init__(self, root: tk.Tk):
             self.root = root
-            self.configFile = os.path.join(
-                Config.read("Files", "base_dir"), "config.ini"
-            )
+            self.configFile = Config.getPath("Files", "config_dir")
 
-            if not os.path.exists(self.configFile):
+            if not self.configFile.is_file():
                 Config.create()
             configView = ConfigView(
                 self.root, self.configFile, self.on_config_saved

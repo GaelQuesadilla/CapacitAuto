@@ -4,6 +4,7 @@ from tkinter import ttk, messagebox, filedialog
 from src.Log import setup_logger, trackFunction
 import os
 from src.View.components.BaseView import BaseView
+import pathlib
 
 logger = setup_logger(loggerName="DataFrameComponent")
 
@@ -15,7 +16,7 @@ class DataFrameComponent(tk.Frame):
         self.optionFrame: tk.Frame = None
         self._parent = parent
         self._tree: ttk.Treeview = None
-        self.fileName = fileName
+        self.fileName = pathlib.Path(fileName)
 
         if self.pd is None:
             self.loadDataFrame()
@@ -69,7 +70,7 @@ class DataFrameComponent(tk.Frame):
             logger.error(error)
             raise ValueError(error)
 
-        if not os.path.isfile(self.fileName):
+        if not self.fileName.is_file():
             error = f"No es posible acceder al archivo {self.fileName}."
             logger.error(error)
             self._pd = pd.DataFrame()
@@ -89,8 +90,9 @@ class DataFrameComponent(tk.Frame):
             initialdir="~",
             filetypes=(("Archivos de Excel", "*.xlsx"),)
         )
+        newFilePath = pathlib.Path(newFilePath)
 
-        if os.path.isfile(newFilePath):
+        if newFilePath.is_file():
 
             self.fileName = newFilePath
             self.loadDataFrame()
@@ -100,7 +102,7 @@ class DataFrameComponent(tk.Frame):
 
     def exportFile(self):
 
-        defaultFileName = os.path.basename(self.fileName)
+        defaultFileName = self.fileName.name
         newFilePath = filedialog.asksaveasfilename(
             title="Guardar archivo como",
             defaultextension=".xlsx",
@@ -111,7 +113,9 @@ class DataFrameComponent(tk.Frame):
             initialfile=defaultFileName
         )
 
-        if os.path.isdir(os.path.dirname(newFilePath)):
+        newFilePath = pathlib.Path(newFilePath)
+
+        if newFilePath.is_dir():
             self.pd.to_excel(newFilePath, index=False)
             messagebox.showinfo("Archivo exportado ",
                                 f"Archivo guardado en {newFilePath}")
@@ -132,10 +136,8 @@ class DataFrameComponent(tk.Frame):
 if __name__ == "__main__":
     from src.Config import Config
 
-    fileName = os.path.join(
-        Config.read("Files", "data_dir"),
-        "lists\\TEST\\Lista Alumnos 2-A.xlsx"
-    )
+    fileName = Config.getPath("Files", "lists_dir") / \
+        "TEST" / "Lista Alumnos 2-A.xlsx"
     base = BaseView()
     component = DataFrameComponent(base.root, fileName=fileName)
     component.pack(fill=tk.BOTH, expand=True)

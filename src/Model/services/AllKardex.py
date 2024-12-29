@@ -54,7 +54,7 @@ class AllKardex():
                 info = current.getInfo()
                 logging.info(
                     f"{curp}: {info.get('Name')}, {info.get('Semester')}, "
-                    f"{info.get('Group')}, {info.get("Final_Grade")}"
+                    f"{info.get('Group')}, {info.get('Final_Grade')}"
                 )
                 self._allKardex.append(info)
             except InvalidCurp:

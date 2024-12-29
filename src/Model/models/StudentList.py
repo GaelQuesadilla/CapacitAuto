@@ -83,8 +83,8 @@ class StudentList(DataList):
         toList.addStudent(student)
         self.deleteStudent(student)
         logging.info(
-            f"Moving student {
-                student.CURP} from {self.fileName} to {toList.fileName}"
+            f"Moving student "
+            f"{student.CURP} from {self.fileName} to {toList.fileName}"
         )
 
     def updateStudent(self, student: Student):

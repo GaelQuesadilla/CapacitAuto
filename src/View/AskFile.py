@@ -52,21 +52,24 @@ def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: 
     parent = os.path.dirname(baseDir)
 
     print(
-        f"{Back.YELLOW +
-            Fore.BLACK}{centerChar("-1")}{Back.RESET + Fore.RESET}: {parent}"
+        f"{Back.YELLOW + Fore.BLACK}"
+        f"{centerChar("-1")}{Back.RESET + Fore.RESET}: "
+        f"{parent}"
     )
 
     for index, el in enumerate(listdir):
         path = os.path.join(baseDir, el)
         if os.path.isfile(path):
             print(
-                f"{Back.CYAN +
-                    Fore.BLACK}{centerChar(index)}{Back.RESET + Fore.RESET}: {path}"
+                f"{Back.CYAN + Fore.BLACK}"
+                f"{centerChar(index)}{Back.RESET + Fore.RESET}: "
+                f"{path}"
             )
         if not os.path.isfile(path):
             print(
-                f"{Back.LIGHTMAGENTA_EX +
-                    Fore.BLACK}{centerChar(index)}{Back.RESET + Fore.RESET}: {path}"
+                f"{Back.LIGHTMAGENTA_EX + Fore.BLACK}"
+                f"{centerChar(index)}{Back.RESET + Fore.RESET}: "
+                f"{path}"
             )
 
     try:
@@ -88,8 +91,8 @@ def askPath(info: str, baseDir: str = Config.read("Files", "data_dir"), prefix: 
 
     except IndexError:
         raise InvalidInput(
-            f"No es posible seleccionar el archivo {
-                selectedIndex + 1}/{len(listdir)}"
+            f"No es posible seleccionar el archivo "
+            f"{selectedIndex + 1}/{len(listdir)}"
         )
         return None
 

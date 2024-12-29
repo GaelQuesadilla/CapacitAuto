@@ -55,8 +55,8 @@ class ConfigView(TopWindow):
                     prev: str = self.config.get(section, option)
                     if entry.get() != prev:
                         logger.info(
-                            f"Actualizando {section}.{option} de '{
-                                prev}' a '{entry.get()}'"
+                            f"Actualizando {section}.{option} de "
+                            f"'{prev}' a '{entry.get()}'"
                         )
                     # Get entries
                     self.config.set(

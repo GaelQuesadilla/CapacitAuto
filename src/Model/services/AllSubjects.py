@@ -54,8 +54,8 @@ class AllSubjects():
 
         df.to_excel(self.allSubjectsFileDir, index=False)
         logging.info(
-            f"Todas las materias han sido guardadas en: {
-                self.allSubjectsFileDir}"
+            f"Todas las materias han sido guardadas en: "
+            f"{self.allSubjectsFileDir}"
         )
 
     @trackFunction
@@ -71,8 +71,8 @@ class AllSubjects():
         df = pd.read_excel(self.allSubjectsFileDir)
 
         logging.info(
-            f"Materias recuperadas desde: {
-                self.allSubjectsFileDir}"
+            f"Materias recuperadas desde: "
+            f"{self.allSubjectsFileDir}"
         )
 
         allSubjectsFromExcel = df.to_dict()

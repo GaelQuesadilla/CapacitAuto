@@ -76,8 +76,8 @@ class DataFrameComponent(tk.Frame):
             self._pd = pd.DataFrame()
             messagebox.showwarning(
                 "Atención",
-                f"No es posible acceder al archivo {
-                    self.fileName}.\nPor favor, inserte el archivo"
+                f"No es posible acceder al archivo {self.fileName}.\n"
+                f"Por favor, inserte el archivo"
             )
 
             return

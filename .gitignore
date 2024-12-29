@@ -20,4 +20,3 @@ cache/
 
 .pytest_cache
 
-Pipfile.lock

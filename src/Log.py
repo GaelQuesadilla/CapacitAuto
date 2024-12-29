@@ -40,8 +40,8 @@ def trackFunction(func: Callable):
         t1 = time.time()
 
         logger.info(
-            f"Inicio de la función: {func.__name__} con args={
-                args} y kwargs={kwargs}"
+            f"Inicio de la función: {func.__name__} con args="
+            f"{args} y kwargs={kwargs}"
         )
 
         try:

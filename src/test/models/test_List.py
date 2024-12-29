@@ -1,5 +1,6 @@
 from unittest import TestCase
 from src.Model.models.DataList import DataList
+import pathlib
 
 
 class test_List(TestCase):
@@ -14,7 +15,9 @@ class test_List(TestCase):
     # |    5    |   10    |   15    |
     # +---------+---------+---------+
     def test_open(self):
-        list = DataList("src\\test\\models\\utils\\List.xlsx")
+
+        listPath = pathlib.Path("src") / "test" / \
+            "models" / "utils" / "List.xlsx"
         list.load()
 
         self.assertEqual(list.df.shape, (5, 3))

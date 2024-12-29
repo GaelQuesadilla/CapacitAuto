@@ -18,6 +18,7 @@ class test_List(TestCase):
 
         listPath = pathlib.Path("src") / "test" / \
             "models" / "utils" / "List.xlsx"
+        list = DataList(listPath)
         list.load()
 
         self.assertEqual(list.df.shape, (5, 3))

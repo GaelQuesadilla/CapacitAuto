@@ -5,6 +5,7 @@ from typing import List, Dict, Any
 import pandas as pd
 from src.Config import Config
 from src.Log import setup_logger
+import pathlib
 
 maxStudents: int = Config.read("School", "max_students_in_group")
 optionPrefix: str = Config.read("General", "choice_name")
@@ -101,29 +102,34 @@ class AdvancedGroup(Group):
 
 
 if __name__ == "__main__":
+
     studentListA = StudentList(
-        fileName="data\\lists\\TEST\\Lista Alumnos 2-A.xlsx",
+        fileName=Config.getPath("Files", "lists_dir") /
+        "TEST" / "Lista Alumnos 2-A.xlsx",
         group="A",
         semester="2"
     )
     studentListA.load()
 
     studentListB = StudentList(
-        fileName="data\\lists\\TEST\\Lista Alumnos 2-B.xlsx",
+        fileName=Config.getPath("Files", "lists_dir") /
+        "TEST" / "Lista Alumnos 2-B.xlsx",
         group="B",
         semester="2"
     )
     studentListB.load()
 
     studentListC = StudentList(
-        fileName="data\\lists\\TEST\\Lista Alumnos 2-C.xlsx",
+        fileName=Config.getPath("Files", "lists_dir") /
+        "TEST" / "Lista Alumnos 2-C.xlsx",
         group="C",
         semester="2"
     )
     studentListC.load()
 
     studentListD = StudentList(
-        fileName="data\\lists\\TEST\\Lista Alumnos 2-D.xlsx",
+        fileName=Config.getPath("Files", "lists_dir") /
+        "TEST" / "Lista Alumnos 2-D.xlsx",
         group="D",
         semester="2"
     )

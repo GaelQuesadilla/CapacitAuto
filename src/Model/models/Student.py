@@ -83,8 +83,8 @@ class Student:
             setattr(self, name, value)
         else:
             logging.warning(
-                f"No es posible agregar nuevos atributos desde {
-                    self.set.__name__}",
+                f"No es posible agregar nuevos atributos desde"
+                f" {self.set.__name__}",
             )
 
     def setExtras(self, **kwargs):

@@ -33,8 +33,8 @@ def safeFileName(info: str, path: str):
 
     if os.path.exists(path):
         logging.warning(
-            f"El archivo '{
-                path}' ya existe ¿Desea remplazarlo?"
+            f"El archivo "
+            f"'{path}' ya existe ¿Desea remplazarlo?"
         )
         option = input(f"[Si/No]\n")
         option = option.lower()
@@ -49,8 +49,9 @@ def safeFileName(info: str, path: str):
 
             now = datetime.datetime.now()
 
-            newFileName = f"{name}_{now.strftime(
-                '%y-%m-%d_%H-%M-%S')}{extension}"
+            newFileName = (
+                f"{name}_{now.strftime('%y-%m-%d_%H-%M-%S')}{extension}"
+            )
 
             newPath = os.path.join(baseDir, newFileName)
 

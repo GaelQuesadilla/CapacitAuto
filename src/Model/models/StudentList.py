@@ -44,15 +44,15 @@ class StudentList(DataList):
 
         if studentData.shape[0] == 0:
             logging.warning(
-                f"La búsqueda de la CURP {CURP} en la lista {
-                    self.fileName} no consigue ningún elemento"
+                f"La búsqueda de la CURP {CURP} en la lista"
+                f" {self.fileName} no consigue ningún elemento"
             )
             return None
 
         if studentData.shape[0] > 1:
             logging.warning(
-                f"La búsqueda de la CURP {CURP} en la lista {
-                    self.fileName} consigue elementos duplicados"
+                f"La búsqueda de la CURP {CURP} en la lista "
+                f"{self.fileName} consigue elementos duplicados"
             )
 
         studentDataDict: dict = studentData.iloc[0].to_dict()
@@ -64,8 +64,9 @@ class StudentList(DataList):
     def addStudent(self, student: Student):
         if not student.Semestre == self._semester:
             logging.warning(
-                f"El estudiante con CURP {student.CURP} tiene grado '{
-                    student.Semestre}' y será agregado a la lista con grado '{self._semester}'."
+                f"El estudiante con CURP {student.CURP} tiene grado"
+                f" '{student.Semestre}' y será agregado a la lista con grado "
+                f"'{self._semester}'."
             )
         self.df.loc[len(self.df)] = student.to_dict()
 
@@ -91,8 +92,8 @@ class StudentList(DataList):
 
         if studentToUpdate is None:
             logging.warning(
-                f"El estudiante con CURP {
-                    student.CURP} no fue encontrado en la lista."
+                f"El estudiante con CURP "
+                f"{student.CURP} no fue encontrado en la lista."
             )
             return None
 

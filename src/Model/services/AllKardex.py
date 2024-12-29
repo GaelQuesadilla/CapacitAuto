@@ -5,6 +5,7 @@ from src.Config import Config
 from src.Log import setup_logger, trackFunction
 from typing import List, Dict, Any
 import os
+import pathlib
 
 
 logging = setup_logger()
@@ -73,11 +74,12 @@ class AllKardex():
 
 if __name__ == "__main__":
     import os
-    curps = open(os.path.join(Config.read(
-        "Files", "data_dir"), "CURPS.txt")).read()
+    curpsDir = pathlib.Path(Config.read("Files", "curps_dir"))
+    curps = curpsDir.read_text()
 
-    allKardex = AllKardex(os.path.join(Config.read(
-        "Files", "data_dir"), "AllKardex.json"), curps.splitlines())
+    allKardexDir = pathlib.Path(Config.read("Files", "all_kardex_dir"))
+
+    allKardex = AllKardex(allKardexDir, curps.splitlines())
 
     allKardex.requestAllKardex()
 

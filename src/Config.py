@@ -1,5 +1,6 @@
 import configparser
 import os
+import pathlib
 
 """
 This module defines a `Config` class for managing configuration settings in an INI file.
@@ -32,26 +33,26 @@ default_config = {
         "groups": 4,
     },
     "Files": {
-        "base_dir": os.getcwd(),
-        "config_dir": os.path.join(os.getcwd(), "config.ini"),
-        "data_dir": os.path.join(os.getcwd(), "data\\"),
-        "reports_dir": os.path.join(os.getcwd(), "data\\reports\\"),
-        "lists_dir": os.path.join(os.getcwd(), "data\\lists\\"),
-        "curps_dir": os.path.join(os.getcwd(), "data\\CURPS.txt"),
-        "all_kardex_dir": os.path.join(os.getcwd(), "data\\allKardex.json"),
-        "curp_report_dir": os.path.join(os.getcwd(), "data\\reports\\curp_report.txt"),
+        "base_dir": pathlib.Path.cwd(),
+        "config_dir": pathlib.Path.cwd() / "config.ini",
+        "data_dir": pathlib.Path.cwd() / "data",
+        "reports_dir": pathlib.Path.cwd() / "data" / "reports",
+        "lists_dir": pathlib.Path.cwd() / "data" / "lists",
+        "curps_dir": pathlib.Path.cwd() / "data" / "CURPS.txt",
+        "all_kardex_dir": pathlib.Path.cwd() / "data" / "allKardex.json",
+        "curp_report_dir": pathlib.Path.cwd() / "data" / "reports" / "curp_report.txt",
 
-        "output_dir": os.path.join(os.getcwd(), "output\\"),
-        "logs_dir": os.path.join(os.getcwd(), "logs\\"),
-        "assets_dir": os.path.join(os.getcwd(), "assets\\"),
-        "base_dir": os.path.join(os.getcwd(), ""),
-        "kardex_data_dir": os.path.join(os.getcwd(), "data\\kardexData.json"),
-        "all_subjects_dir": os.path.join(os.getcwd(), "data\\AllSubjects.xlsx"),
-        "choices_dir": os.path.join(os.getcwd(), "data\\choices.xlsx"),
-        "config_dir": os.path.join(os.getcwd(), "config.ini"),
+        "output_dir": pathlib.Path.cwd() / "output",
+        "output_dir": pathlib.Path.cwd() / "output",
+        "logs_dir": pathlib.Path.cwd() / "logs",
+        "assets_dir": pathlib.Path.cwd() / "assets",
+        "base_dir": pathlib.Path.cwd() / "",
+        "kardex_data_dir": pathlib.Path.cwd() / "data" / "kardexData.json",
+        "all_subjects_dir": pathlib.Path.cwd() / "data" / "AllSubjects.xlsx",
+        "choices_dir": pathlib.Path.cwd() / "data" / "choices.xlsx",
     },
     "Assets": {
-        "logo_image_dir": os.path.join(os.getcwd(), "assets\\images\\cobach_logo.png"),
+        "logo_image_dir": pathlib.Path.cwd() / "assets" / "images" / "cobach_logo.png",
     },
 }
 
@@ -120,7 +121,10 @@ class Config():
         str
             The value of the selected option
         """
-        if not os.path.isfile("config.ini"):
+
+        configPath = pathlib.Path.cwd() / "config.ini"
+
+        if not configPath.is_file():
             print("config.ini not found")
             config.create()
         config = configparser.ConfigParser()
@@ -141,16 +145,22 @@ class Config():
             pass
         return value
 
+    def getPath(section: str, option: str) -> pathlib.Path:
+        path = pathlib.Path(Config.read(section, option))
+        return path
+
     def setup():
         for option, defaultValue in default_config.get("Files").items():
-            path = os.path.join(Config.read("Files", option))
+            path = pathlib.Path(Config.read("Files", option))
 
-            os.makedirs(os.path.dirname(path), exist_ok=True)
-
-            if not os.path.isfile(path) and os.path.splitext(path)[1] != "":
+            if path.suffix == "":
+                # Create a directory
+                path.mkdir(exist_ok=True)
+            elif not path.is_file():
+                # Create an empty file
                 print(f"Creando el archivo {path}")
-                with open(path, "w") as file:
-                    file.write(" ")
+                path.parent.mkdir(exist_ok=True)
+                path.write_text("")
 
         print("Setup done")
 

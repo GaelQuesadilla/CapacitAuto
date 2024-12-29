@@ -3,18 +3,20 @@ import os
 from src.Config import Config
 import logging
 import time
+import pathlib
 
-logFile = os.path.join(Config.read("Files", "logs_dir"), "logs.log")
+logsDir = pathlib.Path(Config.read("Files", "logs_dir"))
+logsFile = logsDir / "logs.log"
 
 
-def setup_logger(logFile: str = logFile, loggerName: str = "Capacitauto") -> logging.Logger:
-    os.makedirs(os.path.dirname(logFile), exist_ok=True)
+def setup_logger(logsFile: str = logsFile, loggerName: str = "Capacitauto") -> logging.Logger:
 
+    logsDir.mkdir(exist_ok=True)
     logging.basicConfig(
         level=logging.DEBUG,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         handlers=[
-            logging.FileHandler(logFile),
+            logging.FileHandler(logsFile),
             logging.StreamHandler()
         ]
     )

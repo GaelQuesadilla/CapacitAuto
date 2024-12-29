@@ -13,6 +13,7 @@ pandas = "*"
 openpyxl = "*"
 ipython = "*"
 requests-cache = "*"
+pathlib = "*"
 
 [dev-packages]
 pytest = "*"

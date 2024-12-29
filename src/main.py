@@ -3,6 +3,7 @@ from src.View.components.BaseView import BaseView
 from src.View.views.ConfigView import ConfigView
 from src.Config import Config
 from src.Log import setup_logger, trackFunction
+import pathlib
 import os
 
 logger = setup_logger()
@@ -21,10 +22,9 @@ class MainApp:
 
         self.icon = tk.PhotoImage(file=Config.read("Assets", "logo_image_dir"))
 
-        self.configFile = os.path.join(
-            Config.read("Files", "base_dir"), "config.ini")
+        self.configFile = pathlib.Path(Config.read("Files", "config_dir"))
 
-        if not os.path.exists(self.configFile):
+        if not self.configFile.is_file():
             Config.create()
 
         self.root.iconphoto(False, self.icon)

@@ -59,8 +59,9 @@ class CURPManagerView():
 
     def showCurps(self):
         self.clearTree()
-
-        for i, curp in enumerate(self.curps):
+        curps = list(self.curps)
+        curps.sort()
+        for i, curp in enumerate(curps):
 
             status = self.status.get("unsolicited")
             tag = "unsolicited"

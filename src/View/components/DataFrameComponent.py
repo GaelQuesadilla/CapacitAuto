@@ -32,8 +32,12 @@ class DataFrameComponent(tk.Frame):
             self.tree.heading(column, text=column)
             self.tree.column(column, anchor="center")
 
-        for _, row in self.pd.iterrows():
-            self.tree.insert("", "end", values=row.tolist())
+        for index, row in self.pd.iterrows():
+            tag = "oddrow" if index % 2 == 0 else "evenrow"
+            self.tree.insert(
+                "", "end", values=row.tolist(),
+                tags=(tag,)
+            )
 
         v_scrollbar = ttk.Scrollbar(
             self, orient="vertical", command=self.tree.yview)
@@ -49,6 +53,9 @@ class DataFrameComponent(tk.Frame):
 
         self.grid_rowconfigure(1, weight=1, minsize=200)
         self.grid_columnconfigure(0, weight=1)
+
+        self.tree.tag_configure("oddrow", background="#ffffff")
+        self.tree.tag_configure("evenrow", background="#f2faff")
 
     def _createButtons(self):
         """Método para crear el Frame con los botones encima del DataFrame"""

@@ -7,6 +7,7 @@ from src.Log import setup_logger
 from src.Config import Config
 from src.Model.services.AllKardex import AllKardex
 import pathlib
+from src.View.components.ProgressTask import ProgressTask
 
 logger = setup_logger(loggerName="src.View.views.CurpManagerView")
 
@@ -28,6 +29,12 @@ class CURPManagerView():
         self.reportDir = Config.read("Files", "curp_report_dir")
 
         self.allKardexDir = Config.read("Files", "all_kardex_dir")
+
+        # self.requestKardex = ProgressTask(
+        #     self.requestKardex,
+        #     parent=self.parent,
+        #     title="Solicitando datos..."
+        # )
 
     def getCurps(self):
 
@@ -98,29 +105,23 @@ class CURPManagerView():
 
     def requestKardex(self):
 
-        progressbarWindow = tk.Tk()
-        progressbarWindow.title("Solicitando datos...")
+        def onTaskComplete():
+            self.getCurps()
+            self.showCurps()
+            messagebox.showinfo(
+                "Se ha completado la solicitud",
+                "Se ha solicitado el kardex de todos los alumnos"
+            )
+            self.showCurpResume()
 
-        progressbar = ttk.Progressbar(
-            progressbarWindow, length=300, mode='indeterminate')
+        @ProgressTask(parent=self.parent, title="Solicitando datos...", onComplete=onTaskComplete)
+        def task():
+            allKardex = AllKardex(fileName=self.allKardexDir, curps=self.curps)
+            allKardex.requestAllKardex()
+            allKardex.saveAllKardex()
+            allKardex.saveReport()
 
-        progressbar.pack(pady=20)
-
-        allKardex = AllKardex(fileName=self.allKardexDir, curps=self.curps)
-        allKardex.requestAllKardex()
-        allKardex.saveAllKardex()
-        allKardex.saveReport()
-
-        progressbar.stop()
-        progressbarWindow.destroy()
-
-        self.getCurps()
-        self.showCurps()
-
-        messagebox.showinfo("Se ha completado la solicitud",
-                            "Se ha solicitado el kardex de todos los alumnos")
-
-        self.showCurpResume()
+        task()
 
     def showCurpResume(self):
         expectedCurps = Config.read(

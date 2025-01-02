@@ -71,13 +71,18 @@ class DataFrameComponent(tk.Frame):
             self.optionFrame, text="Exportar archivo", command=self.exportFile)
         exportButton.pack(side=tk.LEFT, padx=10)
 
-    def loadDataFrame(self):
-        if self.fileName is None:
+    def loadDataFrame(self, fileName=None):
+        if fileName is None:
+            fileName = self.fileName
+
+        fileName = pathlib.Path(fileName)
+
+        if fileName is None:
             error = "No se ha proporcionado ningún archivo para acceder."
             logger.error(error)
             raise ValueError(error)
 
-        if not self.fileName.is_file():
+        if not fileName.is_file():
             error = f"No es posible acceder al archivo {self.fileName}."
             logger.error(error)
             self._pd = pd.DataFrame()
@@ -89,11 +94,11 @@ class DataFrameComponent(tk.Frame):
 
             return
 
-        self._pd = pd.read_excel(self.fileName)
+        self._pd = pd.read_excel(fileName)
 
     def loadFile(self):
         newFilePath = filedialog.askopenfilename(
-            title="Selecciona el archivo de las CURP",
+            title="Selecciona el archivo a cargar",
             initialdir="~",
             filetypes=(("Archivos de Excel", "*.xlsx"),)
         )
@@ -101,11 +106,11 @@ class DataFrameComponent(tk.Frame):
 
         if newFilePath.is_file():
 
-            self.fileName = newFilePath
-            self.loadDataFrame()
+            self.loadDataFrame(newFilePath)
 
             self.pd.to_excel(self.fileName, index=False)
             self._createComponent()
+            self.onUpdateDf()
 
     def exportFile(self):
 
@@ -138,6 +143,9 @@ class DataFrameComponent(tk.Frame):
     @property
     def tree(self):
         return self._tree
+
+    def onUpdateDf(self):
+        pass
 
 
 if __name__ == "__main__":

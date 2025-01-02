@@ -19,6 +19,8 @@ class AllSubjects():
             "5": [],
             "6": [],
         }
+
+        self.df: pd.DataFrame = None
         self.allSubjectsFileDir = allSubjectsFileName
         self._allKardexFileName = kardexFileName
         self._allKardex = AllKardex(fileName=kardexFileName)
@@ -68,14 +70,14 @@ class AllSubjects():
             A dictionary that contains all subjects for each semester.
         """
 
-        df = pd.read_excel(self.allSubjectsFileDir)
+        self.df = pd.read_excel(self.allSubjectsFileDir)
 
         logging.info(
             f"Materias recuperadas desde: "
             f"{self.allSubjectsFileDir}"
         )
 
-        allSubjectsFromExcel = df.to_dict()
+        allSubjectsFromExcel = self.df.to_dict()
 
         for semester in allSubjectsFromExcel.keys():
             subjects = list(allSubjectsFromExcel.get(semester).values())

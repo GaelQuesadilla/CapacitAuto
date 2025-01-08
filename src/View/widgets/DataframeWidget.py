@@ -11,7 +11,7 @@ logger = setup_logger(loggerName=__name__)
 class DataframeWidget(tk.Frame):
     def __init__(self, parent: tk.Tk, df: pd.DataFrame = None, fileName: str = None):
         super().__init__(parent)
-        self._pd = df
+        self._df = df
         self.optionFrame: tk.Frame = None
         self._parent = parent
         self._tree: ttk.Treeview = None
@@ -20,21 +20,21 @@ class DataframeWidget(tk.Frame):
         if not fileName is None:
             self.fileName = pathlib.Path(fileName)
 
-        if self.pd is None:
+        if self.df is None:
             self.loadDataFrame()
 
         self._createComponent()
         self._createButtons()
 
     def _createComponent(self):
-        columns = list(self.pd.columns)
+        columns = list(self.df.columns)
         self._tree = ttk.Treeview(self, columns=columns, show="headings")
 
         for column in columns:
             self.tree.heading(column, text=column)
             self.tree.column(column, anchor="center")
 
-        for index, row in self.pd.iterrows():
+        for index, row in self.df.iterrows():
             tag = "oddrow" if index % 2 == 0 else "evenrow"
             self.tree.insert(
                 "", "end", values=row.tolist(),
@@ -89,7 +89,7 @@ class DataframeWidget(tk.Frame):
         if not fileName.is_file():
             error = f"No es posible acceder al archivo {self.fileName}."
             logger.error(error)
-            self._pd = pd.DataFrame()
+            self._df = pd.DataFrame()
             messagebox.showwarning(
                 "Atención",
                 f"No es posible acceder al archivo {self.fileName}.\n"
@@ -98,7 +98,7 @@ class DataframeWidget(tk.Frame):
 
             return
 
-        self._pd = pd.read_excel(fileName)
+        self._df = pd.read_excel(fileName)
 
     def loadFile(self):
         newFilePath = filedialog.askopenfilename(
@@ -112,7 +112,7 @@ class DataframeWidget(tk.Frame):
 
             self.loadDataFrame(newFilePath)
 
-            self.pd.to_excel(self.fileName, index=False)
+            self.df.to_excel(self.fileName, index=False)
             self._createComponent()
             self.onUpdateDf()
 
@@ -132,7 +132,7 @@ class DataframeWidget(tk.Frame):
         newFilePath = pathlib.Path(newFilePath)
 
         if newFilePath.is_dir():
-            self.pd.to_excel(newFilePath, index=False)
+            self.df.to_excel(newFilePath, index=False)
             messagebox.showinfo("Archivo exportado ",
                                 f"Archivo guardado en {newFilePath}")
 
@@ -141,8 +141,8 @@ class DataframeWidget(tk.Frame):
             self.tree.delete(row)
 
     @property
-    def pd(self):
-        return self._pd
+    def df(self):
+        return self._df
 
     @property
     def tree(self):

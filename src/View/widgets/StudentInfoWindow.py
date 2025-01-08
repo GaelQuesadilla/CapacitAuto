@@ -1,23 +1,23 @@
-from src.View.components.TopWindow import TopWindow
+from src.View.widgets.TopWindow import TopWindow
 import tkinter as tk
 from typing import Dict, Union
 from tkinter import ttk
 
 
-class StudentInfoView(TopWindow):
+class StudentInfoWindow(TopWindow):
 
     def __init__(self, parent: tk.Tk, studentKardex: Dict[str, Union[str, int]]):
         super().__init__(parent)
         self.studentKardex = studentKardex
         self.subjectFrame = tk.Frame()
+        self.show()
 
     def show(self):
-        super().show()
 
-        self.window.title("Información del Estudiante")
-        self.window.geometry("700x500")
+        self.title("Información del Estudiante")
+        self.geometry("700x500")
 
-        container = tk.Frame(self.window)
+        container = tk.Frame(self)
         container.pack(fill=tk.BOTH, expand=True)
 
         canvas = tk.Canvas(container)

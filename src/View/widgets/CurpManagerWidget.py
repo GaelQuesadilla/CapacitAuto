@@ -1,15 +1,65 @@
 from tkinter import ttk, Tk
 from tkinter import messagebox, filedialog
 import tkinter as tk
-from typing import List, Set
+from typing import List, Set, Dict
 import os
 from src.Log import setup_logger
 from src.Config import Config
 from src.Model.services.AllKardex import AllKardex
 import pathlib
-from src.View.components.ProgressTask import ProgressTask
+from src.View.widgets.ProgressTask import ProgressTask
+from src.View.widgets.DataframeWidget import DataframeWidget
+import pandas as pd
+import json
 
 logger = setup_logger(loggerName="src.View.views.CurpManagerView")
+
+
+class CurpManagerWidget(DataframeWidget):
+    def __init__(self, parent):
+        self.columns = ["No.", "CURP", "Estado"]
+        self.curpFile: pathlib.Path = Config.getPath("Files", "curps_dir")
+        self.kardexDataFile: pathlib.Path = Config.getPath(
+            "Files", "kardex_data_dir")
+        self.kardexFile: pathlib.Path = Config.getPath(
+            "Files", "all_kardex_dir")
+
+        super().__init__(parent, self.df)
+
+    @property
+    def df(self):
+
+        data = [
+            {
+                self.columns[0]: i+1,
+                self.columns[1]: curp,
+                self.columns[2]: (
+                    "Kardex solicitado" if curp in self.requestedCurps else
+                    "CURP no valida" if curp in self.invalidCurps else
+                    "Kardex no solicitado"
+                ),
+
+            }
+            for i, curp in enumerate(self.curps)
+        ]
+        df = pd.DataFrame(data)
+
+        return df
+
+    @property
+    def curps(self):
+        return self.curpFile.read_text().splitlines()
+
+    @property
+    def requestedCurps(self):
+        kardex: List[str] = json.load(self.kardexFile.open())
+
+        return [student.get("CURP") for student in kardex]
+
+    @property
+    def invalidCurps(self):
+        kardexData: Dict[str] = json.load(self.kardexDataFile.open())
+        return kardexData.get("invalidCurps", [])
 
 
 class CURPManagerView():
@@ -29,12 +79,6 @@ class CURPManagerView():
         self.reportDir = Config.read("Files", "curp_report_dir")
 
         self.allKardexDir = Config.read("Files", "all_kardex_dir")
-
-        # self.requestKardex = ProgressTask(
-        #     self.requestKardex,
-        #     parent=self.parent,
-        #     title="Solicitando datos..."
-        # )
 
     def getCurps(self):
 
@@ -178,12 +222,11 @@ class CURPManagerView():
 
 if __name__ == "__main__":
     from src.Config import Config
+    from src.View.widgets.AppWindow import AppWindow
 
-    logger.debug(Config.getPath("Files", "curps_dir"))
+    view = AppWindow()
 
-    root = tk.Tk()
+    component = CurpManagerWidget(view)
+    component.pack(fill=tk.BOTH, expand=True)
 
-    app = CURPManagerView(root)
-
-    app.show()
-    root.mainloop()
+    view.mainloop()

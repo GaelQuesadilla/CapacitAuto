@@ -1,5 +1,5 @@
-from src.View.components.DataFrameComponent import DataFrameComponent
-from src.View.components.BaseView import BaseView
+from src.View.widgets.DataframeWidget import DataframeWidget
+from src.View.widgets.AppWindow import AppWindow
 import tkinter as tk
 from tkinter import ttk
 from src.Model.services.AllSubjects import AllSubjects
@@ -8,11 +8,11 @@ from src.Log import setup_logger
 from src.Model.services.CalcRelevantGrades import calcRelevantGrades
 
 
-from src.View.components.ProgressTask import ProgressTask
+from src.View.widgets.ProgressTask import ProgressTask
 logger = setup_logger(loggerName=__name__)
 
 
-class AllSubjectsComponent(DataFrameComponent):
+class AllSubjectsWidget(DataframeWidget):
 
     def __init__(self, parent: tk.Tk):
 
@@ -42,7 +42,7 @@ class AllSubjectsComponent(DataFrameComponent):
         self._createComponent()
 
     def onUpdateDf(self):
-        @ProgressTask(parent=self._parent, title="Calculando promedios relevantes")
+        @ProgressTask(parent=self.master, title="Calculando promedios relevantes")
         def task():
             calcRelevantGrades()
 
@@ -51,8 +51,8 @@ class AllSubjectsComponent(DataFrameComponent):
 
 if __name__ == "__main__":
 
-    base = BaseView()
-    component = AllSubjectsComponent(parent=base.root)
+    view = AppWindow()
+    component = AllSubjectsWidget(view)
     component.pack(fill=tk.BOTH, expand=True)
 
-    base.show()
+    view.mainloop()

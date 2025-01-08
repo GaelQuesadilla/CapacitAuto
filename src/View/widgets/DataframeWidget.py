@@ -3,20 +3,22 @@ import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 from src.Log import setup_logger, trackFunction
 import os
-from src.View.components.BaseView import BaseView
 import pathlib
 
-logger = setup_logger(loggerName="DataFrameComponent")
+logger = setup_logger(loggerName=__name__)
 
 
-class DataFrameComponent(tk.Frame):
+class DataframeWidget(tk.Frame):
     def __init__(self, parent: tk.Tk, df: pd.DataFrame = None, fileName: str = None):
         super().__init__(parent)
         self._pd = df
         self.optionFrame: tk.Frame = None
         self._parent = parent
         self._tree: ttk.Treeview = None
-        self.fileName = pathlib.Path(fileName)
+        self.fileName: pathlib.Path = None
+
+        if not fileName is None:
+            self.fileName = pathlib.Path(fileName)
 
         if self.pd is None:
             self.loadDataFrame()
@@ -63,9 +65,11 @@ class DataFrameComponent(tk.Frame):
         self.optionFrame.grid(row=0, column=0, sticky="ew", padx=10, pady=5)
 
         # Botón para cargar otro archivo
-        loadButton = tk.Button(
-            self.optionFrame, text="Cargar archivo", command=self.loadFile)
-        loadButton.pack(side=tk.LEFT, padx=10)
+
+        if self.fileName:
+            loadButton = tk.Button(
+                self.optionFrame, text="Cargar archivo", command=self.loadFile)
+            loadButton.pack(side=tk.LEFT, padx=10)
 
         exportButton = tk.Button(
             self.optionFrame, text="Exportar archivo", command=self.exportFile)
@@ -150,11 +154,12 @@ class DataFrameComponent(tk.Frame):
 
 if __name__ == "__main__":
     from src.Config import Config
+    from src.View.widgets.AppWindow import AppWindow
 
     fileName = Config.getPath("Files", "lists_dir") / \
         "TEST" / "Lista Alumnos 2-A.xlsx"
-    base = BaseView()
-    component = DataFrameComponent(base.root, fileName=fileName)
+    view = AppWindow()
+    component = DataframeWidget(view, fileName=fileName)
     component.pack(fill=tk.BOTH, expand=True)
 
-    base.show()
+    view.mainloop()

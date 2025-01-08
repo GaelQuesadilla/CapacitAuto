@@ -4,14 +4,14 @@ from src.Config import default_config, Config
 from configparser import ConfigParser
 from typing import Dict, Any, Callable
 from src.Log import setup_logger, trackFunction
-from src.View.components.TopWindow import TopWindow
+from src.View.widgets.TopWindow import TopWindow
 import pathlib
 
 
 logger = setup_logger(loggerName="ConfigView")
 
 
-class ConfigView(TopWindow):
+class ConfigWidget(tk.Frame):
     def __init__(self, parent: tk.Tk, configFile: str, onSaveConfig: Callable):
         self.parent = parent
         self.onSaveConfig = onSaveConfig
@@ -20,6 +20,8 @@ class ConfigView(TopWindow):
         self.config.read(configFile)
 
         self.entriesBySection: Dict[str, Dict[str, tk.Entry]] = {}
+
+        super().__init__(parent)
 
     def createConfigFields(self):
         row = 1
@@ -76,25 +78,22 @@ class ConfigView(TopWindow):
 
     @trackFunction
     def show(self):
-        super().show()
-
-        self.window.title("Configuración")
-        self.window.geometry("790x400")
+        super()
 
         # Center main frame in column 1
-        self.window.columnconfigure(0, weight=1)
-        self.window.columnconfigure(1, weight=3)
-        self.window.columnconfigure(2, weight=1)
-        self.window.columnconfigure(3, weight=0)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=3)
+        self.columnconfigure(2, weight=1)
+        self.columnconfigure(3, weight=0)
 
-        self.window.rowconfigure(0, weight=0)
-        self.window.rowconfigure(1, weight=1)
+        self.rowconfigure(0, weight=0)
+        self.rowconfigure(1, weight=1)
 
-        self.canvas = tk.Canvas(self.window)
+        self.canvas = tk.Canvas(self)
         self.canvas.grid(row=1, column=1, sticky="nsew")
 
         self.scrollBar = ttk.Scrollbar(
-            self.window, orient="vertical", command=self.canvas.yview)
+            self, orient="vertical", command=self.canvas.yview)
         self.scrollBar.grid(row=1, column=3, sticky="ns")
 
         # Create a frame inside the canvas
@@ -106,7 +105,7 @@ class ConfigView(TopWindow):
 
         # Create the save button
         self.save_button = tk.Button(
-            self.window, text="Guardar Configuración", command=self.saveConfig, bg="green"
+            self, text="Guardar Configuración", command=self.saveConfig, bg="green"
         )
         self.save_button.grid(column=1, row=0, pady=10)
 
@@ -118,28 +117,22 @@ class ConfigView(TopWindow):
 
 
 if __name__ == "__main__":
-    import os
-    from src.Config import Config
 
-    class View:
-        def __init__(self, root: tk.Tk):
-            self.root = root
-            self.configFile = Config.getPath("Files", "config_dir")
+    from src.View.widgets.AppWindow import AppWindow
 
-            if not self.configFile.is_file():
-                Config.create()
-            configView = ConfigView(
-                self.root, self.configFile, self.on_config_saved
-            )
+    configFile = Config.getPath("Files", "config_dir")
 
-            configView.show()
+    if not configFile.is_file():
+        Config.create()
 
-        def on_config_saved(self):
-            print("Configuración guardada y aplicación actualizada.")
+    def on_config_saved(self):
+        print("Configuración guardada y aplicación actualizada.")
 
-        def show(self):
-            self.root.mainloop()
+    view = AppWindow()
 
-    root = tk.Tk()
-    app = View(root)
-    app.show()
+    component = ConfigWidget(view, configFile, on_config_saved)
+
+    component.show()
+    component.pack(fill=tk.BOTH)
+
+    view.mainloop()

@@ -16,7 +16,8 @@ def setup_logger(logsFile: str = logsFile, loggerName: str = "Capacitauto") -> l
         level=logging.DEBUG,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         handlers=[
-            logging.FileHandler(logsFile),
+            logging.FileHandler(
+                logsFile, encoding=Config.read("General", "encoding")),
             logging.StreamHandler()
         ]
     )

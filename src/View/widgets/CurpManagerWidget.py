@@ -26,6 +26,32 @@ class CurpManagerWidget(DataframeWidget):
 
         super().__init__(parent, self.df)
 
+        self.tree.tag_configure("error", background="#f2c6de")
+        self.tree.tag_configure("unsolicited", background="#faedcb")
+
+        self.tree.tag_configure("even-error", background="#f2c6de")
+        self.tree.tag_configure("odd-error", background="#fce3e9")
+        self.tree.tag_configure("even-unsolicited", background="#faedcb")
+        self.tree.tag_configure("odd-unsolicited", background="#fdf4e3")
+
+    def _createComponent(self):
+
+        super()._createComponent()
+
+        for row in self.tree.get_children():
+            values = self.tree.item(row, "values")
+            tags = self.tree.item(row, "tags")
+            index, curp, status = values
+
+            parityTag = "odd" if int(index) % 2 == 0 else "even"
+
+            if curp in self.requestedCurps:
+                pass
+            elif curp in self.invalidCurps:
+                self.tree.item(row, tags=(f"{parityTag}-error",))
+            else:
+                self.tree.item(row, tags=(f"{parityTag}-unsolicited",))
+
     @property
     def df(self):
 
@@ -52,9 +78,12 @@ class CurpManagerWidget(DataframeWidget):
 
     @property
     def requestedCurps(self):
-        kardex: List[str] = json.load(self.kardexFile.open())
 
-        return [student.get("CURP") for student in kardex]
+        try:
+            kardex: List[str] = json.load(self.kardexFile.open())
+            return [student.get("CURP") for student in kardex]
+        except (json.decoder.JSONDecodeError, FileNotFoundError) as e:
+            return []
 
     @property
     def invalidCurps(self):
@@ -79,6 +108,8 @@ class CURPManagerView():
         self.reportDir = Config.read("Files", "curp_report_dir")
 
         self.allKardexDir = Config.read("Files", "all_kardex_dir")
+
+        self.tree.tag_configure()
 
     def getCurps(self):
 

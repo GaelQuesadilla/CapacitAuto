@@ -1,10 +1,14 @@
 from src.Config import Config
 from requests_cache import CachedSession
+import logging
 
 session = CachedSession(
     cache_name=Config.read("Web", "kardex_cache_session_name"),
     expire_after=Config.read("Web", "cache_expire_after")
 )
+
+logging.getLogger("charset_normalizer").setLevel(logging.WARNING)
+logging.getLogger("requests_cache.policy.actions").setLevel(logging.WARNING)
 
 
 def GetStudentKardex(curp: str):

@@ -1,12 +1,12 @@
-from src.View.components.DataFrameComponent import DataFrameComponent
-from src.View.components.BaseView import BaseView
+from src.View.widgets.DataframeWidget import DataframeWidget
+from src.View.widgets.AppWindow import AppWindow
 import tkinter as tk
 from src.Model.services.AllKardex import AllKardex
 from src.Config import Config
-from src.View.views.StudentInfoView import StudentInfoView
+from src.View.widgets.StudentInfoWindow import StudentInfoWindow
 
 
-class StudentsDataFrame(DataFrameComponent):
+class StudentsListWidget(DataframeWidget):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -34,7 +34,7 @@ class StudentsDataFrame(DataFrameComponent):
 
         studentKardex = [
             kardex for kardex in self.allKardex.allKardex if kardex.get("CURP") == curp]
-        StudentInfoView(self._parent, studentKardex[0]).show()
+        StudentInfoWindow(self.master, studentKardex[0])
 
 
 if __name__ == "__main__":
@@ -42,8 +42,8 @@ if __name__ == "__main__":
 
     fileName = Config.getPath("Files", "lists_dir") / \
         "Lista Alumnos 7-D-M.xlsx"
-    base = BaseView()
-    component = StudentsDataFrame(base.root, fileName=fileName)
+    view = AppWindow()
+    component = StudentsListWidget(view, fileName=fileName)
     component.pack(fill=tk.BOTH, expand=True)
 
-    base.show()
+    view.mainloop()

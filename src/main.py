@@ -1,6 +1,6 @@
 import tkinter as tk
-from src.View.components.BaseView import BaseView
-from src.View.views.ConfigView import ConfigView
+from src.View.widgets.AppWindow import BaseView
+from src.View.widgets.ConfigWidget import ConfigView
 from src.Config import Config
 from src.Log import setup_logger, trackFunction
 import pathlib

@@ -96,14 +96,13 @@ def createStudentsList(allKardexFileDir: str = None):
                 studentList.addStudent(student)
 
             studentList.sort(by=["Nombre", "CURP"], ascending=True)
-            choicePrefix = Config.read("General", "choice_name")
+            choicePrefix = Config.read("General", "choice_name").format("")
 
             columnsToDrop = [
-                col for col in studentList.df.columns if choicePrefix in col
+                col for col in studentList.df.columns if choicePrefix in str(col)
             ]
-            print(f"{columnsToDrop=}")
 
-            studentList.df.drop(columns=columnsToDrop)
+            studentList.df.drop(columns=columnsToDrop, inplace=True)
             studentList.save()
 
 

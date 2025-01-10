@@ -8,9 +8,10 @@ import pathlib
 logsDir = pathlib.Path(Config.read("Files", "logs_dir"))
 logsFile = logsDir / "logs.log"
 
+logging.getLogger("requests_cache").setLevel(logging.WARNING)
+
 
 def setup_logger(logsFile: str = logsFile, loggerName: str = __name__) -> logging.Logger:
-
     logsDir.mkdir(exist_ok=True)
     logging.basicConfig(
         level=logging.DEBUG,
@@ -24,6 +25,10 @@ def setup_logger(logsFile: str = logsFile, loggerName: str = __name__) -> loggin
 
     # Crear un logger específico para tu aplicación
     logger: logging.Logger = logging.getLogger(loggerName)
+    if Config.read("General", "debug"):
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.INFO)
     return logger
 
 

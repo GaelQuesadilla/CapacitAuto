@@ -82,8 +82,8 @@ class StudentList(DataList):
 
         toList.addStudent(student)
         self.deleteStudent(student)
-        logging.info(
-            f"Moving student "
+        logging.debug(
+            f"Moviendo estudiante "
             f"{student.CURP} from {self.fileName} to {toList.fileName}"
         )
 
@@ -101,7 +101,7 @@ class StudentList(DataList):
         for key, value in student.to_dict().items():
             self.df.loc[self.df["CURP"] == student.CURP, key] = value
 
-        logging.info(f"Estudiante con CURP {student.CURP} actualizado.")
+        logging.debug(f"Estudiante con CURP {student.CURP} actualizado.")
 
 
 if __name__ == "__main__":

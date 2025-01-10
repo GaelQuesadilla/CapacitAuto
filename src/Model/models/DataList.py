@@ -12,7 +12,7 @@ class DataList:
 
     @fileName.setter
     def fileName(self, fileName: str):
-        if not fileName.endswith(".xlsx"):
+        if not str(fileName).endswith(".xlsx"):
             fileName += ".xlsx"
         self._fileName = fileName
 

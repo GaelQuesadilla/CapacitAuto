@@ -135,9 +135,9 @@ class CurpManagerWidget(DataframeWidget):
         @ProgressTask(parent=self.master, title="Solicitando datos...", onComplete=onTaskComplete)
         def task():
             allKardex = AllKardex(fileName=self.kardexFile, curps=self.curps)
-            # allKardex.requestAllKardex()
-            # allKardex.saveAllKardex()
-            # allKardex.saveReport()
+            allKardex.requestAllKardex()
+            allKardex.saveAllKardex()
+            allKardex.saveReport()
 
             createStudentsList(Config.getPath("Files", "all_kardex_dir"))
 

@@ -31,6 +31,7 @@ class ListChoiceWidget(ttk.Combobox):
         self.fileNames = [x.name for x in self.files]
         self.set(value="")
         try:
+            self.config(values=self.fileNames)
             self.set(self.fileNames[0])
         except IndexError as e:
             logger.warning(f"No se encuentra ningún archivo en {self.listDir}")

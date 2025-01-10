@@ -83,8 +83,9 @@ class Student:
             setattr(self, name, value)
         else:
             logging.warning(
-                f"No es posible agregar nuevos atributos desde"
-                f" {self.set.__name__}",
+                f"No es posible agregar nuevos atributos desde "
+                f"set a {self.Nombre} {self.Semestre} {self.Grupo}. "
+                f"Rechazando {name} = {value}",
             )
 
     def setExtras(self, **kwargs):
@@ -138,6 +139,6 @@ class Student:
 
 if __name__ == "__main__":
     import pprint
-    test = Student(Semestre="1")
+    test = Student(Semestre="2")
     pprint.pp(test.to_dict())
     pprint.pp(asdict(test))

@@ -6,12 +6,13 @@ import pandas as pd
 from src.Config import Config
 from src.Log import setup_logger
 import pathlib
+import numpy as np
 
 maxStudents: int = Config.read("School", "max_students_in_group")
 optionPrefix: str = Config.read("General", "choice_name")
 relevantGradesPrefix: str = Config.read("General", "relevant_grades_name")
 
-logging = setup_logger()
+logger = setup_logger()
 
 
 class AdvancedGroup(Group):
@@ -30,7 +31,7 @@ class AdvancedGroup(Group):
             self.courses = Config.read("School", "trainings").split(",")
             self.group = "Paquetes"
         else:
-            logging.warning(
+            logger.warning(
                 "Advanced groups should be used only in 1,2,3,4 semesters"
             )
 
@@ -66,7 +67,8 @@ class AdvancedGroup(Group):
             for studentData in studentsData:
                 currentStudent = Student(Semestre=self.semester)
                 for key, value in studentData.items():
-                    currentStudent.set(key, value)
+                    if not pd.isna(value):
+                        currentStudent.set(key, value)
 
                 currentStudent.Semestre = str(currentStudent.Semestre)
                 currentList.addStudent(
@@ -83,22 +85,36 @@ class AdvancedGroup(Group):
             )
 
     def iterate(self):
-        changedLists = 0
-        for course in self.courses:
-            self.sortByGrades()
-            currentList = self._studentLists.get(course)
-            currentList.df.reset_index(drop=True, inplace=True)
-            shape = currentList.df.shape
+        for _ in range(1, 10):
+            movedStudents = 0
+            for course in self.courses:
+                self.sortByGrades()
+                currentList = self._studentLists.get(course)
+                currentList.df.reset_index(drop=True, inplace=True)
+                shape = currentList.df.shape
 
-            for i in range(45, shape[0], 1):
-                curp: str = currentList.df.loc[i]["CURP"]
-                student: Student = currentList.getStudent(curp)
+                for i in range(45, shape[0], 1):
+                    curp: str = currentList.df.loc[i]["CURP"]
+                    student: Student = currentList.getStudent(curp)
 
-                currentChoice = student.getChoiceIndex(course)
-                nextChoice = student.getChoiceName(currentChoice+1)
+                    currentChoice = student.getChoiceIndex(course)
+                    nextChoice = student.getChoiceName(currentChoice+1)
 
-                nextList = self._studentLists.get(nextChoice)
-                currentList.moveStudent(student=student, toList=nextList)
+                    nextList = self._studentLists.get(nextChoice)
+                    currentList.moveStudent(student=student, toList=nextList)
+                    movedStudents += 1
+            logger.info(f"Se han movido {movedStudents} estudiantes "
+                        f"en la iteración n. {_}")
+            if movedStudents == 0:
+                logger.info(f"Se ha resuelto el grupo en {_} iteraciones")
+                break
+        else:
+            logger.info(f"No ha sido posible calcular los grupos "
+                        f"en {_} iteraciones.")
+            raise RecursionError(
+                f"No ha sido posible calcular los grupos "
+                f"en {_} iteraciones."
+            )
 
 
 if __name__ == "__main__":
@@ -138,14 +154,14 @@ if __name__ == "__main__":
     advancedGroup = AdvancedGroup(
         "2", studentListA, studentListB, studentListC, studentListD)
 
-    logging.info("All students")
+    logger.info("All students")
     print(f"{advancedGroup.allStudents}")
 
-    logging.info("Set Perfect List")
+    logger.info("Set Perfect List")
     advancedGroup.setPerfectLists()
 
-    logging.info("Set Perfect List")
+    logger.info("Set Perfect List")
 
     for course, studentList in advancedGroup.studentLists.items():
-        logging.info(f"Lista - {course}")
+        logger.info(f"Lista - {course}")
         print(studentList.df)

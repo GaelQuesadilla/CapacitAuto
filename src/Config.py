@@ -146,6 +146,8 @@ class Config():
                 value = int(value)
             elif type(defaultValue) == float:
                 value = float(value)
+            elif type(defaultValue) == bool:
+                value = value == "True"
 
         except Exception:
             pass

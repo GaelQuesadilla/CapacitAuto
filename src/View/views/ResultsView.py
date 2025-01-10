@@ -8,6 +8,13 @@ import pandas as pd
 from src.View.widgets.ProgressTask import ProgressTask
 import json
 from tkinter import ttk
+from src.Log import setup_logger
+from src.Model.models.AdvancedGroup import AdvancedGroup
+from src.Model.models.StudentList import StudentList
+from typing import List
+from tkinter import messagebox
+
+logger = setup_logger(__name__)
 
 
 class ResultsView(tk.Frame):
@@ -89,28 +96,68 @@ class ResultsView(tk.Frame):
 
         @ProgressTask(parent=self.master, title="Calculando grupos")
         def task():
-            print(f"Procesando con semestre: {semester}")
+            logger.info(f"Procesando el semestre {semester}")
+
+            availableLists: List[StudentList] = []
+            choicesList = pd.read_excel(Config.getPath("Files", "choices_dir"))
+            listsDir: pathlib.Path = Config.getPath("Files", "lists_dir")
+
             for group in self.kardexData.get("availableGroups", []):
-                path = Config.getPath(
-                    "Files", "lists_dir"
-                ) / pathlib.Path(
-                    Config.read("General", "list_path_format").format(
-                        semestre=semester,
-                        grupo=group,
-                        turno=shift
-                    )
+                fileName = listNameFormat.format(
+                    semestre=semester,
+                    grupo=group,
+                    turno=shift
                 )
-                print(path)
+                path: pathlib.Path = listsDir / fileName
+                if path.is_file():
+                    studentList = StudentList(
+                        fileName=path,
+                        semester=semester,
+                        group=group,
+                    )
+
+                    logger.info(f"Cargando lista {path}")
+                    studentList.load()
+
+                    availableLists.append(studentList)
+
+            advancedGroup = AdvancedGroup(
+                semester,
+                choicesList,
+                * availableLists
+            )
+
+            advancedGroup.setPerfectLists()
+            try:
+                advancedGroup.iterate()
+                logger.info("Guardando listas de los grupos calculados")
+
+                resultsDir = Config.getPath("Files", "list_results_dir")
+                print(f"{resultsDir=}")
+
+                for course, studentList in advancedGroup.studentLists.items():
+                    studentList.fileName = resultsDir / \
+                        f"Lista - {course}.xlsx"
+
+                    studentList.sort(by="Nombre")
+                    studentList.save()
+                    self.listsCombobox.getFiles()
+            except RecursionError:
+                messagebox.showwarning(
+                    "Advertencia",
+                    "No ha sido posible resolver los grupos en multiples iteraciones.\n"
+                    "Se recomienda revisar los registros."
+                )
+
         task()
 
-    @property
+    @ property
     def path(self):
-        print(f"{self.listsCombobox.get()=}")
         if self.listsCombobox.get() == "":
             return False
 
-        path = Config.getPath("Files", "lists_dir") / \
-            pathlib.Path(self.listsCombobox.get())
+        path = Config.getPath("Files", "list_results_dir") / \
+            self.listsCombobox.get()
         return path
 
 

@@ -16,6 +16,7 @@ default_config = {
         "relevant_subjects_name": "Materias relevantes para {}",
         "relevant_grades_name": "Promedio relevante para {}",
         "choice_name": "Opcion {}",
+        "list_path_format": "Lista Alumnos {semestre}-{grupo}-{turno}.xlsx",
     },
     "Web": {
         "kardex_url": "https://apps.cobachbcs.edu.mx/Sice/ReportesImpresos/wf_Rep_Kardex_ws.aspx",
@@ -50,9 +51,13 @@ default_config = {
         "kardex_data_dir": pathlib.Path.cwd() / "data" / "kardexData.json",
         "all_subjects_dir": pathlib.Path.cwd() / "data" / "AllSubjects.xlsx",
         "choices_dir": pathlib.Path.cwd() / "data" / "choices.xlsx",
+        "list_results_dir": pathlib.Path.cwd() / "data" / "lists" / "results",
     },
     "Assets": {
         "logo_image_dir": pathlib.Path.cwd() / "assets" / "images" / "cobach_logo.png",
+    },
+    "Dev": {
+        "enable_ttkbootstrap": False
     },
 }
 
@@ -99,6 +104,7 @@ class Config():
             config["School"] = default_config.get("School")
             config["Files"] = default_config.get("Files")
             config["Assets"] = default_config.get("Assets")
+            config["Dev"] = default_config.get("Dev")
             with open("config.ini", "w") as config_file:
                 config.write(config_file)
             print("Config file has been written successfully")

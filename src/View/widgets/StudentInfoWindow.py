@@ -76,21 +76,25 @@ class StudentInfoWindow(TopWindow):
         semesterLabel.pack(side=tk.LEFT, padx=5)
 
         self.semesterSelector = ttk.Combobox(selectFrame, values=semesters)
+        self.semesterSelector.bind("<<ComboboxSelected>>", self.setSubjects)
+
         self.semesterSelector.pack(side=tk.LEFT, padx=5)
 
-        confirmButton = tk.Button(
-            selectFrame, text="Seleccionar", command=self.setSubjects)
-        confirmButton.pack(side=tk.LEFT, padx=5)
+        # confirmButton = tk.Button(
+        #     selectFrame, text="Seleccionar", command=self.setSubjects)
+        # confirmButton.pack(side=tk.LEFT, padx=5)
 
         subjectLabel = tk.Label(selectFrame, text="Materia:")
+
         subjectLabel.pack(side=tk.LEFT, padx=5)
 
         self.subjectSelector = ttk.Combobox(selectFrame, values=[])
+        self.subjectSelector.bind("<<ComboboxSelected>>", self.showSubject)
         self.subjectSelector.pack(side=tk.LEFT, padx=5)
 
-        confirmButton2 = tk.Button(
-            selectFrame, text="Confirmar", command=self.showSubject)
-        confirmButton2.pack(side=tk.LEFT, padx=5)
+        # confirmButton2 = tk.Button(
+        #     selectFrame, text="Confirmar", command=self.showSubject)
+        # confirmButton2.pack(side=tk.LEFT, padx=5)
 
     def dictToView(self, title: str, data: Dict[str, Union[str, int]], parent):
 
@@ -127,15 +131,16 @@ class StudentInfoWindow(TopWindow):
 
         return mainFrame
 
-    def setSubjects(self):
+    def setSubjects(self, *args):
         semester = self.semesterSelector.get()
         subjects = [
             subject
             for subject in self.studentKardex.get("Grades").get(semester)
         ]
         self.subjectSelector.config(values=subjects)
+        self.subjectSelector.set(value="")
 
-    def showSubject(self):
+    def showSubject(self, *args):
 
         self.subjectFrame.destroy()
         semester = self.semesterSelector.get()

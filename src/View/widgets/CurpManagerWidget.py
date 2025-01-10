@@ -6,6 +6,7 @@ from src.Log import setup_logger
 from src.Config import Config
 from src.Model.services.AllKardex import AllKardex
 import pathlib
+from src.Model.services.CreateStudentList import createStudentsList
 from src.View.widgets.ProgressTask import ProgressTask
 from src.View.widgets.DataframeWidget import DataframeWidget
 import pandas as pd
@@ -134,9 +135,11 @@ class CurpManagerWidget(DataframeWidget):
         @ProgressTask(parent=self.master, title="Solicitando datos...", onComplete=onTaskComplete)
         def task():
             allKardex = AllKardex(fileName=self.kardexFile, curps=self.curps)
-            allKardex.requestAllKardex()
-            allKardex.saveAllKardex()
-            allKardex.saveReport()
+            # allKardex.requestAllKardex()
+            # allKardex.saveAllKardex()
+            # allKardex.saveReport()
+
+            createStudentsList(Config.getPath("Files", "all_kardex_dir"))
 
         task()
 

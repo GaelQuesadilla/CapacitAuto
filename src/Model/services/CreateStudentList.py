@@ -78,7 +78,12 @@ def createStudentsList(allKardexFileDir: str = None):
         for groupKey, group in semester.items():
 
             shift = Config.read("School", "school_shift")
-            fileName = f"Lista Alumnos {semesterKey}-{groupKey}-{shift}.xlsx"
+
+            fileName = Config.read("General", "list_path_format").format(
+                semestre=semesterKey,
+                grupo=groupKey,
+                turno=shift
+            )
             path = Config.getPath("Files", "lists_dir") / fileName
 
             studentList = StudentList(
@@ -91,6 +96,14 @@ def createStudentsList(allKardexFileDir: str = None):
                 studentList.addStudent(student)
 
             studentList.sort(by=["Nombre", "CURP"], ascending=True)
+            choicePrefix = Config.read("General", "choice_name")
+
+            columnsToDrop = [
+                col for col in studentList.df.columns if choicePrefix in col
+            ]
+            print(f"{columnsToDrop=}")
+
+            studentList.df.drop(columns=columnsToDrop)
             studentList.save()
 
 

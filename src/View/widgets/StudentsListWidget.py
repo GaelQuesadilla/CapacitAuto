@@ -8,8 +8,8 @@ from src.View.widgets.StudentInfoWindow import StudentInfoWindow
 
 class StudentsListWidget(DataframeWidget):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, parent, df=None, fileName=None):
+        super().__init__(parent, df, fileName)
 
         self.allKardex = AllKardex(
             fileName=Config.getPath("Files", "all_kardex_dir")

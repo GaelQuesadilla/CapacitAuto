@@ -4,6 +4,8 @@ from tkinter import ttk, messagebox, filedialog
 from src.Log import setup_logger, trackFunction
 import os
 import pathlib
+from tkinter import ttk
+
 
 logger = setup_logger(loggerName=__name__)
 
@@ -29,7 +31,9 @@ class DataframeWidget(tk.Frame):
     def _createComponent(self):
         columns = list(self.df.columns)
         self._tree = ttk.Treeview(self, columns=columns, show="headings")
+        style = ttk.Style()
 
+        style.map("Treeview.Heading", background=[('active', '#E2E2E2')])
         for column in columns:
             self.tree.heading(column, text=column)
             self.tree.column(column, anchor="center")
@@ -88,7 +92,7 @@ class DataframeWidget(tk.Frame):
 
         try:
             self._df = pd.read_excel(fileName)
-        except (FileNotFoundError, ValueError) as error:
+        except (FileNotFoundError, ValueError, PermissionError) as error:
             logger.error(
                 f"No es posible acceder al archivo {self.fileName}.\n"
                 f"Error : {error}"

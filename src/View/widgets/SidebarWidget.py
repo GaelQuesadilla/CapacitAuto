@@ -18,7 +18,7 @@ class SidebarWidget(tk.Frame):
         super().__init__(master)
 
         self.configure(
-            width=500, bg="#2c3e50",
+            width=300, bg="#2c3e50",
             relief="sunken", padx=20, pady=10
         )
 
@@ -55,6 +55,9 @@ class SidebarWidget(tk.Frame):
         button.pack(fill=tk.X, pady=3, padx=20)
 
         self.buttonData[name] = {"widget": widget, "button": button}
+
+    def selectWidget(self, name):
+        self.onClick(name)
 
 
 if __name__ == "__main__":

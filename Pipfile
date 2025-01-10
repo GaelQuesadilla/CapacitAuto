@@ -17,6 +17,7 @@ pathlib = "*"
 
 [dev-packages]
 pytest = "*"
+ttkbootstrap = "*"
 
 [requires]
 python_version = "3.13"

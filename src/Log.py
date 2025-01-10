@@ -9,7 +9,7 @@ logsDir = pathlib.Path(Config.read("Files", "logs_dir"))
 logsFile = logsDir / "logs.log"
 
 
-def setup_logger(logsFile: str = logsFile, loggerName: str = "Capacitauto") -> logging.Logger:
+def setup_logger(logsFile: str = logsFile, loggerName: str = __name__) -> logging.Logger:
 
     logsDir.mkdir(exist_ok=True)
     logging.basicConfig(

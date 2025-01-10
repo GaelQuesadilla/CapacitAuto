@@ -34,8 +34,6 @@ def createChoicesList():
 
     dataList.save()
 
-    print(df)
-
 
 if __name__ == "__main__":
     createChoicesList()

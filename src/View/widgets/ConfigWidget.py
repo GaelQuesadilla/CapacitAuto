@@ -12,9 +12,8 @@ logger = setup_logger(loggerName="ConfigView")
 
 
 class ConfigWidget(tk.Frame):
-    def __init__(self, parent: tk.Tk, configFile: str, onSaveConfig: Callable):
+    def __init__(self, parent: tk.Tk, configFile: str):
         self.parent = parent
-        self.onSaveConfig = onSaveConfig
         self.configFile = configFile
         self.config = ConfigParser()
         self.config.read(configFile)
@@ -22,6 +21,8 @@ class ConfigWidget(tk.Frame):
         self.entriesBySection: Dict[str, Dict[str, tk.Entry]] = {}
 
         super().__init__(parent)
+
+        self.show()
 
     def createConfigFields(self):
         row = 1
@@ -125,12 +126,9 @@ if __name__ == "__main__":
     if not configFile.is_file():
         Config.create()
 
-    def on_config_saved(self):
-        print("Configuración guardada y aplicación actualizada.")
-
     view = AppWindow()
 
-    component = ConfigWidget(view, configFile, on_config_saved)
+    component = ConfigWidget(view, configFile)
 
     component.show()
     component.pack(fill=tk.BOTH)

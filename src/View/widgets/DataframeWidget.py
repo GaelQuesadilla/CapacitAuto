@@ -86,19 +86,22 @@ class DataframeWidget(tk.Frame):
             logger.error(error)
             raise ValueError(error)
 
-        if not fileName.is_file():
-            error = f"No es posible acceder al archivo {self.fileName}."
-            logger.error(error)
-            self._df = pd.DataFrame()
+        try:
+            self._df = pd.read_excel(fileName)
+        except (FileNotFoundError, ValueError) as error:
+            logger.error(
+                f"No es posible acceder al archivo {self.fileName}.\n"
+                f"Error : {error}"
+            )
+
+            if self._df is None:
+                self._df = pd.DataFrame()
+
             messagebox.showwarning(
                 "Atención",
                 f"No es posible acceder al archivo {self.fileName}.\n"
                 f"Por favor, inserte el archivo"
             )
-
-            return
-
-        self._df = pd.read_excel(fileName)
 
     def loadFile(self):
         newFilePath = filedialog.askopenfilename(
@@ -130,8 +133,7 @@ class DataframeWidget(tk.Frame):
         )
 
         newFilePath = pathlib.Path(newFilePath)
-
-        if newFilePath.is_dir():
+        if newFilePath.is_dir() and newFilePath != pathlib.Path("."):
             self.df.to_excel(newFilePath, index=False)
             messagebox.showinfo("Archivo exportado ",
                                 f"Archivo guardado en {newFilePath}")

@@ -14,7 +14,7 @@ from src.Model.models.StudentList import StudentList
 from typing import List
 from tkinter import messagebox
 
-logger = setup_logger(__name__)
+logger = setup_logger(loggerName=__name__)
 
 
 class ResultsView(tk.Frame):
@@ -142,6 +142,7 @@ class ResultsView(tk.Frame):
                     studentList.sort(by="Nombre")
                     studentList.save()
                     self.listsCombobox.getFiles()
+                    self.setList(None)
             except RecursionError:
                 messagebox.showwarning(
                     "Advertencia",

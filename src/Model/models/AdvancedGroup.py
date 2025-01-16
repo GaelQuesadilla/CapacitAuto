@@ -34,6 +34,8 @@ class AdvancedGroup(Group):
             logger.warning(
                 "Advanced groups should be used only in 1,2,3,4 semesters"
             )
+            raise ValueError(
+                "Advanced groups should be used only in 1,2,3,4 semesters")
 
         self._allStudents = self._allStudents.merge(self.choicesList, on="CURP",
                                                     how="left", suffixes=('', '_choices'))

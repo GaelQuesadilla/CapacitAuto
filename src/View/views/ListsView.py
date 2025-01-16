@@ -1,4 +1,5 @@
 import tkinter as tk
+import ttkbootstrap as ttk
 from src.View.widgets.StudentsListWidget import StudentsListWidget
 from src.View.widgets.ListChoiceWidget import ListChoiceWidget
 import pathlib
@@ -6,14 +7,14 @@ import pandas as pd
 from src.Config import Config
 
 
-class ListsView(tk.Frame):
-    def __init__(self, master):
+class ListsView(ttk.Frame):
+    def __init__(self, master: tk.Widget):
         super().__init__(master)
 
-        self.title = tk.Label(self, text="Listas de alumnos")
-        self.title.pack(fill=tk.X)
+        self.title = ttk.Label(self, text="Listas de alumnos")
+        self.title.pack(fill=ttk.X)
 
-        self.instruction = tk.Label(self, text="Selecciona la lista")
+        self.instruction = ttk.Label(self, text="Selecciona la lista")
         self.instruction.pack()
 
         self.listsCombobox = ListChoiceWidget(self)
@@ -27,7 +28,7 @@ class ListsView(tk.Frame):
             self.list = StudentsListWidget(
                 self, fileName=self.path)
 
-        self.list.pack(fill=tk.BOTH, expand=True)
+        self.list.pack(fill=ttk.BOTH, expand=True)
 
     def setList(self, event):
         self.list.fileName = self.path
@@ -51,6 +52,6 @@ if __name__ == "__main__":
     window = AppWindow()
 
     view = ListsView(window)
-    view.pack(fill=tk.BOTH, expand=True)
+    view.pack(fill=ttk.BOTH, expand=True)
 
     window.mainloop()

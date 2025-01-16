@@ -1,7 +1,7 @@
 from src.View.widgets.DataframeWidget import DataframeWidget
 from src.View.widgets.AppWindow import AppWindow
 import tkinter as tk
-from tkinter import ttk
+import ttkbootstrap as ttk
 from src.Model.services.AllSubjects import AllSubjects
 from src.Config import Config
 from src.Log import setup_logger
@@ -14,7 +14,7 @@ logger = setup_logger(loggerName=__name__)
 
 class AllSubjectsWidget(DataframeWidget):
 
-    def __init__(self, parent: tk.Tk):
+    def __init__(self, parent: tk.Widget):
 
         allSubjectsFileName = Config.getPath("Files", "all_subjects_dir")
 
@@ -28,11 +28,11 @@ class AllSubjectsWidget(DataframeWidget):
     def _createButtons(self):
         super()._createButtons()
 
-        genButton = tk.Button(
+        genButton = ttk.Button(
             self.optionFrame, text="Generar archivo", command=self.generateNewSubjectsExcel
         )
 
-        genButton.pack(side=tk.LEFT, padx=10)
+        genButton.pack(side=ttk.LEFT, padx=10)
 
     def generateNewSubjectsExcel(self):
         self.allSubjects.getAll()
@@ -53,6 +53,6 @@ if __name__ == "__main__":
 
     view = AppWindow()
     component = AllSubjectsWidget(view)
-    component.pack(fill=tk.BOTH, expand=True)
+    component.pack(fill=ttk.BOTH, expand=True)
 
     view.mainloop()

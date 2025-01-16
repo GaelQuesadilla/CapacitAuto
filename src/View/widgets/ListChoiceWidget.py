@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+import ttkbootstrap as ttk
 from typing import List
 import pathlib
 from src.Config import Config
@@ -10,7 +10,7 @@ logger = setup_logger()
 
 class ListChoiceWidget(ttk.Combobox):
     def __init__(
-        self, parent: tk.Tk,
+        self, parent: tk.Widget,
         listDir: pathlib.Path = Config.getPath("Files", "lists_dir")
     ):
         super().__init__(parent)
@@ -19,7 +19,7 @@ class ListChoiceWidget(ttk.Combobox):
         self.files: List[pathlib.Path] = []
         self.files: List[pathlib.Path] = []
 
-        self.parent: tk.Tk = parent
+        self.parent: tk.Widget = parent
 
         self.getFiles()
 

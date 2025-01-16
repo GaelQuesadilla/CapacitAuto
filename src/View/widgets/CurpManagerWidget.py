@@ -1,7 +1,8 @@
-from tkinter import ttk, Tk
-from tkinter import messagebox, filedialog
+import ttkbootstrap as ttk
 import tkinter as tk
-from typing import List, Set, Dict
+from ttkbootstrap.dialogs import Messagebox
+from tkinter import filedialog
+from typing import List, Dict
 from src.Log import setup_logger
 from src.Config import Config
 from src.Model.services.AllKardex import AllKardex
@@ -32,10 +33,13 @@ class CurpManagerWidget(DataframeWidget):
 
         super()._createComponent()
 
-        self.tree.column(self.columns[0], width=40)
-        self.tree.column(self.columns[1], width=200)
-        self.tree.column(self.columns[3], width=80)
-        self.tree.column(self.columns[4], width=200)
+        try:
+            self.tree.column(self.columns[0], width=40)
+            self.tree.column(self.columns[1], width=200)
+            self.tree.column(self.columns[3], width=80)
+            self.tree.column(self.columns[4], width=200)
+        except tk.TclError:
+            logger.error("No es posible cambiar el ancho de las columnas")
 
         for row in self.tree.get_children():
             values = self.tree.item(row, "values")
@@ -62,15 +66,15 @@ class CurpManagerWidget(DataframeWidget):
     def _createButtons(self):
         super()._createButtons()
 
-        self.loadCurpsFromFileButton = tk.Button(
+        self.loadCurpsFromFileButton = ttk.Button(
             self.optionFrame, text="Cargar Curps desde archivo", command=self.loadCurpsFromFile
         )
-        self.loadCurpsFromFileButton.pack(side=tk.LEFT, padx=3)
+        self.loadCurpsFromFileButton.pack(side=ttk.LEFT, padx=3)
 
-        self.requestKardexButton = tk.Button(
+        self.requestKardexButton = ttk.Button(
             self.optionFrame, text="Solicitar kardex", command=self.requestKardex
         )
-        self.requestKardexButton.pack(side=tk.LEFT, padx=3)
+        self.requestKardexButton.pack(side=ttk.LEFT, padx=3)
 
     def loadCurpsFromFile(self):
         newFilePath = filedialog.askopenfilename(
@@ -126,9 +130,9 @@ class CurpManagerWidget(DataframeWidget):
 
         def onTaskComplete():
             self._createComponent()
-            messagebox.showinfo(
-                "Se ha completado la solicitud",
-                "Se ha solicitado el kardex de todos los alumnos"
+            Messagebox.show_info(
+                title="Se ha completado la solicitud",
+                message="Se ha solicitado el kardex de todos los alumnos"
             )
             self.showCurpResume()
 
@@ -153,10 +157,13 @@ class CurpManagerWidget(DataframeWidget):
         {len(self.requestedCurps)} CURPS ya han sido solicitadas
         {len(self.curps) - len(self.invalidCurps) - len(self.requestedCurps)} CURPS Están pendientes de solicitar
         """
-        messagebox.showinfo("RESUMEN DE SOLICITUD DE CURPS", message)
+        Messagebox.show_info(
+            title="RESUMEN DE SOLICITUD DE CURPS", message=message
+        )
 
     @property
     def curps(self):
+        # TODO ADD EXCEPTIONS
         return self.curpFile.read_text().splitlines()
 
     @property
@@ -181,6 +188,6 @@ if __name__ == "__main__":
     view = AppWindow()
 
     component = CurpManagerWidget(view)
-    component.pack(fill=tk.BOTH, expand=True)
+    component.pack(fill=ttk.BOTH, expand=True)
 
     view.mainloop()

@@ -1,20 +1,20 @@
 import pandas as pd
 import tkinter as tk
-from tkinter import ttk, messagebox, filedialog
+from tkinter import filedialog
+from ttkbootstrap.dialogs import Messagebox
 from src.Log import setup_logger, trackFunction
-import os
 import pathlib
-from tkinter import ttk
+import ttkbootstrap as ttk
 
 
 logger = setup_logger(loggerName=__name__)
 
 
-class DataframeWidget(tk.Frame):
-    def __init__(self, parent: tk.Tk, df: pd.DataFrame = None, fileName: str = None):
+class DataframeWidget(ttk.Frame):
+    def __init__(self, parent: tk.Widget, df: pd.DataFrame = None, fileName: str = None):
         super().__init__(parent)
         self._df = df
-        self.optionFrame: tk.Frame = None
+        self.optionFrame: ttk.Frame = None
         self._parent = parent
         self._tree: ttk.Treeview = None
         self.fileName: pathlib.Path = None
@@ -53,9 +53,9 @@ class DataframeWidget(tk.Frame):
         self.tree.configure(yscrollcommand=v_scrollbar.set,
                             xscrollcommand=h_scrollbar.set)
 
-        self.tree.grid(row=1, column=0, sticky=tk.NSEW)
-        v_scrollbar.grid(row=1, column=1, sticky=tk.NS)
-        h_scrollbar.grid(row=2, column=0, sticky=tk.EW)
+        self.tree.grid(row=1, column=0, sticky=ttk.NSEW)
+        v_scrollbar.grid(row=1, column=1, sticky=ttk.NS)
+        h_scrollbar.grid(row=2, column=0, sticky=ttk.EW)
 
         self.grid_rowconfigure(1, weight=1, minsize=200)
         self.grid_columnconfigure(0, weight=1)
@@ -65,19 +65,19 @@ class DataframeWidget(tk.Frame):
 
     def _createButtons(self):
         """Método para crear el Frame con los botones encima del DataFrame"""
-        self.optionFrame = tk.Frame(self)
+        self.optionFrame = ttk.Frame(self)
         self.optionFrame.grid(row=0, column=0, sticky="ew", padx=10, pady=5)
 
         # Botón para cargar otro archivo
 
         if self.fileName:
-            loadButton = tk.Button(
+            loadButton = ttk.Button(
                 self.optionFrame, text="Cargar archivo", command=self.loadFile)
-            loadButton.pack(side=tk.LEFT, padx=10)
+            loadButton.pack(side=ttk.LEFT, padx=10)
 
-        exportButton = tk.Button(
+        exportButton = ttk.Button(
             self.optionFrame, text="Exportar archivo", command=self.exportFile)
-        exportButton.pack(side=tk.LEFT, padx=10)
+        exportButton.pack(side=ttk.LEFT, padx=10)
 
     def loadDataFrame(self, fileName=None):
         if fileName is None:
@@ -101,9 +101,9 @@ class DataframeWidget(tk.Frame):
             if self._df is None:
                 self._df = pd.DataFrame()
 
-            messagebox.showwarning(
-                "Atención",
-                f"No es posible acceder al archivo {self.fileName}.\n"
+            Messagebox.show_warning(
+                title="Atención",
+                message=f"No es posible acceder al archivo {self.fileName}.\n"
                 f"Por favor, inserte el archivo"
             )
 
@@ -139,8 +139,9 @@ class DataframeWidget(tk.Frame):
         newFilePath = pathlib.Path(newFilePath)
         if newFilePath.is_dir() and newFilePath != pathlib.Path("."):
             self.df.to_excel(newFilePath, index=False)
-            messagebox.showinfo("Archivo exportado ",
-                                f"Archivo guardado en {newFilePath}")
+            Messagebox.show_info(
+                title="Archivo exportado ",
+                message=f"Archivo guardado en {newFilePath}")
 
     def clearData(self):
         for row in self.tree.get_children():
@@ -166,6 +167,6 @@ if __name__ == "__main__":
         "TEST" / "Lista Alumnos 2-A.xlsx"
     view = AppWindow()
     component = DataframeWidget(view, fileName=fileName)
-    component.pack(fill=tk.BOTH, expand=True)
+    component.pack(fill=ttk.BOTH, expand=True)
 
     view.mainloop()

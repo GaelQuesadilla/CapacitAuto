@@ -9,8 +9,8 @@ from src.View.views.ListsView import ListsView
 from src.View.views.HomeView import HomeView
 from src.View.views.ResultsView import ResultsView
 from src.Log import setup_logger
-import tkinter as tk
-from tkinter import messagebox
+from ttkbootstrap.dialogs import Messagebox
+import ttkbootstrap as ttk
 logger = setup_logger()
 
 
@@ -21,10 +21,10 @@ class App(AppWindow):
 
         self.sidebar = SidebarWidget()
         self.sidebar.configure(width=200)
-        self.sidebar.pack(side=tk.LEFT, fill=tk.Y)
+        self.sidebar.pack(side=ttk.LEFT, fill=ttk.Y)
 
-        self.content = tk.Frame(self)
-        self.content.pack(expand=True, fill=tk.BOTH)
+        self.content = ttk.Frame(self)
+        self.content.pack(expand=True, fill=ttk.BOTH)
 
         def curpManagerView(): return CurpManagerView(self.content)
         def homeView(): return HomeView(self.content)
@@ -42,7 +42,7 @@ class App(AppWindow):
         self.sidebar.addButton("Resultados", resultsView)
         self.sidebar.addButton("Configuración", configView)
 
-        self.sidebar.selectWidget("Resultados")
+        self.sidebar.selectWidget("Administración de CURPS")
 
     def destroy(self):
         logger.info("EXIT APP")
@@ -55,8 +55,8 @@ class App(AppWindow):
             super().mainloop(n)
         except Exception as e:
             logger.error(f"Error en la aplicación. Error : {e}")
-            messagebox.showerror(
-                "Error", f"Error en la aplicación : {e}"
+            Messagebox.show_error(
+                title="Error", message=f"Error en la aplicación : {e}"
             )
 
 

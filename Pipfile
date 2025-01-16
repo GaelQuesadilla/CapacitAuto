@@ -8,16 +8,15 @@ configparser = "*"
 colorama = "*"
 requests = "*"
 bs4 = "*"
-alive-progress = "*"
 pandas = "*"
 openpyxl = "*"
-ipython = "*"
 requests-cache = "*"
 pathlib = "*"
+ttkbootstrap = "*"
 
 [dev-packages]
 pytest = "*"
-ttkbootstrap = "*"
+ipython = "*"
 
 [requires]
 python_version = "3.13"

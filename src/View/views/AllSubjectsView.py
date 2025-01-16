@@ -1,14 +1,24 @@
 import ttkbootstrap as ttk
+from ttkbootstrap import constants as c
 import tkinter as tk
 from src.View.widgets.AllSubjectsWidget import AllSubjectsWidget
+from src.View.widgets.Labels import TitleLabel
+from src.View.widgets.Buttons import InfoButton
 
 
 class AllSubjectsView(ttk.Frame):
     def __init__(self, master: tk.Widget):
         super().__init__(master)
 
-        self.title = ttk.Label(self, text="Relación de materias")
-        self.title.pack(fill=ttk.X)
+        self.header = ttk.Frame(self)
+        self.header.pack(fill=ttk.X)
+
+        self.title = TitleLabel(
+            self.header, text="Relación de materias con capacitación/paquete")
+        self.title.pack(side=ttk.LEFT)
+
+        self.help = InfoButton(self.header)
+        self.help.pack(side=ttk.RIGHT)
         self.allSubjectsWidget = AllSubjectsWidget(self)
         self.allSubjectsWidget.pack(expand=True, fill=ttk.BOTH)
 

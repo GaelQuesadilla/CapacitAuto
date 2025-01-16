@@ -4,6 +4,10 @@ import ttkbootstrap as ttk
 from src.Model.services.AllKardex import AllKardex
 from src.Config import Config
 from src.View.widgets.StudentInfoWindow import StudentInfoWindow
+import tkinter as tk
+from src.Log import setup_logger
+
+logger = setup_logger(loggerName=__name__)
 
 
 class StudentsListWidget(DataframeWidget):
@@ -15,6 +19,19 @@ class StudentsListWidget(DataframeWidget):
             fileName=Config.getPath("Files", "all_kardex_dir")
         )
         self.allKardex.loadAllKardex()
+
+    def _createComponent(self):
+        super()._createComponent()
+        try:
+            self.tree.column("Semestre", width=70)
+            self.tree.column("Grupo", width=70)
+            self.tree.column("Turno", width=70)
+
+        except tk.TclError:
+            logger.warning(
+                "No es posible modificar el ancho de las columnas de la lista "
+                f"{self.fileName}"
+            )
 
     def _createButtons(self):
         super()._createButtons()

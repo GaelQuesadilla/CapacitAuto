@@ -2,14 +2,22 @@ import ttkbootstrap as ttk
 import tkinter as tk
 from src.View.widgets.ChoiceWidget import ChoiceWidget
 from src.Config import Config
+from src.View.widgets.Labels import TitleLabel
+from src.View.widgets.Buttons import InfoButton
 
 
 class ChoiceView(ttk.Frame):
     def __init__(self, master: tk.Widget):
         super().__init__(master)
 
-        self.title = ttk.Label(self, text="Elecciones de los alumnos")
-        self.title.pack(fill=ttk.X)
+        self.header = ttk.Frame(self)
+        self.header.pack(fill=ttk.X)
+
+        self.title = TitleLabel(self.header, text="Elecciones de los alumnos")
+        self.title.pack(side=ttk.LEFT)
+
+        self.help = InfoButton(self.header)
+        self.help.pack(side=ttk.RIGHT)
         self.choiceWidget = ChoiceWidget(self)
         self.choiceWidget.pack(expand=True, fill=ttk.BOTH)
 

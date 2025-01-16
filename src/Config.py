@@ -56,9 +56,6 @@ default_config = {
     "Assets": {
         "logo_image_dir": pathlib.Path.cwd() / "assets" / "images" / "cobach_logo.png",
     },
-    "Dev": {
-        "enable_ttkbootstrap": False
-    },
 }
 
 
@@ -104,7 +101,6 @@ class Config():
             config["School"] = default_config.get("School")
             config["Files"] = default_config.get("Files")
             config["Assets"] = default_config.get("Assets")
-            config["Dev"] = default_config.get("Dev")
             with open("config.ini", "w") as config_file:
                 config.write(config_file)
             print("Config file has been written successfully")

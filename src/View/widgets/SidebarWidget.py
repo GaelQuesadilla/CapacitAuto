@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from src.Log import setup_logger
 from ttkbootstrap import constants as c
 
-logger = setup_logger()
+logger = setup_logger(loggerName=__name__)
 
 
 @dataclass

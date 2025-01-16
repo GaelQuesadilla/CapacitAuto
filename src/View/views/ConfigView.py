@@ -1,21 +1,22 @@
 import tkinter as tk
 from src.View.widgets.ConfigWidget import ConfigWidget
 from src.Config import Config
+import ttkbootstrap as ttk
 
 
-class ConfigView(tk.Frame):
-    def __init__(self, master):
+class ConfigView(ttk.Frame):
+    def __init__(self, master: tk.Widget):
         super().__init__(master)
 
-        self.title = tk.Label(self, text="Configuración")
-        self.title.pack(fill=tk.X)
+        self.title = ttk.Label(self, text="Configuración")
+        self.title.pack(fill=ttk.X)
 
         self.configFile = Config.getPath("Files", "config_dir")
         if not self.configFile.is_file():
             Config.create()
 
         self.configWidget = ConfigWidget(self, configFile=self.configFile)
-        self.configWidget.pack(expand=True, fill=tk.BOTH)
+        self.configWidget.pack(expand=True, fill=ttk.BOTH)
 
 
 if __name__ == "__main__":
@@ -24,6 +25,6 @@ if __name__ == "__main__":
     window = AppWindow()
 
     view = ConfigView(window)
-    view.pack(fill=tk.BOTH, expand=True)
+    view.pack(fill=ttk.BOTH, expand=True)
 
     window.mainloop()

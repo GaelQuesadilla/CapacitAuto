@@ -1,12 +1,13 @@
 import tkinter as tk
+import ttkbootstrap as ttk
 
 
-class HomeView(tk.Frame):
-    def __init__(self, master):
+class HomeView(ttk.Frame):
+    def __init__(self, master: tk.Widget):
         super().__init__(master)
 
-        self.title = tk.Label(self, text="Bienvenido")
-        self.title.pack(fill=tk.BOTH, expand=True)
+        self.title = ttk.Label(self, text="Bienvenido")
+        self.title.pack(fill=ttk.BOTH, expand=True)
 
 
 if __name__ == "__main__":
@@ -15,6 +16,6 @@ if __name__ == "__main__":
     window = AppWindow()
 
     view = HomeView(window)
-    view.pack(fill=tk.BOTH, expand=True)
+    view.pack(fill=ttk.BOTH, expand=True)
 
     window.mainloop()

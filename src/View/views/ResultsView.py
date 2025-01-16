@@ -1,4 +1,5 @@
 import tkinter as tk
+import ttkbootstrap as ttk
 from src.View.widgets.StudentsListWidget import StudentsListWidget
 from src.View.widgets.ListChoiceWidget import ListChoiceWidget
 from src.View.widgets.TopWindow import TopWindow
@@ -7,33 +8,32 @@ from src.Config import Config
 import pandas as pd
 from src.View.widgets.ProgressTask import ProgressTask
 import json
-from tkinter import ttk
 from src.Log import setup_logger
 from src.Model.models.AdvancedGroup import AdvancedGroup
 from src.Model.models.StudentList import StudentList
 from typing import List
-from tkinter import messagebox
+from ttkbootstrap.dialogs.dialogs import Messagebox
 
 logger = setup_logger(loggerName=__name__)
 
 
-class ResultsView(tk.Frame):
-    def __init__(self, master):
+class ResultsView(ttk.Frame):
+    def __init__(self, master: tk.Widget):
         super().__init__(master)
 
         self.kardexData = json.load(Config.getPath(
             "Files", "kardex_data_dir").open()
         )
 
-        self.title = tk.Label(self, text="Listas de alumnos")
-        self.title.pack(fill=tk.X)
+        self.title = ttk.Label(self, text="Listas de alumnos")
+        self.title.pack(fill=ttk.X)
 
-        self.calcResultsButton = tk.Button(
+        self.calcResultsButton = ttk.Button(
             self, text="Calcular grupos", command=self.calcResults
         )
         self.calcResultsButton.pack()
 
-        self.instruction = tk.Label(
+        self.instruction = ttk.Label(
             self, text="Selecciona la lista para verla")
         self.instruction.pack()
 
@@ -50,7 +50,7 @@ class ResultsView(tk.Frame):
             self.list = StudentsListWidget(
                 self, fileName=self.path)
 
-        self.list.pack(fill=tk.BOTH, expand=True)
+        self.list.pack(fill=ttk.BOTH, expand=True)
 
     def setList(self, event):
         self.list.fileName = self.path
@@ -67,13 +67,16 @@ class ResultsView(tk.Frame):
         def onSemesterSelected():
             semester = combobox.get()
             if not semester:
-                tk.messagebox.showerror(
-                    "Error", "Debe seleccionar un semestre.")
+                Messagebox.show_error(
+                    title="Error",
+                    message="Debe seleccionar un semestre.",
+                    alert=True
+                )
                 return
             topWindow.destroy()
             callback(semester)
 
-        instructions = tk.Label(
+        instructions = ttk.Label(
             topWindow, text="Selecciona el semestre a obtener")
         instructions.pack()
 
@@ -81,7 +84,7 @@ class ResultsView(tk.Frame):
         combobox = ttk.Combobox(topWindow, values=availableSemesters)
         combobox.pack()
 
-        confirm_button = tk.Button(
+        confirm_button = ttk.Button(
             topWindow, text="Confirmar",
             command=onSemesterSelected
         )
@@ -144,10 +147,11 @@ class ResultsView(tk.Frame):
                     self.listsCombobox.getFiles()
                     self.setList(None)
             except RecursionError:
-                messagebox.showwarning(
-                    "Advertencia",
-                    "No ha sido posible resolver los grupos en multiples iteraciones.\n"
-                    "Se recomienda revisar los registros."
+                Messagebox.show_warning(
+                    title="Advertencia",
+                    message="No ha sido posible resolver los grupos en multiples iteraciones.\n"
+                    "Se recomienda revisar los registros.",
+                    alert=True
                 )
 
         task()
@@ -168,6 +172,6 @@ if __name__ == "__main__":
     window = AppWindow()
 
     view = ResultsView(window)
-    view.pack(fill=tk.BOTH, expand=True)
+    view.pack(fill=ttk.BOTH, expand=True)
 
     window.mainloop()

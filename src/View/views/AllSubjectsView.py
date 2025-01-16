@@ -1,15 +1,16 @@
+import ttkbootstrap as ttk
 import tkinter as tk
 from src.View.widgets.AllSubjectsWidget import AllSubjectsWidget
 
 
-class AllSubjectsView(tk.Frame):
-    def __init__(self, master):
+class AllSubjectsView(ttk.Frame):
+    def __init__(self, master: tk.Widget):
         super().__init__(master)
 
-        self.title = tk.Label(self, text="Relación de materias")
-        self.title.pack(fill=tk.X)
+        self.title = ttk.Label(self, text="Relación de materias")
+        self.title.pack(fill=ttk.X)
         self.allSubjectsWidget = AllSubjectsWidget(self)
-        self.allSubjectsWidget.pack(expand=True, fill=tk.BOTH)
+        self.allSubjectsWidget.pack(expand=True, fill=ttk.BOTH)
 
 
 if __name__ == "__main__":
@@ -18,6 +19,6 @@ if __name__ == "__main__":
     window = AppWindow()
 
     view = AllSubjectsView(window)
-    view.pack(fill=tk.BOTH, expand=True)
+    view.pack(fill=ttk.BOTH, expand=True)
 
     window.mainloop()

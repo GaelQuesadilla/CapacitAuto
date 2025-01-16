@@ -1,25 +1,50 @@
-import tkinter as tk
-from tkinter import ttk
+import ttkbootstrap as ttk
 from src.Log import setup_logger
 from src.Config import Config
+from ttkbootstrap.window import Toplevel
 
 
 logger = setup_logger(loggerName="ConfigView")
 
 
-class TopWindow(tk.Toplevel):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.geometry("400x200")
-        self.icon = tk.PhotoImage(file=Config.read("Assets", "logo_image_dir"))
-
-        self.title("TopWindow")
-
-        self.iconphoto(False, self.icon)
+class TopWindow(Toplevel):
+    def __init__(
+            self,
+            title="Nueva ventana",
+            iconphoto=Config.getPath("Assets", "logo_image_dir"),
+            size=[400, 200],
+            position=None,
+            minsize=None,
+            maxsize=None,
+            resizable=None,
+            transient=None,
+            overrideredirect=False,
+            windowtype=None,
+            topmost=False,
+            toolwindow=False,
+            alpha=1,
+            **kwargs
+    ):
+        super().__init__(
+            title,
+            iconphoto,
+            size,
+            position,
+            minsize,
+            maxsize,
+            resizable,
+            transient,
+            overrideredirect,
+            windowtype,
+            topmost,
+            toolwindow,
+            alpha,
+            **kwargs
+        )
 
 
 if __name__ == "__main__":
 
-    parent = tk.Tk()
-    topWindow = TopWindow(parent=parent)
+    parent = ttk.Window(themename="minty")
+    topWindow = TopWindow(parent)
     parent.mainloop()

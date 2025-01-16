@@ -1,24 +1,23 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+import ttkbootstrap as ttk
+from ttkbootstrap.dialogs import Messagebox
 from src.Config import default_config, Config
 from configparser import ConfigParser
-from typing import Dict, Any, Callable
+from typing import Dict, Any
 from src.Log import setup_logger, trackFunction
-from src.View.widgets.TopWindow import TopWindow
-import pathlib
 
 
 logger = setup_logger(loggerName="ConfigView")
 
 
-class ConfigWidget(tk.Frame):
-    def __init__(self, parent: tk.Tk, configFile: str):
+class ConfigWidget(ttk.Frame):
+    def __init__(self, parent: tk.Widget, configFile: str):
         self.parent = parent
         self.configFile = configFile
         self.config = ConfigParser()
         self.config.read(configFile)
 
-        self.entriesBySection: Dict[str, Dict[str, tk.Entry]] = {}
+        self.entriesBySection: Dict[str, Dict[str, ttk.Entry]] = {}
 
         super().__init__(parent)
 
@@ -43,7 +42,7 @@ class ConfigWidget(tk.Frame):
                 self.entriesBySection[sectionName][key] = entry
                 row += 1
 
-    def createSectionFrame(self, sectionName: str) -> tk.Tk:
+    def createSectionFrame(self, sectionName: str) -> ttk.Label:
         frame = ttk.LabelFrame(self.mainFrame, text=sectionName, padding=10)
         frame.columnconfigure(1, weight=10)
         return frame
@@ -71,8 +70,8 @@ class ConfigWidget(tk.Frame):
                 self.config.write(file)
 
         except Exception as e:
-            errorWindow = messagebox.showerror(
-                "Error", "No fue posible guardar la configuración")
+            errorWindow = Messagebox.show_error(
+                title="Error", message="No fue posible guardar la configuración")
 
             logger.error("No fue posible guardar la configuración")
             logger.error(e)
@@ -90,8 +89,8 @@ class ConfigWidget(tk.Frame):
         self.rowconfigure(0, weight=0)
         self.rowconfigure(1, weight=1)
 
-        self.canvas = tk.Canvas(self)
-        self.canvas.grid(row=1, column=1, sticky="nsew")
+        self.canvas = ttk.Canvas(self)
+        self.canvas.grid(row=1, column=1, sticky=ttk.NSEW)
 
         self.scrollBar = ttk.Scrollbar(
             self, orient="vertical", command=self.canvas.yview)
@@ -105,8 +104,8 @@ class ConfigWidget(tk.Frame):
         self.canvas.configure(yscrollcommand=self.scrollBar.set)
 
         # Create the save button
-        self.save_button = tk.Button(
-            self, text="Guardar Configuración", command=self.saveConfig, bg="green"
+        self.save_button = ttk.Button(
+            self, text="Guardar Configuración", command=self.saveConfig
         )
         self.save_button.grid(column=1, row=0, pady=10)
 
@@ -131,6 +130,6 @@ if __name__ == "__main__":
     component = ConfigWidget(view, configFile)
 
     component.show()
-    component.pack(fill=tk.BOTH)
+    component.pack(fill=ttk.BOTH)
 
     view.mainloop()

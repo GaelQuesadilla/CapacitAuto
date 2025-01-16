@@ -11,7 +11,7 @@ from src.View.views.ResultsView import ResultsView
 from src.Log import setup_logger
 from ttkbootstrap.dialogs import Messagebox
 import ttkbootstrap as ttk
-logger = setup_logger()
+logger = setup_logger(loggerName=__name__)
 
 
 class App(AppWindow):

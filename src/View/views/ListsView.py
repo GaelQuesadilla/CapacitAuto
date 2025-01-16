@@ -5,21 +5,36 @@ from src.View.widgets.ListChoiceWidget import ListChoiceWidget
 import pathlib
 import pandas as pd
 from src.Config import Config
+from src.View.widgets.Labels import TitleLabel
+from src.View.widgets.Buttons import InfoButton
+from ttkbootstrap import constants as c
 
 
 class ListsView(ttk.Frame):
     def __init__(self, master: tk.Widget):
         super().__init__(master)
 
-        self.title = ttk.Label(self, text="Listas de alumnos")
-        self.title.pack(fill=ttk.X)
+        # Header
+        self.header = ttk.Frame(self)
+        self.header.pack(fill=ttk.X)
 
-        self.instruction = ttk.Label(self, text="Selecciona la lista")
-        self.instruction.pack()
+        self.title = TitleLabel(self.header, text="Listas de alumnos")
+        self.title.pack(side=ttk.LEFT)
 
-        self.listsCombobox = ListChoiceWidget(self)
+        self.help = InfoButton(self.header)
+        self.help.pack(side=ttk.RIGHT)
+
+        # Instructions
+        self.instructionFrame = ttk.Frame(self)
+        self.instructionFrame.pack(fill=ttk.X)
+
+        self.instruction = ttk.Label(
+            self.instructionFrame, text="Selecciona la lista a consultar:", padding=[5, 5])
+        self.instruction.pack(side=ttk.LEFT)
+
+        self.listsCombobox = ListChoiceWidget(self.instructionFrame)
         self.listsCombobox.bind('<<ComboboxSelected>>', self.setList)
-        self.listsCombobox.pack()
+        self.listsCombobox.pack(side=ttk.LEFT)
 
         if not self.path:
             self.list = StudentsListWidget(

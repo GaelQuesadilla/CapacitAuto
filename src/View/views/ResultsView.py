@@ -13,6 +13,9 @@ from src.Model.models.AdvancedGroup import AdvancedGroup
 from src.Model.models.StudentList import StudentList
 from typing import List
 from ttkbootstrap.dialogs.dialogs import Messagebox
+from src.View.widgets.Labels import TitleLabel
+from src.View.widgets.Buttons import InfoButton
+
 
 logger = setup_logger(loggerName=__name__)
 
@@ -24,24 +27,34 @@ class ResultsView(ttk.Frame):
         self.kardexData = json.load(Config.getPath(
             "Files", "kardex_data_dir").open()
         )
+        # Header
+        self.header = ttk.Frame(self)
+        self.header.pack(fill=ttk.X)
 
-        self.title = ttk.Label(self, text="Listas de alumnos")
-        self.title.pack(fill=ttk.X)
+        self.title = TitleLabel(self.header, text="Nuevos grupos")
+        self.title.pack(side=ttk.LEFT)
+
+        self.help = InfoButton(self.header)
+        self.help.pack(side=ttk.RIGHT)
 
         self.calcResultsButton = ttk.Button(
-            self, text="Calcular grupos", command=self.calcResults
+            self.header, text="Calcular grupos", command=self.calcResults
         )
-        self.calcResultsButton.pack()
+        self.calcResultsButton.pack(side=ttk.RIGHT)
+
+        # Instructions
+        self.instructionFrame = ttk.Frame(self)
+        self.instructionFrame.pack(fill=ttk.X)
 
         self.instruction = ttk.Label(
-            self, text="Selecciona la lista para verla")
-        self.instruction.pack()
+            self.instructionFrame, text="Selecciona la lista a consultar:", padding=[5, 5])
+        self.instruction.pack(side=ttk.LEFT)
 
         self.listsCombobox = ListChoiceWidget(
-            self, Config.getPath("Files", "list_results_dir")
+            self.instructionFrame, Config.getPath("Files", "list_results_dir")
         )
         self.listsCombobox.bind('<<ComboboxSelected>>', self.setList)
-        self.listsCombobox.pack()
+        self.listsCombobox.pack(side=ttk.LEFT)
 
         if not self.path:
             self.list = StudentsListWidget(
@@ -63,6 +76,8 @@ class ResultsView(ttk.Frame):
     def getSemester(self, callback):
         """Abre un TopWindow para seleccionar el semestre y ejecuta un callback al obtenerlo."""
         topWindow = TopWindow(self.master)
+        frame = ttk.Frame(topWindow)
+        frame.pack(expand=True)
 
         def onSemesterSelected():
             semester = combobox.get()
@@ -77,18 +92,17 @@ class ResultsView(ttk.Frame):
             callback(semester)
 
         instructions = ttk.Label(
-            topWindow, text="Selecciona el semestre a obtener")
-        instructions.pack()
+            frame, text="Selecciona el semestre a obtener")
+        instructions.pack(pady=5)
 
         availableSemesters = self.kardexData.get("availableSemesters", [])
-        combobox = ttk.Combobox(topWindow, values=availableSemesters)
-        combobox.pack()
-
+        combobox = ttk.Combobox(frame, values=availableSemesters)
+        combobox.pack(pady=5)
         confirm_button = ttk.Button(
-            topWindow, text="Confirmar",
+            frame, text="Confirmar",
             command=onSemesterSelected
         )
-        confirm_button.pack()
+        confirm_button.pack(pady=5)
 
     def _processResults(self, semester):
         listNameFormat = Config.read("General", "list_path_format")

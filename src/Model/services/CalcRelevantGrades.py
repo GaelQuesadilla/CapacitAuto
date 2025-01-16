@@ -1,6 +1,5 @@
 from src.Config import Config
 from src.Model.services.AllKardex import AllKardex
-from alive_progress import alive_bar
 from src.Model.services.AllSubjects import AllSubjects
 import math
 import os

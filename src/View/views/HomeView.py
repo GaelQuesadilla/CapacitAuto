@@ -4,6 +4,7 @@ from src.View.widgets.Labels import TitleLabel
 from src.View.widgets.Buttons import InfoButton
 from ttkbootstrap.scrolled import ScrolledFrame
 from ttkbootstrap import constants as c
+from src.Controller.controllers import update
 
 
 class HomeView(ttk.Frame):
@@ -36,7 +37,7 @@ class HomeView(ttk.Frame):
 
         self.restoreConfigButton = ttk.Button(
             self.optionFrame, text="Instalar actualizaciones", padding=[10, 10],
-            style=c.SUCCESS)
+            style=c.SUCCESS, command=self.updateApp)
         self.restoreConfigButton.pack(side=ttk.LEFT, padx=15)
 
         self.restoreConfigButton = ttk.Button(
@@ -53,6 +54,9 @@ class HomeView(ttk.Frame):
             self.optionFrame, text="Eliminar datos", padding=[10, 10],
             style=c.DANGER)
         self.restoreConfigButton.pack(side=ttk.LEFT, padx=15)
+
+    def updateApp(self):
+        update()
 
 
 if __name__ == "__main__":

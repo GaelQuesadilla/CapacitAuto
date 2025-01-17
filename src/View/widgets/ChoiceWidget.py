@@ -1,6 +1,7 @@
 from src.View.widgets.DataframeWidget import DataframeWidget
 from src.View.widgets.AppWindow import AppWindow
 import tkinter as tk
+import ttkbootstrap as ttk
 from src.Config import Config
 from src.Model.services.CreateChoicesList import createChoicesList
 from src.Log import setup_logger
@@ -10,18 +11,18 @@ logger = setup_logger()
 
 class ChoiceWidget(DataframeWidget):
 
-    def __init__(self, master):
+    def __init__(self, master: tk.Widget):
         choicesPath = Config.getPath("Files", "choices_dir")
         super().__init__(master, fileName=choicesPath)
 
     def _createButtons(self):
         super()._createButtons()
 
-        genButton = tk.Button(
+        genButton = ttk.Button(
             self.optionFrame, text="Generar archivo", command=self.generateNewChoicesExcel
         )
 
-        genButton.pack(side=tk.LEFT, padx=10)
+        genButton.pack(side=ttk.LEFT, padx=10)
 
     def generateNewChoicesExcel(self):
 
@@ -45,6 +46,6 @@ if __name__ == "__main__":
 
     view = AppWindow()
     component = ChoiceWidget(view)
-    component.pack(fill=tk.BOTH, expand=True)
+    component.pack(fill=ttk.BOTH, expand=True)
 
     view.mainloop()

@@ -1,9 +1,13 @@
 from src.View.widgets.DataframeWidget import DataframeWidget
 from src.View.widgets.AppWindow import AppWindow
-import tkinter as tk
+import ttkbootstrap as ttk
 from src.Model.services.AllKardex import AllKardex
 from src.Config import Config
 from src.View.widgets.StudentInfoWindow import StudentInfoWindow
+import tkinter as tk
+from src.Log import setup_logger
+
+logger = setup_logger(loggerName=__name__)
 
 
 class StudentsListWidget(DataframeWidget):
@@ -16,15 +20,28 @@ class StudentsListWidget(DataframeWidget):
         )
         self.allKardex.loadAllKardex()
 
+    def _createComponent(self):
+        super()._createComponent()
+        try:
+            self.tree.column("Semestre", width=70)
+            self.tree.column("Grupo", width=70)
+            self.tree.column("Turno", width=70)
+
+        except tk.TclError:
+            logger.warning(
+                "No es posible modificar el ancho de las columnas de la lista "
+                f"{self.fileName}"
+            )
+
     def _createButtons(self):
         super()._createButtons()
 
-        viewStudentButton = tk.Button(
+        viewStudentButton = ttk.Button(
             self.optionFrame, text="Ver información del alumno", command=self.viewStudent
         )
 
         print("pack viewStudentButton")
-        viewStudentButton.pack(side=tk.LEFT, padx=10)
+        viewStudentButton.pack(side=ttk.LEFT, padx=10)
 
     def viewStudent(self):
         selected = self._tree.focus()
@@ -44,6 +61,6 @@ if __name__ == "__main__":
         "Lista Alumnos 7-D-M.xlsx"
     view = AppWindow()
     component = StudentsListWidget(view, fileName=fileName)
-    component.pack(fill=tk.BOTH, expand=True)
+    component.pack(fill=ttk.BOTH, expand=True)
 
     view.mainloop()

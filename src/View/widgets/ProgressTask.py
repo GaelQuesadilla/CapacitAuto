@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+import ttkbootstrap as ttk
 from typing import Callable
 import threading
 from src.View.widgets.TopWindow import TopWindow
@@ -13,7 +13,7 @@ class ProgressWindow(TopWindow):
         self.protocol("WM_DELETE_WINDOW", lambda: None)
 
         self.progressBar = ttk.Progressbar(self, mode="indeterminate")
-        self.progressBar.pack(fill=tk.BOTH, expand=True, pady=20, padx=10)
+        self.progressBar.pack(fill=ttk.BOTH, expand=True, pady=20, padx=10)
 
     def start(self):
         self.progressBar.start()

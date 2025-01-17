@@ -1,15 +1,15 @@
 from src.View.widgets.TopWindow import TopWindow
 import tkinter as tk
 from typing import Dict, Union
-from tkinter import ttk
+import ttkbootstrap as ttk
 
 
 class StudentInfoWindow(TopWindow):
 
-    def __init__(self, parent: tk.Tk, studentKardex: Dict[str, Union[str, int]]):
+    def __init__(self, parent: tk.Widget, studentKardex: Dict[str, Union[str, int]]):
         super().__init__(parent)
         self.studentKardex = studentKardex
-        self.subjectFrame = tk.Frame()
+        self.subjectFrame = ttk.Frame()
         self.show()
 
     def show(self):
@@ -17,13 +17,13 @@ class StudentInfoWindow(TopWindow):
         self.title("Información del Estudiante")
         self.geometry("700x500")
 
-        container = tk.Frame(self)
-        container.pack(fill=tk.BOTH, expand=True)
+        container = ttk.Frame(self)
+        container.pack(fill=ttk.BOTH, expand=True)
 
-        canvas = tk.Canvas(container)
-        scrollbar = tk.Scrollbar(
+        canvas = ttk.Canvas(container)
+        scrollbar = ttk.Scrollbar(
             container, orient="vertical", command=canvas.yview)
-        self.scrollableFrame = tk.Frame(canvas)
+        self.scrollableFrame = ttk.Frame(canvas)
 
         self.scrollableFrame.bind(
             "<Configure>",
@@ -38,13 +38,13 @@ class StudentInfoWindow(TopWindow):
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
-        title_label = tk.Label(
+        title_label = ttk.Label(
             self.scrollableFrame,
             text="Información del Estudiante",
-            pady=10,
+            padding=[0, 10],
             font=("Arial", 16, "bold")
         )
-        title_label.pack(fill=tk.X)
+        title_label.pack(fill=ttk.X)
 
         basicData = {
             "Nombre": self.studentKardex.get("Name"),
@@ -56,41 +56,41 @@ class StudentInfoWindow(TopWindow):
         }
         self.dictToView("Datos básicos", basicData, self.scrollableFrame)
 
-        gradeFrame = tk.Frame(self.scrollableFrame, padx=10,
-                              pady=10, relief=tk.RIDGE)
-        gradeFrame.pack(pady=20, padx=20, fill=tk.BOTH, expand=True)
+        gradeFrame = ttk.Frame(self.scrollableFrame, padding=[10, 10])
+        gradeFrame.pack(fill=ttk.BOTH, expand=True)
 
-        gradeTitleFrame = tk.Label(
+        gradeTitleFrame = ttk.Label(
             gradeFrame,
             font=(12),
             text="Calificaciones",
         )
-        gradeTitleFrame.pack(fill=tk.X)
+        gradeTitleFrame.pack(fill=ttk.X)
 
         semesters = list(self.studentKardex.get("Grades").keys())
 
-        selectFrame = tk.Frame(gradeFrame)
-        selectFrame.pack(fill=tk.X, pady=10)
+        selectFrame = ttk.Frame(gradeFrame, padding=[0, 10])
+        selectFrame.pack(fill=ttk.X)
 
-        semesterLabel = tk.Label(selectFrame, text="Semestre:")
-        semesterLabel.pack(side=tk.LEFT, padx=5)
+        semesterLabel = ttk.Label(
+            selectFrame, text="Semestre:", padding=[5, 0])
+        semesterLabel.pack(side=ttk.LEFT)
 
         self.semesterSelector = ttk.Combobox(selectFrame, values=semesters)
         self.semesterSelector.bind("<<ComboboxSelected>>", self.setSubjects)
 
-        self.semesterSelector.pack(side=tk.LEFT, padx=5)
+        self.semesterSelector.pack(side=ttk.LEFT, padx=5)
 
         # confirmButton = tk.Button(
         #     selectFrame, text="Seleccionar", command=self.setSubjects)
         # confirmButton.pack(side=tk.LEFT, padx=5)
 
-        subjectLabel = tk.Label(selectFrame, text="Materia:")
+        subjectLabel = ttk.Label(selectFrame, text="Materia:", padding=[5, 0])
 
-        subjectLabel.pack(side=tk.LEFT, padx=5)
+        subjectLabel.pack(side=ttk.LEFT)
 
         self.subjectSelector = ttk.Combobox(selectFrame, values=[])
         self.subjectSelector.bind("<<ComboboxSelected>>", self.showSubject)
-        self.subjectSelector.pack(side=tk.LEFT, padx=5)
+        self.subjectSelector.pack(side=ttk.LEFT, padx=5)
 
         # confirmButton2 = tk.Button(
         #     selectFrame, text="Confirmar", command=self.showSubject)
@@ -98,36 +98,36 @@ class StudentInfoWindow(TopWindow):
 
     def dictToView(self, title: str, data: Dict[str, Union[str, int]], parent):
 
-        mainFrame = tk.Frame(parent)
-        mainFrame.pack(fill=tk.X, padx=10, pady=10)
+        mainFrame = ttk.Frame(parent, padding=[10, 10])
+        mainFrame.pack(fill=ttk.X)
 
-        titleLabel = tk.Label(
+        titleLabel = ttk.Label(
             mainFrame,
             font=(10),
             text=title,
         )
-        titleLabel.pack(pady=(0, 10), anchor="w")
+        titleLabel.pack(pady=(0, 10), anchor=ttk.W)
 
         for key, value in data.items():
             value = value if value else "N/A"
-            frame = tk.Frame(mainFrame)
-            frame.pack(fill=tk.X, pady=(0, 5))
+            frame = ttk.Frame(mainFrame)
+            frame.pack(fill=ttk.X, pady=(0, 5))
 
-            keyLabel = tk.Label(
+            keyLabel = ttk.Label(
                 frame,
                 text=f"{key}:",
                 font=("bold"),
                 width=15,
-                anchor="e"
+                anchor=ttk.E
             )
-            keyLabel.pack(side=tk.LEFT)
+            keyLabel.pack(side=ttk.LEFT)
 
-            valueLabel = tk.Label(
+            valueLabel = ttk.Label(
                 frame,
                 text=value,
-                anchor="w"
+                anchor=ttk.W
             )
-            valueLabel.pack(side=tk.LEFT, fill=tk.X, expand=True)
+            valueLabel.pack(side=ttk.LEFT, fill=ttk.X, expand=True)
 
         return mainFrame
 

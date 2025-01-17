@@ -52,7 +52,7 @@ class AllKardex():
             current = ReadKardex(curp)
             try:
                 info = current.getInfo()
-                logging.info(
+                logging.debug(
                     f"{curp}: {info.get('Name')}, {info.get('Semester')}, "
                     f"{info.get('Group')}, {info.get('Final_Grade')}"
                 )

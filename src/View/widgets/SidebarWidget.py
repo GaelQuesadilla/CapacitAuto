@@ -1,10 +1,11 @@
 import tkinter as tk
-from src.View.MainApp import MainApp
-from typing import Dict, Callable, Union, List
+import ttkbootstrap as ttk
+from typing import Dict, Callable, Union
 from dataclasses import dataclass
 from src.Log import setup_logger
+from ttkbootstrap import constants as c
 
-logger = setup_logger()
+logger = setup_logger(loggerName=__name__)
 
 
 @dataclass
@@ -13,16 +14,17 @@ class currentWidget:
     widget: tk.Widget
 
 
-class SidebarWidget(tk.Frame):
+class SidebarWidget(ttk.Frame):
     def __init__(self, master=None):
-        super().__init__(master)
+        super().__init__(master, style=c.DARK)
 
         self.configure(
-            width=300, bg="#2c3e50",
-            relief="sunken", padx=20, pady=10
+            width=400,
+            padding=[20, 30],
+
         )
 
-        self.buttonData: Dict[str, Dict[str, Union[Callable, tk.Button]]] = {}
+        self.buttonData: Dict[str, Dict[str, Union[Callable, ttk.Button]]] = {}
 
         self.currentWidget: currentWidget = currentWidget(None, None)
 
@@ -37,22 +39,21 @@ class SidebarWidget(tk.Frame):
         self.currentWidget = currentWidget(name, newWidget)
 
         logger.info(f"Loading '{name}' Widget as view")
-        self.currentWidget.widget.pack(fill=tk.BOTH, expand=True)
+        self.currentWidget.widget.pack(fill=ttk.BOTH, expand=True)
 
     def addButton(self, name: str, widget: Callable, onClick=None):
 
         if onClick is None:
             def onClick(): return self.onClick(name)
 
-        button = tk.Button(
+        button = ttk.Button(
             self,
             text=name,
-            bg="#34495e",
-            fg="white",
-            relief=tk.FLAT,
-            command=lambda: onClick()
+            command=lambda: onClick(),
+            padding=[3, 10],
+            style=c.DARK
         )
-        button.pack(fill=tk.X, pady=3, padx=20)
+        button.pack(fill=ttk.X, expand=True)
 
         self.buttonData[name] = {"widget": widget, "button": button}
 
@@ -61,19 +62,20 @@ class SidebarWidget(tk.Frame):
 
 
 if __name__ == "__main__":
+    from src.View.widgets.AppWindow import AppWindow
 
-    app = MainApp()
+    app = AppWindow()
 
     sidebar = SidebarWidget(app)
-    sidebar.pack(side=tk.LEFT, fill=tk.Y)
+    sidebar.pack(side=ttk.LEFT, fill=ttk.Y)
     i = 0
 
-    def red(): return tk.Frame(app, bg="red")
-    def blue(): return tk.Frame(app, bg="blue")
-    def purple(): return tk.Frame(app, bg="purple")
+    def primary(): return ttk.Frame(app, style=ttk.PRIMARY)
+    def secondary(): return ttk.Frame(app, style=ttk.SECONDARY)
+    def warning(): return ttk.Frame(app, style=ttk.WARNING)
 
-    sidebar.addButton("red", red)
-    sidebar.addButton("blue", blue)
-    sidebar.addButton("purple", purple)
+    sidebar.addButton("primary", primary)
+    sidebar.addButton("secondary", secondary)
+    sidebar.addButton("warning", warning)
 
     app.mainloop()

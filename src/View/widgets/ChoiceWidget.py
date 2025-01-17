@@ -37,7 +37,7 @@ class ChoiceWidget(DataframeWidget):
             self.tree.column("Semestre", width=50)
             self.tree.column("Grupo", width=50)
             self.tree.column("Turno", width=50)
-        except ttk.TclError:
+        except tk.TclError:
             logger.warning("No es posible modificar el ancho de las columnas")
 
 

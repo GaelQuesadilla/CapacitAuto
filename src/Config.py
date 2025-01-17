@@ -186,7 +186,7 @@ class Config():
                 path.mkdir(exist_ok=True)
             elif not path.is_file():
                 # Create an empty file
-                logger.info(f"Creando archivo {path}")
+                logger.debug(f"Creando archivo {path}")
                 path.parent.mkdir(exist_ok=True)
                 path.write_text("")
 
@@ -210,7 +210,7 @@ class Config():
                     if not currentConfig.has_option(section=section, option=option):
                         continue
 
-                    logger.info(
+                    logger.debug(
                         f"Actualizando [{section}] {option} = {value}")
                     currentConfig.set(
                         section=section, option=option, value=value

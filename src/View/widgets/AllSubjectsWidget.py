@@ -39,6 +39,7 @@ class AllSubjectsWidget(DataframeWidget):
         self.allSubjects.saveToExcel()
 
         self.onUpdateDf()
+        self.loadDataFrame()
         self._createComponent()
 
     def onUpdateDf(self):

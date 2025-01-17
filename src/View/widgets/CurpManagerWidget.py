@@ -41,6 +41,9 @@ class CurpManagerWidget(DataframeWidget):
         except tk.TclError:
             logger.error("No es posible cambiar el ancho de las columnas")
 
+        requestedCurps = self.requestedCurps
+        invalidCurps = self.invalidCurps
+
         for row in self.tree.get_children():
             values = self.tree.item(row, "values")
             tags = self.tree.item(row, "tags")
@@ -48,9 +51,9 @@ class CurpManagerWidget(DataframeWidget):
 
             parityTag = "odd" if int(index) % 2 == 0 else "even"
 
-            if curp in self.requestedCurps:
+            if curp in requestedCurps:
                 pass
-            elif curp in self.invalidCurps:
+            elif curp in invalidCurps:
                 self.tree.item(row, tags=(f"{parityTag}-error",))
             else:
                 self.tree.item(row, tags=(f"{parityTag}-unsolicited",))
@@ -105,7 +108,8 @@ class CurpManagerWidget(DataframeWidget):
         except (json.decoder.JSONDecodeError, FileNotFoundError) as e:
             logger.warning("No es posible obtener el archivo de kardex")
 
-        kardexData: Dict[str] = json.load(self.kardexDataFile.open())
+        invalidCurps = self.invalidCurps
+        requestedCurps = self.requestedCurps
 
         data = [
             {
@@ -114,8 +118,8 @@ class CurpManagerWidget(DataframeWidget):
                 self.columns[2]: student.get("Name", "SN") if student else "SN",
                 self.columns[3]: student.get("Semester", "SN") if student else "SN",
                 self.columns[4]: (
-                    "Kardex solicitado" if curp in self.requestedCurps else
-                    "CURP no valida" if curp in self.invalidCurps else
+                    "Kardex solicitado" if curp in requestedCurps else
+                    "CURP no valida" if curp in invalidCurps else
                     "Kardex no solicitado"
                 ),
             }
@@ -177,7 +181,11 @@ class CurpManagerWidget(DataframeWidget):
 
     @property
     def invalidCurps(self):
-        kardexData: Dict[str] = json.load(self.kardexDataFile.open())
+        kardexData: Dict[str] = {}
+        try:
+            kardexData: Dict[str] = json.load(self.kardexDataFile.open())
+        except Exception as e:
+            logger.warning("No es posible obtener el reporte de Kardex")
         return kardexData.get("invalidCurps", [])
 
 

@@ -1,3 +1,5 @@
+from src.View.widgets.TopWindow import TopWindow
+from src.View.views.guides.ListsGuide import ListsGuide
 import tkinter as tk
 import ttkbootstrap as ttk
 from src.View.widgets.StudentsListWidget import StudentsListWidget
@@ -21,7 +23,7 @@ class ListsView(ttk.Frame):
         self.title = TitleLabel(self.header, text="Listas de alumnos")
         self.title.pack(side=ttk.LEFT)
 
-        self.help = InfoButton(self.header)
+        self.help = InfoButton(self.header, command=self.showInfo)
         self.help.pack(side=ttk.RIGHT)
 
         # Instructions
@@ -49,6 +51,14 @@ class ListsView(ttk.Frame):
         self.list.fileName = self.path
         self.list.loadDataFrame()
         self.list._createComponent()
+
+    def showInfo(self):
+
+        window = TopWindow(
+            title="Información de la ventana",
+            size=[800, 500])
+        info = ListsGuide(window)
+        info.pack(fill=ttk.BOTH, expand=True)
 
     @property
     def path(self):

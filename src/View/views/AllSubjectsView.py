@@ -1,3 +1,5 @@
+from src.View.widgets.TopWindow import TopWindow
+from src.View.views.guides.SubjectRelationGuide import SubjectRelationGuide
 import ttkbootstrap as ttk
 from ttkbootstrap import constants as c
 import tkinter as tk
@@ -17,10 +19,18 @@ class AllSubjectsView(ttk.Frame):
             self.header, text="Relación de materias con capacitación/paquete")
         self.title.pack(side=ttk.LEFT)
 
-        self.help = InfoButton(self.header)
+        self.help = InfoButton(self.header,  command=self.showInfo)
         self.help.pack(side=ttk.RIGHT)
         self.allSubjectsWidget = AllSubjectsWidget(self)
         self.allSubjectsWidget.pack(expand=True, fill=ttk.BOTH)
+
+    def showInfo(self):
+
+        window = TopWindow(
+            title="Información de la ventana",
+            size=[800, 500])
+        info = SubjectRelationGuide(window)
+        info.pack(fill=ttk.BOTH, expand=True)
 
 
 if __name__ == "__main__":

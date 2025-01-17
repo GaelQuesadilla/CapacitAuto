@@ -10,34 +10,57 @@ class TextWM():
         title_label = ttk.Label(
             self, text=title, font=(font_weight, font_size),
             style=c.PRIMARY)
-        title_label.pack(anchor=ttk.W, padx=10, pady=5)
+        title_label.pack(
+            anchor=ttk.W, padx=10, pady=5,
+            fill=ttk.X, expand=True)
+
+    def AddColoredTitle(self, title, font_size=18, font_weight="bold"):
+
+        title_label = ttk.Label(
+            self, text=title, font=(font_weight, font_size),
+            style=(c.PRIMARY, c.INVERSE))
+        title_label.pack(
+            anchor=ttk.W, padx=10, pady=5,
+            fill=ttk.X, expand=True)
 
     def AddSubtitle(self, subtitle, font_size=14, font_weight="normal"):
 
         subtitle_label = ttk.Label(
             self, text=subtitle, font=(font_weight, font_size),
             style=c.SECONDARY)
-        subtitle_label.pack(anchor=ttk.W, padx=10, pady=3)
+        subtitle_label.pack(
+            anchor=ttk.W, padx=10, pady=3,
+            fill=ttk.X, expand=True)
 
     def AddText(self, text, font_size=12):
 
         text_label = ttk.Label(
-            self, text=text, wraplength=500, font=(font_size,))
-        text_label.pack(anchor=ttk.W, padx=10, pady=5)
+            self, text=text, wraplength=self.winfo_width() - 20, font=(font_size,))
+        text_label.bind("<Configure>", lambda e: text_label.config(
+            wraplength=text_label.winfo_width() - 20))
+        text_label.pack(padx=10, pady=10, fill=ttk.X, expand=True)
 
     def AddBulletList(self, items, font_size=12):
 
         for item in items:
             list_item_label = ttk.Label(
-                self, text=f"- {item}",  wraplength=500, font=(font_size,))
-            list_item_label.pack(anchor=ttk.W, padx=10, pady=3)
+                self, text=f"- {item}",  wraplength=self.winfo_width() - 20, font=(font_size,))
+            list_item_label.bind("<Configure>", lambda e, lbl=list_item_label: lbl.config(
+                wraplength=lbl.winfo_width() - 20))
+            list_item_label.pack(
+                anchor=ttk.W, padx=20,
+                pady=10, fill=ttk.X, expand=True)
 
     def AddEnumList(self, items, font_size=12):
 
         for index, item in enumerate(items):
             list_item_label = ttk.Label(
-                self, text=f"{index+1}. {item}",  wraplength=500, font=(font_size,))
-            list_item_label.pack(anchor=ttk.W, padx=10, pady=3)
+                self, text=f"{index+1}. {item}",  wraplength=self.winfo_width() - 20, font=(font_size,))
+            list_item_label.bind("<Configure>", lambda e, lbl=list_item_label: lbl.config(
+                wraplength=lbl.winfo_width() - 20))
+            list_item_label.pack(
+                anchor=ttk.W, padx=10,
+                pady=3, fill=ttk.X, expand=True)
 
 
 class HTextWidget(ttk.Frame, TextWM):

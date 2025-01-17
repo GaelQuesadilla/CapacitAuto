@@ -4,7 +4,7 @@ from src.View.widgets.Labels import TitleLabel
 from src.View.widgets.Buttons import InfoButton
 from ttkbootstrap.scrolled import ScrolledFrame
 from ttkbootstrap import constants as c
-from src.Controller.controllers import update
+from src.Controller.controllers.update import update
 
 
 class HomeView(ttk.Frame):

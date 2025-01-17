@@ -35,25 +35,24 @@ class HomeView(ttk.Frame):
 
         self.optionTitle = TitleLabel(self.optionFrame, text="Opciones")
 
-        self.restoreConfigButton = ttk.Button(
+        self.updateAppButton = ttk.Button(
             self.optionFrame, text="Instalar actualizaciones", padding=[10, 10],
             style=c.SUCCESS, command=self.updateApp)
-        self.restoreConfigButton.pack(side=ttk.LEFT, padx=15)
+        self.updateAppButton.pack(side=ttk.LEFT, padx=15)
 
         self.restoreConfigButton = ttk.Button(
             self.optionFrame, text="Restablecer configuración", padding=[10, 10],
             style=c.SECONDARY)
         self.restoreConfigButton.pack(side=ttk.LEFT, padx=15)
-        self.restoreConfigButton = ttk.Button(
-
+        self.reportErrorButton = ttk.Button(
             self.optionFrame, text="Reportar error", padding=[10, 10],
             style=c.WARNING)
-        self.restoreConfigButton.pack(side=ttk.LEFT, padx=15)
+        self.reportErrorButton.pack(side=ttk.LEFT, padx=15)
 
-        self.restoreConfigButton = ttk.Button(
+        self.deleteDataButton = ttk.Button(
             self.optionFrame, text="Eliminar datos", padding=[10, 10],
             style=c.DANGER)
-        self.restoreConfigButton.pack(side=ttk.LEFT, padx=15)
+        self.deleteDataButton.pack(side=ttk.LEFT, padx=15)
 
     def updateApp(self):
         update()

@@ -9,6 +9,8 @@ logsDir = pathlib.Path(Config.read("Files", "logs_dir"))
 logsFile = logsDir / "logs.log"
 
 logging.getLogger("requests_cache").setLevel(logging.WARNING)
+logging.getLogger("git.cmd").setLevel(logging.WARNING)
+logging.getLogger("urllib3.connectionpool").setLevel(logging.WARNING)
 
 
 def setup_logger(logsFile: str = logsFile, loggerName: str = __name__) -> logging.Logger:

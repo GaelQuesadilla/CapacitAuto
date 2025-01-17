@@ -69,7 +69,7 @@ class HomeView(ttk.Frame):
             alert=True
         )
         if yesnoQuestion in YES:
-            deleteInfo()
+            update()
 
     def deleteAppInfo(self):
         yesnoQuestion = Messagebox.yesno(

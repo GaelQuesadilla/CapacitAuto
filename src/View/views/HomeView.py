@@ -61,6 +61,7 @@ class HomeView(ttk.Frame):
         self.deleteDataButton.pack(side=ttk.LEFT, padx=15)
 
     def updateApp(self):
+
         yesnoQuestion = Messagebox.yesno(
             title="Actualizar aplicación",
             message="Se actualizará la aplicación, esto puede causar errores.\n"
@@ -68,8 +69,25 @@ class HomeView(ttk.Frame):
             "¿Desea continuar?",
             alert=True
         )
-        if yesnoQuestion in YES:
+        if not yesnoQuestion in YES:
+            return
+
+        try:
             update()
+            yesnoQuestion = Messagebox.yesno(
+                title="Actualizar configuración",
+                message="Se recomienda reiniciar la configuración.\n"
+                "Seleccione 'No' para reiniciar la configuración (recomendado)\n"
+                "Seleccione 'Si' para actualizar la configuración\n",
+                alert=True
+            )
+            if yesnoQuestion in YES:
+                return
+
+            Config.create()
+            Config.setup()
+        except Exception as e:
+            pass
 
     def deleteAppInfo(self):
         yesnoQuestion = Messagebox.yesno(

@@ -49,3 +49,7 @@ def update():
         raise e
 
     return True
+
+
+if __name__ == "__main__":
+    update()

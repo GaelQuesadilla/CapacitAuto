@@ -32,7 +32,7 @@ class ResultsCalculationGuide(ScrollableHTextWidget):
 if __name__ == "__main__":
     from src.View.widgets.AppWindow import AppWindow
     app = AppWindow()
-    component = ConfigGuide(app)
+    component = ResultsCalculationGuide(app)
     component.pack(fill=ttk.BOTH, expand=True)
 
     app.mainloop()

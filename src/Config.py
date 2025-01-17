@@ -1,6 +1,9 @@
 import configparser
-import os
+from configparser import ConfigParser
+from typing import Dict, Union
 import pathlib
+import logging
+
 
 """
 This module defines a `Config` class for managing configuration settings in an INI file.
@@ -9,7 +12,7 @@ The default configuration is a dictionary with sections and key-value pairs
 """
 
 
-default_config = {
+default_config: Dict[str, Dict[str, Union[str, int, bool, pathlib.Path]]] = {
     "General": {
         "encoding": "utf-8",
         "debug": True,
@@ -58,6 +61,22 @@ default_config = {
     },
 }
 
+logsDir = default_config["Files"]["logs_dir"]
+logsFile = logsDir / "logs.log"
+
+logsDir.mkdir(exist_ok=True)
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(logsFile, encoding="utf-8"),
+        logging.StreamHandler()
+    ]
+)
+
+# Crear un logger específico para tu aplicación
+logger: logging.Logger = logging.getLogger(__name__)
+
 
 class Config():
     """Provides methods for creating and reading configuration settings from a file.
@@ -93,7 +112,7 @@ class Config():
         Exception
             If an error occurs while creating the file.
         """
-        print("Creating config file")
+        logger.info("Creando archivo de configuración")
         try:
             config = configparser.ConfigParser()
             config["General"] = default_config.get("General")
@@ -103,10 +122,12 @@ class Config():
             config["Assets"] = default_config.get("Assets")
             with open("config.ini", "w") as config_file:
                 config.write(config_file)
-            print("Config file has been written successfully")
+            logger.info(
+                "El archivo de configuración ha sido creado exitosamente")
         except Exception as e:
-            print("Error")
-            print(e)
+            logger.error("Error al crear el archivo de configuración")
+            logger.error(e)
+            raise e
 
     def read(section: str, option: str) -> any:
         """Reads a specific configuration value from the file("config.ini").
@@ -127,7 +148,7 @@ class Config():
         configPath = pathlib.Path.cwd() / "config.ini"
 
         if not configPath.is_file():
-            print("config.ini not found")
+            logger.info(f"config.ini no encontrado en {configPath}")
             config.create()
         config = configparser.ConfigParser()
         config.read("config.ini")
@@ -146,7 +167,10 @@ class Config():
                 value = value == "True"
 
         except Exception:
-            pass
+            logger.warning(
+                f"No es posible convertir el dato "
+                f"'{section}' : {type(value)}'{value}'"
+            )
         return value
 
     def getPath(section: str, option: str) -> pathlib.Path:
@@ -162,11 +186,41 @@ class Config():
                 path.mkdir(exist_ok=True)
             elif not path.is_file():
                 # Create an empty file
-                print(f"Creando el archivo {path}")
+                logger.info(f"Creando archivo {path}")
                 path.parent.mkdir(exist_ok=True)
                 path.write_text("")
 
-        print("Setup done")
+        logger.info("Archivos creados, configuración hecha")
+
+    def update():
+        logging.info("Actualizando configuración")
+        prevConfig = ConfigParser()
+        currentConfig = ConfigParser()
+        try:
+            prevConfig.read(default_config["Files"]["config_dir"])
+            Config.create()
+            currentConfig.read(default_config["Files"]["config_dir"])
+
+            for section in prevConfig.sections():
+                for option in prevConfig.options(section=section):
+                    value = prevConfig.get(section=section, option=option)
+
+                    if not currentConfig.has_section(section=section):
+                        break
+                    if not currentConfig.has_option(section=section, option=option):
+                        continue
+
+                    logger.info(
+                        f"Actualizando [{section}] {option} = {value}")
+                    currentConfig.set(
+                        section=section, option=option, value=value
+
+                    )
+
+        except (configparser.ParsingError, FileNotFoundError):
+            Config.create()
+
+        Config.setup()
 
 
 if __name__ == "__main__":

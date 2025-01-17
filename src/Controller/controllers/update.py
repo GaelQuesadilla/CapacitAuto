@@ -18,7 +18,7 @@ def update():
     try:
         repo = git.Repo(path=Config.getPath("Files", "base_dir"))
         repo.remotes.origin.pull()
-        logger.log("Archivos obtenidos")
+        logger.info("Archivos obtenidos")
 
         if os.getenv("VIRTUAL_ENV"):
             logger.info("Entorno virtual detectado. Utilizando pipenv")

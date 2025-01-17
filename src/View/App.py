@@ -42,7 +42,7 @@ class App(AppWindow):
         self.sidebar.addButton("Resultados", resultsView)
         self.sidebar.addButton("Configuración", configView)
 
-        self.sidebar.selectWidget("Administración de CURPS")
+        self.sidebar.selectWidget("Inicio")
 
     def destroy(self):
         logger.info("EXIT APP")

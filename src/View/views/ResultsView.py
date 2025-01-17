@@ -1,3 +1,4 @@
+from src.View.views.guides.ResultsCalculationGuide import ResultsCalculationGuide
 import tkinter as tk
 import ttkbootstrap as ttk
 from src.View.widgets.StudentsListWidget import StudentsListWidget
@@ -34,7 +35,7 @@ class ResultsView(ttk.Frame):
         self.title = TitleLabel(self.header, text="Nuevos grupos")
         self.title.pack(side=ttk.LEFT)
 
-        self.help = InfoButton(self.header)
+        self.help = InfoButton(self.header, command=self.showInfo)
         self.help.pack(side=ttk.RIGHT)
 
         self.calcResultsButton = ttk.Button(
@@ -169,6 +170,14 @@ class ResultsView(ttk.Frame):
                 )
 
         task()
+
+    def showInfo(self):
+
+        window = TopWindow(
+            title="Información de la ventana",
+            size=[800, 500])
+        info = ResultsCalculationGuide(window)
+        info.pack(fill=ttk.BOTH, expand=True)
 
     @ property
     def path(self):
